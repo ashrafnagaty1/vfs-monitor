@@ -39,7 +39,7 @@ def check_appointments(session):
             response = session.get(url, headers=headers, timeout=30)
             data = response.json()
             if data and len(data) > 0:
-                send_telegram(f"🎉 ميعاد فرنسا متاح في فرع {branch_name}!\nافتح الموقع الآن: https://visas-fr.tlscontact.com/workflow/appointment-booking/{branch_code}")
+                send_telegram(f"🎉 ميعاد فرنسا متاح في فرع {branch_name}!\nافتح الموقع الآن: https://visas-fr.tlscontact.com/workflow/appointment-booking/egALY2fr/25781145")
             else:
                 print(f"لا توجد مواعيد في {branch_name}")
         except Exception as e:
