@@ -1,6 +1,5 @@
 import os
 import requests
-import time
 
 TOKEN = os.environ.get("TOKEN")
 CHAT_ID = os.environ.get("CHAT_ID")
@@ -47,4 +46,5 @@ def check_appointments(session):
             print(f"خطأ في {branch_name}: {e}")
 
 session = login()
+send_telegram("✅ البوت بدأ يراقب مواعيد TLS فرنسا - الإسكندرية والشيخ زايد!")
 check_appointments(session)
