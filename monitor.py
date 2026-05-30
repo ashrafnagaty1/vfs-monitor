@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-import json
+import requests
 from playwright.sync_api import sync_playwright
 
 TOKEN = os.environ.get("TOKEN")
@@ -11,7 +11,6 @@ BRANCH_CODE = "egALY2fr"
 YOUR_ID = "25781145"
 
 def send_telegram(message):
-    import requests
     try:
         url = "https://api.telegram.org/bot{}/sendMessage".format(TOKEN)
         requests.post(url, data={"chat_id": CHAT_ID, "text": message})
@@ -27,11 +26,13 @@ def check_appointments():
         page = context.new_page()
 
         try:
-            # افتح الموقع الاول عشان ياخد الكوكيز
-            page.goto("https://visas-fr.tlscontact.com/workflow/appointment-booking/{}/{}".format(BRANCH_CODE, YOUR_ID))
+            page.goto(
+                "https://visas-fr.tlscontact.com/workflow/appointment-booking/{}/{}".format(
+                    BRANCH_CODE, YOUR_ID
+                )
+            )
             page.wait_for_timeout(5000)
 
-            # اعمل request للـ API
             response = page.request.get(
                 "{}/api/slot/active/{}".format(BASE_URL, BRANCH_CODE)
             )
