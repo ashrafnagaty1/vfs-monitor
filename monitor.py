@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import requests
 
@@ -12,10 +13,10 @@ YOUR_ID = "25781145"
 
 def send_telegram(message):
     try:
-        url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+        url = "https://api.telegram.org/bot{}/sendMessage".format(TOKEN)
         requests.post(url, data={"chat_id": CHAT_ID, "text": message})
     except Exception as e:
-        print(f"خطأ تيليجرام: {e}")
+        print("خطا تيليجرام: {}".format(e))
 
 def login():
     try:
@@ -37,19 +38,19 @@ def login():
             "Connection": "keep-alive"
         }
         res = session.post(
-            f"{BASE_URL}/api/auth/login",
+            "{}/api/auth/login".format(BASE_URL),
             json={"email": TLS_EMAIL, "password": TLS_PASSWORD},
             headers=headers,
             timeout=30
         )
         if res.status_code == 200:
-            send_telegram("✅ تم تسجيل الدخول بنجاح")
+            send_telegram("تم تسجيل الدخول بنجاح")
             return session
         else:
-            send_telegram(f"❌ فشل اللوجين - status: {res.status_code}\n{res.text[:200]}")
+            send_telegram("فشل اللوجين - status: {}\n{}".format(res.status_code, res.text[:200]))
             return None
     except Exception as e:
-        send_telegram(f"❌ خطأ في اللوجين: {e}")
+        send_telegram("خطا في اللوجين: {}".format(e))
         return None
 
 def check_appointments(session):
@@ -63,25 +64,36 @@ def check_appointments(session):
             "Sec-Fetch-Mode": "cors",
             "Sec-Fetch-Site": "same-origin",
         }
-        url = f"{BASE_URL}/api/slot/active/{BRANCH_CODE}"
+        url = "{}/api/slot/active/{}".format(BASE_URL, BRANCH_CODE)
         response = session.get(url, headers=headers, timeout=30)
 
         send_telegram(
-            f"🔍 الإسكندرية\n"
-            f"Status: {response.status_code}\n"
-            f"Response: {response.text[:200]}"
+            "الاسكندرية\nStatus: {}\nResponse: {}".format(
+                response.status_code,
+                response.text[:200]
+            )
         )
 
         if response.status_code == 401:
-            send_telegram("⚠️ انتهت الجلسة!")
+            send_telegram("انتهت الجلسة!")
             return
 
         data = response.json()
         if data and len(data) > 0:
             send_telegram(
-                f"🎉 ميعاد متاح في الإسكندرية!\n"
-                f"افتح الآن بسرعة 👇\n"
-                f"https://visas-fr.tlscontact.com/workflow/appointment-booking/{BRANCH_CODE}/{YOUR_ID}"
+                "ميعاد متاح في الاسكندرية!\n"
+                "افتح الان بسرعة:\n"
+                "https://visas-fr.tlscontact.com/workflow/appointment-booking/{}/{}".format(
+                    BRANCH_CODE, YOUR_ID
+                )
             )
         else:
-            send_telegram("😔 لا مواعيد ف
+            send_telegram("لا مواعيد في الاسكندرية دلوقتي")
+
+    except Exception as e:
+        send_telegram("خطا: {}".format(e))
+
+# تشغيل
+session = login()
+if session:
+    check_appointments(session)
