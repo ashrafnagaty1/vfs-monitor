@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 import os
-import requests
+import json
+from playwright.sync_api import sync_playwright
 
 TOKEN = os.environ.get("TOKEN")
 CHAT_ID = os.environ.get("CHAT_ID")
-TLS_COOKIES = os.environ.get("TLS_COOKIES")
 
 BASE_URL = "https://visas-fr.tlscontact.com"
 BRANCH_CODE = "egALY2fr"
 YOUR_ID = "25781145"
 
 def send_telegram(message):
+    import requests
     try:
         url = "https://api.telegram.org/bot{}/sendMessage".format(TOKEN)
         requests.post(url, data={"chat_id": CHAT_ID, "text": message})
@@ -18,52 +19,49 @@ def send_telegram(message):
         print("خطا تيليجرام: {}".format(e))
 
 def check_appointments():
-    try:
-        session = requests.Session()
-
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
-            "Accept": "application/json, text/plain, */*",
-            "Accept-Language": "en-US,en;q=0.9,ar;q=0.8",
-            "Accept-Encoding": "gzip, deflate, br, zstd",
-            "Referer": "https://visas-fr.tlscontact.com/",
-            "sec-ch-ua": '"Chromium";v="148", "Google Chrome";v="148", "Not/A)Brand";v="99"',
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": '"Windows"',
-            "Sec-Fetch-Dest": "empty",
-            "Sec-Fetch-Mode": "cors",
-            "Sec-Fetch-Site": "same-origin",
-            "Cookie": TLS_COOKIES
-        }
-
-        url = "{}/api/slot/active/{}".format(BASE_URL, BRANCH_CODE)
-        response = session.get(url, headers=headers, timeout=30)
-
-        send_telegram(
-            "الاسكندرية\nStatus: {}\nResponse: {}".format(
-                response.status_code,
-                response.text[:300]
-            )
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        context = browser.new_context(
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
         )
+        page = context.new_page()
 
-        if response.status_code == 403 or response.status_code == 401:
-            send_telegram("انتهت الجلسة - محتاج تجدد الكوكيز!")
-            return
+        try:
+            # افتح الموقع الاول عشان ياخد الكوكيز
+            page.goto("https://visas-fr.tlscontact.com/workflow/appointment-booking/{}/{}".format(BRANCH_CODE, YOUR_ID))
+            page.wait_for_timeout(5000)
 
-        data = response.json()
-        if data and len(data) > 0:
+            # اعمل request للـ API
+            response = page.request.get(
+                "{}/api/slot/active/{}".format(BASE_URL, BRANCH_CODE)
+            )
+
             send_telegram(
-                "ميعاد متاح في الاسكندرية!\n"
-                "افتح الان بسرعة:\n"
-                "https://visas-fr.tlscontact.com/workflow/appointment-booking/{}/{}".format(
-                    BRANCH_CODE, YOUR_ID
+                "الاسكندرية\nStatus: {}\nResponse: {}".format(
+                    response.status,
+                    response.text()[:300]
                 )
             )
-        else:
-            send_telegram("لا مواعيد في الاسكندرية دلوقتي")
 
-    except Exception as e:
-        send_telegram("خطا: {}".format(e))
+            if response.status == 200:
+                data = response.json()
+                if data and len(data) > 0:
+                    send_telegram(
+                        "ميعاد متاح في الاسكندرية!\n"
+                        "افتح الان بسرعة:\n"
+                        "https://visas-fr.tlscontact.com/workflow/appointment-booking/{}/{}".format(
+                            BRANCH_CODE, YOUR_ID
+                        )
+                    )
+                else:
+                    send_telegram("لا مواعيد في الاسكندرية دلوقتي")
+            else:
+                send_telegram("مشكلة في الاتصال - status: {}".format(response.status))
+
+        except Exception as e:
+            send_telegram("خطا: {}".format(e))
+        finally:
+            browser.close()
 
 # تشغيل
 check_appointments()
