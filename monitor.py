@@ -7,44 +7,68 @@ TLS_EMAIL = os.environ.get("TLS_EMAIL")
 TLS_PASSWORD = os.environ.get("TLS_PASSWORD")
 
 BASE_URL = "https://visas-fr.tlscontact.com"
+BRANCH_CODE = "egALY2fr"
+YOUR_ID = "25781145"
 
 def send_telegram(message):
-    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-    requests.post(url, data={"chat_id": CHAT_ID, "text": message})
+    try:
+        url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+        requests.post(url, data={"chat_id": CHAT_ID, "text": message})
+    except Exception as e:
+        print(f"خطأ تيليجرام: {e}")
 
 def login():
-    session = requests.Session()
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-        "Content-Type": "application/json"
-    }
-    payload = {
-        "email": TLS_EMAIL,
-        "password": TLS_PASSWORD
-    }
-    session.post(f"{BASE_URL}/api/auth/login", json=payload, headers=headers)
-    return session
+    try:
+        session = requests.Session()
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "Content-Type": "application/json"
+        }
+        res = session.post(
+            f"{BASE_URL}/api/auth/login",
+            json={"email": TLS_EMAIL, "password": TLS_PASSWORD},
+            headers=headers,
+            timeout=30
+        )
+        if res.status_code == 200:
+            send_telegram("✅ تم تسجيل الدخول بنجاح")
+            return session
+        else:
+            send_telegram(f"❌ فشل اللوجين - status: {res.status_code}")
+            return None
+    except Exception as e:
+        send_telegram(f"❌ خطأ في اللوجين: {e}")
+        return None
 
 def check_appointments(session):
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-    }
-    branches = {
-        "الإسكندرية": "egALY2fr",
-        "الشيخ زايد": "egCAI2fr"
-    }
-    for branch_name, branch_code in branches.items():
-        try:
-            url = f"{BASE_URL}/api/slot/active/{branch_code}"
-            response = session.get(url, headers=headers, timeout=30)
-            data = response.json()
-            if data and len(data) > 0:
-                send_telegram(f"🎉 ميعاد فرنسا متاح في فرع {branch_name}!\nافتح الموقع الآن: https://visas-fr.tlscontact.com/workflow/appointment-booking/egALY2fr/25781145")
-            else:
-                print(f"لا توجد مواعيد في {branch_name}")
-        except Exception as e:
-            print(f"خطأ في {branch_name}: {e}")
+    try:
+        url = f"{BASE_URL}/api/slot/active/{BRANCH_CODE}"
+        response = session.get(url, timeout=30)
 
+        send_telegram(
+            f"🔍 الإسكندرية\n"
+            f"Status: {response.status_code}\n"
+            f"Response: {response.text[:200]}"
+        )
+
+        if response.status_code == 401:
+            send_telegram("⚠️ انتهت الجلسة!")
+            return
+
+        data = response.json()
+        if data and len(data) > 0:
+            send_telegram(
+                f"🎉 ميعاد متاح في الإسكندرية!\n"
+                f"افتح الآن بسرعة 👇\n"
+                f"https://visas-fr.tlscontact.com/workflow/appointment-booking/{BRANCH_CODE}/{YOUR_ID}"
+            )
+        else:
+            send_telegram("😔 لا مواعيد في الإسكندرية دلوقتي")
+
+    except Exception as e:
+        send_telegram(f"❌ خطأ: {e}")
+
+# تشغيل
 session = login()
-send_telegram("✅ البوت بدأ يراقب مواعيد TLS فرنسا - الإسكندرية والشيخ زايد!")
-check_appointments(session)
+if session:
+    check_appointments(session)
