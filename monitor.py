@@ -5,6 +5,8 @@ from playwright.sync_api import sync_playwright
 
 TOKEN = os.environ.get("TOKEN")
 CHAT_ID = os.environ.get("CHAT_ID")
+TLS_EMAIL = os.environ.get("TLS_EMAIL")
+TLS_PASSWORD = os.environ.get("TLS_PASSWORD")
 
 BASE_URL = "https://visas-fr.tlscontact.com"
 BRANCH_CODE = "egALY2fr"
@@ -21,18 +23,27 @@ def check_appointments():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         context = browser.new_context(
-            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+            locale="en-US",
+            timezone_id="Africa/Cairo"
         )
         page = context.new_page()
 
         try:
-            page.goto(
-                "https://visas-fr.tlscontact.com/workflow/appointment-booking/{}/{}".format(
-                    BRANCH_CODE, YOUR_ID
-                )
-            )
+            # افتح صفحة اللوجين
+            send_telegram("جاري تسجيل الدخول...")
+            page.goto("https://visas-fr.tlscontact.com/login")
+            page.wait_for_timeout(3000)
+
+            # ادخل الايميل والباسورد
+            page.fill('input[type="email"]', TLS_EMAIL)
+            page.fill('input[type="password"]', TLS_PASSWORD)
+            page.click('button[type="submit"]')
             page.wait_for_timeout(5000)
 
+            send_telegram("تم تسجيل الدخول - جاري التحقق من المواعيد...")
+
+            # اعمل request للـ API
             response = page.request.get(
                 "{}/api/slot/active/{}".format(BASE_URL, BRANCH_CODE)
             )
