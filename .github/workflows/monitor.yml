@@ -1,4 +1,5 @@
 name: VFS Monitor
+
 on:
   schedule:
     - cron: '*/5 * * * *'
@@ -9,8 +10,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install requests
+        run: pip install requests
+      
       - name: Run monitor
         env:
           TOKEN: ${{ secrets.TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
+          TLS_AUTH: ${{ secrets.TLS_AUTH }}
+          TLS_UID: ${{ secrets.TLS_UID }}
         run: python monitor.py
