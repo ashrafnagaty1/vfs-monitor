@@ -30,45 +30,25 @@ def check_appointments():
         page = context.new_page()
 
         try:
-            # افتح صفحة اللوجين
-            send_telegram("جاري تسجيل الدخول...")
+            send_telegram("جاري فتح صفحة اللوجين...")
             page.goto("https://visas-fr.tlscontact.com/login")
-            page.wait_for_timeout(3000)
-
-            # ادخل الايميل والباسورد
-            page.fill('input[type="email"]', TLS_EMAIL)
-            page.fill('input[type="password"]', TLS_PASSWORD)
-            page.click('button[type="submit"]')
             page.wait_for_timeout(5000)
 
-            send_telegram("تم تسجيل الدخول - جاري التحقق من المواعيد...")
+            # نشوف الـ inputs الموجودة
+            inputs = page.query_selector_all("input")
+            send_telegram("عدد الـ inputs: {}".format(len(inputs)))
+            for i in inputs:
+                send_telegram("input: type={} name={} placeholder={}".format(
+                    i.get_attribute("type"),
+                    i.get_attribute("name"),
+                    i.get_attribute("placeholder")
+                ))
 
-            # اعمل request للـ API
-            response = page.request.get(
-                "{}/api/slot/active/{}".format(BASE_URL, BRANCH_CODE)
-            )
+            # نشوف الـ URL الحالي
+            send_telegram("URL الحالي: {}".format(page.url))
 
-            send_telegram(
-                "الاسكندرية\nStatus: {}\nResponse: {}".format(
-                    response.status,
-                    response.text()[:300]
-                )
-            )
-
-            if response.status == 200:
-                data = response.json()
-                if data and len(data) > 0:
-                    send_telegram(
-                        "ميعاد متاح في الاسكندرية!\n"
-                        "افتح الان بسرعة:\n"
-                        "https://visas-fr.tlscontact.com/workflow/appointment-booking/{}/{}".format(
-                            BRANCH_CODE, YOUR_ID
-                        )
-                    )
-                else:
-                    send_telegram("لا مواعيد في الاسكندرية دلوقتي")
-            else:
-                send_telegram("مشكلة في الاتصال - status: {}".format(response.status))
+            # نشوف عنوان الصفحة
+            send_telegram("عنوان الصفحة: {}".format(page.title()))
 
         except Exception as e:
             send_telegram("خطا: {}".format(e))
