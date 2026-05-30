@@ -26,4 +26,6 @@ jobs:
         env:
           TOKEN: ${{ secrets.TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
+          TLS_EMAIL: ${{ secrets.TLS_EMAIL }}
+          TLS_PASSWORD: ${{ secrets.TLS_PASSWORD }}
         run: python monitor.py
