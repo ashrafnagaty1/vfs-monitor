@@ -1,5 +1,6 @@
 import os
 import requests
+import time
 
 TOKEN = os.environ.get("TOKEN")
 CHAT_ID = os.environ.get("CHAT_ID")
@@ -11,6 +12,11 @@ BASE_URL = "https://visas-fr.tlscontact.com"
 def send_telegram(message):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     requests.post(url, data={"chat_id": CHAT_ID, "text": message})
+
+def send_alert(branch_name, link):
+    for i in range(1, 21):
+        send_telegram(f"🚨 تحذير {i}/20 🚨\n⚡ يوجد موعد متاح في فرع {branch_name}!\n👇 الحق احجز دلوقتي:\n{link}")
+        time.sleep(2)
 
 def login():
     session = requests.Session()
@@ -30,15 +36,15 @@ def check_appointments(session):
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
     }
     branches = {
-        "الغردقة": "egHRG2fr",
+        "الغردقة": ("egHRG2fr", "https://visas-fr.tlscontact.com/workflow/appointment-booking/egHRG2fr/26962221?date=2026-09-01"),
     }
-    for branch_name, branch_code in branches.items():
+    for branch_name, (branch_code, link) in branches.items():
         try:
             url = f"{BASE_URL}/api/slot/active/{branch_code}"
             response = session.get(url, headers=headers, timeout=30)
             data = response.json()
             if data and len(data) > 0:
-                send_telegram(f"🎉 ميعاد فرنسا متاح في فرع {branch_name}!\nافتح الموقع الآن: https://visas-fr.tlscontact.com/workflow/appointment-booking/egHRG2fr/26962221?date=2026-09-01")
+                send_alert(branch_name, link)
             else:
                 print(f"لا توجد مواعيد في {branch_name}")
         except Exception as e:
