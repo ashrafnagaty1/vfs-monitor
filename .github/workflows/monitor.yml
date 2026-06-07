@@ -1,8 +1,7 @@
 name: VFS Monitor
-
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '*/3 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -10,18 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      
-      - name: Install dependencies
-        run: |
-          pip install requests playwright
-          playwright install chromium
-          playwright install-deps chromium
-      
       - name: Run monitor
         env:
           TOKEN: ${{ secrets.TOKEN }}
