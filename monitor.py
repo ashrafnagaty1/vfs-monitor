@@ -14,8 +14,8 @@ def send_telegram(message):
     requests.post(url, data={"chat_id": CHAT_ID, "text": message})
 
 def send_alert(branch_name, link):
-    for i in range(1, 21):
-        send_telegram(f"🚨 تحذير {i}/20 🚨\n⚡ يوجد موعد متاح في فرع {branch_name}!\n👇 الحق احجز دلوقتي:\n{link}")
+    for i in range(1, 3):
+        send_telegram(f"🚨 تحذير {i}/2 🚨\n⚡ يوجد موعد متاح في فرع {branch_name}!\n👇 الحق احجز دلوقتي:\n{link}")
         time.sleep(2)
 
 def login():
