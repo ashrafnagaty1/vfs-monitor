@@ -1,55 +1,129 @@
 import os
 import requests
-import time
+from datetime import datetime
 
 TOKEN = os.environ.get("TOKEN")
 CHAT_ID = os.environ.get("CHAT_ID")
-TLS_EMAIL = os.environ.get("TLS_EMAIL")
-TLS_PASSWORD = os.environ.get("TLS_PASSWORD")
+EGX_API_KEY = os.environ.get("EGX_API_KEY")
 
-BASE_URL = "https://visas-fr.tlscontact.com"
+API_BASE = "https://api.egxapi.com/v2"
+
+# ==========================================
+# الأسهم والتنبيهات
+# ==========================================
+
+ALERTS = [
+    {
+        "symbol": "COMI",
+        "target": 100.00,
+        "direction": "above"
+    }
+]
+
 
 def send_telegram(message):
+    if not TOKEN or not CHAT_ID:
+        print("Telegram TOKEN or CHAT_ID is missing")
+        return
+
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-    requests.post(url, data={"chat_id": CHAT_ID, "text": message})
 
-def send_alert(branch_name, link):
-    for i in range(1, 61):
-        send_telegram(f"🚨 تحذير {i}/60 🚨\n⚡ يوجد موعد متاح في فرع {branch_name}!\n👇 الحق احجز دلوقتي:\n{link}")
-        time.sleep(2)
+    response = requests.post(
+        url,
+        data={
+            "chat_id": CHAT_ID,
+            "text": message
+        },
+        timeout=20
+    )
 
-def login():
-    session = requests.Session()
+    response.raise_for_status()
+
+
+def get_stock_price(symbol):
+    if not EGX_API_KEY:
+        raise RuntimeError("EGX_API_KEY is missing")
+
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-        "Content-Type": "application/json"
+        "Authorization": f"Bearer {EGX_API_KEY}",
+        "X-EGX-Env": "paper"
     }
-    payload = {
-        "email": TLS_EMAIL,
-        "password": TLS_PASSWORD
-    }
-    session.post(f"{BASE_URL}/api/auth/login", json=payload, headers=headers)
-    return session
 
-def check_appointments(session):
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-    }
-    branches = {
-        "الغردقة": ("egHRG2fr", "https://visas-fr.tlscontact.com/workflow/appointment-booking/egHRG2fr/26962221?date=2026-09-01"),
-    }
-    for branch_name, (branch_code, link) in branches.items():
-        try:
-            url = f"{BASE_URL}/api/slot/active/{branch_code}"
-            response = session.get(url, headers=headers, timeout=30)
-            data = response.json()
-            if data and len(data) > 0:
-                send_alert(branch_name, link)
-            else:
-                print(f"لا توجد مواعيد في {branch_name}")
-        except Exception as e:
-            print(f"خطأ في {branch_name}: {e}")
+    # سنثبت endpoint النهائي بعد أول اختبار للـ API
+    url = f"{API_BASE}/market/quotes/{symbol}"
 
-session = login()
-send_telegram("✅ البوت بدأ يراقب مواعيد TLS فرنسا - الغردقة!")
-check_appointments(session)
+    response = requests.get(
+        url,
+        headers=headers,
+        timeout=20
+    )
+
+    response.raise_for_status()
+
+    data = response.json()
+
+    # يدعم أكثر من شكل محتمل للاستجابة
+    for key in ["price", "last", "last_price", "close"]:
+        if key in data:
+            return float(data[key])
+
+    if "data" in data and isinstance(data["data"], dict):
+        for key in ["price", "last", "last_price", "close"]:
+            if key in data["data"]:
+                return float(data["data"][key])
+
+    raise RuntimeError(
+        f"Could not find price for {symbol}. Response: {data}"
+    )
+
+
+def check_alert(alert):
+    symbol = alert["symbol"]
+    target = float(alert["target"])
+    direction = alert["direction"]
+
+    try:
+        price = get_stock_price(symbol)
+
+        print(
+            f"{symbol}: current={price} "
+            f"target={target} direction={direction}"
+        )
+
+        triggered = False
+
+        if direction == "above" and price >= target:
+            triggered = True
+
+        elif direction == "below" and price <= target:
+            triggered = True
+
+        if triggered:
+            arrow = "⬆️" if direction == "above" else "⬇️"
+
+            message = (
+                f"🔔 EGX Smart Scanner\n\n"
+                f"📈 السهم: {symbol}\n"
+                f"💰 السعر الحالي: {price:.2f} EGP\n"
+                f"🎯 السعر المستهدف: {target:.2f} EGP\n"
+                f"{arrow} تم تحقق شرط التنبيه\n\n"
+                f"🕒 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+            )
+
+            send_telegram(message)
+
+    except Exception as e:
+        print(f"Error checking {symbol}: {e}")
+
+
+def main():
+    print("================================")
+    print("EGX Smart Scanner Cloud Monitor")
+    print("================================")
+
+    for alert in ALERTS:
+        check_alert(alert)
+
+
+if __name__ == "__main__":
+    main()
