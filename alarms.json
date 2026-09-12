@@ -1,3 +1,16 @@
 {
-  "alarms": []
+  "alarms": [
+    {
+      "id": "a9689093-99cd-4330-993e-388ab9d05e5d",
+      "symbol": "NIPH",
+      "arabic_name": "النيل للأدوية والصناعات الكيماوية",
+      "condition": ">=",
+      "price": 350.0,
+      "max_notifications": 1,
+      "notifications_sent": 0,
+      "active": true,
+      "mode": "telegram_windows_sound",
+      "created_at": "2026-09-12T11:59:27"
+    }
+  ]
 }
