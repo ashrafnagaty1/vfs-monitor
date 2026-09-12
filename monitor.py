@@ -4,6 +4,10 @@ import requests
 TOKEN = os.environ.get("TOKEN")
 CHAT_ID = os.environ.get("CHAT_ID")
 
+SYMBOL = "COMI"
+ALARM_PRICE = 138.20
+
+
 def send_telegram(message):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
 
@@ -18,24 +22,22 @@ def send_telegram(message):
 
     response.raise_for_status()
 
+
 response = requests.get(
-    "https://demo.borsa.ashh.me/demo/quote/COMI",
+    f"https://demo.borsa.ashh.me/demo/quote/{SYMBOL}",
     timeout=20
 )
 
 response.raise_for_status()
-
 data = response.json()
 
-message = (
-    f"📈 EGX Smart Scanner\n\n"
-    f"السهم: {data['symbol']}\n"
-    f"السعر: {data['price']} EGP\n"
-    f"التغير: {data['change']} ({data['change_percent']})\n"
-    f"الحجم: {data['volume']}\n"
-    f"أعلى سعر: {data['high']}\n"
-    f"أقل سعر: {data['low']}\n"
-    f"المصدر: {data['source']}"
-)
+current_price = float(data["price"])
 
-send_telegram(message)
+if current_price <= ALARM_PRICE:
+    send_telegram(
+        f"🚨 EGX PRICE ALARM\n\n"
+        f"السهم: {SYMBOL}\n"
+        f"السعر الحالي: {current_price:.2f} EGP\n"
+        f"سعر التنبيه: {ALARM_PRICE:.2f} EGP\n\n"
+        f"✅ تم الوصول لسعر التنبيه"
+    )
