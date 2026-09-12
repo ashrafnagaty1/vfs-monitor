@@ -18,7 +18,8 @@ def send_telegram(message):
         url,
         data={
             "chat_id": CHAT_ID,
-            "text": message
+            "text": message,
+            "parse_mode": "HTML"
         },
         timeout=20
     )
@@ -45,21 +46,31 @@ response = requests.get(
 )
 
 response.raise_for_status()
-
 data = response.json()
 
 current_price = float(data["price"])
+change = float(data["change"])
+change_percent_text = data["change_percent"]
+
 state = load_state()
+
+
+if change > 0:
+    change_icon = "🟢"
+elif change < 0:
+    change_icon = "🔴"
+else:
+    change_icon = "⚪"
 
 
 if current_price <= ALARM_PRICE and not state["alarm_triggered"]:
 
     send_telegram(
-        f"🚨 EGX PRICE ALARM\n\n"
-        f"السهم: {ARABIC_NAME} - {SYMBOL}\n"
-        f"السعر الحالي: {current_price:.2f} جنيه\n"
+        f"🚨 <b>EGX PRICE ALARM</b>\n\n"
+        f"السهم: <b>{ARABIC_NAME} - {SYMBOL}</b>\n"
+        f"السعر الحالي: <b>{current_price:.2f} جنيه</b>\n"
         f"سعر التنبيه: {ALARM_PRICE:.2f} جنيه\n"
-        f"التغير: {data['change']} ({data['change_percent']})\n"
+        f"التغير: {change_icon} <b>{change:+.2f} ({change_percent_text})</b>\n"
         f"أعلى سعر: {data['high']} جنيه\n"
         f"أقل سعر: {data['low']} جنيه\n"
         f"حجم التداول: {data['volume']:,}\n\n"
