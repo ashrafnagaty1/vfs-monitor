@@ -3,8 +3,6 @@ import requests
 
 TOKEN = os.environ.get("TOKEN")
 CHAT_ID = os.environ.get("CHAT_ID")
-EGX_API_KEY = os.environ.get("EGX_API_KEY")
-
 
 def send_telegram(message):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
@@ -20,27 +18,24 @@ def send_telegram(message):
 
     response.raise_for_status()
 
+response = requests.get(
+    "https://demo.borsa.ashh.me/demo/quote/COMI",
+    timeout=20
+)
 
-headers = {
-    "Authorization": f"Bearer {EGX_API_KEY}",
-    "X-EGX-Env": "paper"
-}
+response.raise_for_status()
 
-try:
-    response = requests.get(
-        "https://api.egxapi.com/v2/account",
-        headers=headers,
-        timeout=20
-    )
+data = response.json()
 
-    if response.status_code == 200:
-        send_telegram("✅ EGXAPI متصل بنجاح والمفتاح شغال")
-    else:
-        send_telegram(
-            f"❌ مشكلة في EGXAPI\n"
-            f"Status Code: {response.status_code}\n"
-            f"{response.text[:300]}"
-        )
+message = (
+    f"📈 EGX Smart Scanner\n\n"
+    f"السهم: {data['symbol']}\n"
+    f"السعر: {data['price']} EGP\n"
+    f"التغير: {data['change']} ({data['change_percent']})\n"
+    f"الحجم: {data['volume']}\n"
+    f"أعلى سعر: {data['high']}\n"
+    f"أقل سعر: {data['low']}\n"
+    f"المصدر: {data['source']}"
+)
 
-except Exception as e:
-    send_telegram(f"❌ خطأ أثناء الاتصال بـ EGXAPI:\n{e}")
+send_telegram(message)
