@@ -6,6 +6,7 @@ TOKEN = os.environ.get("TOKEN")
 CHAT_ID = os.environ.get("CHAT_ID")
 
 SYMBOL = "COMI"
+ARABIC_NAME = "البنك التجاري الدولي (مصر)"
 ALARM_PRICE = 138.20
 STATE_FILE = "state.json"
 
@@ -44,23 +45,30 @@ response = requests.get(
 )
 
 response.raise_for_status()
+
 data = response.json()
 
 current_price = float(data["price"])
 state = load_state()
 
+
 if current_price <= ALARM_PRICE and not state["alarm_triggered"]:
 
     send_telegram(
         f"🚨 EGX PRICE ALARM\n\n"
-        f"السهم: {SYMBOL}\n"
-        f"السعر الحالي: {current_price:.2f} EGP\n"
-        f"سعر التنبيه: {ALARM_PRICE:.2f} EGP\n\n"
+        f"السهم: {ARABIC_NAME} - {SYMBOL}\n"
+        f"السعر الحالي: {current_price:.2f} جنيه\n"
+        f"سعر التنبيه: {ALARM_PRICE:.2f} جنيه\n"
+        f"التغير: {data['change']} ({data['change_percent']})\n"
+        f"أعلى سعر: {data['high']} جنيه\n"
+        f"أقل سعر: {data['low']} جنيه\n"
+        f"حجم التداول: {data['volume']:,}\n\n"
         f"✅ تم الوصول لسعر التنبيه"
     )
 
     state["alarm_triggered"] = True
     save_state(state)
+
 
 elif current_price > ALARM_PRICE and state["alarm_triggered"]:
 
