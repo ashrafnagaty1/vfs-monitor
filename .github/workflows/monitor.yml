@@ -30,6 +30,17 @@ jobs:
       - name: Install requests
         run: pip install requests
 
+      - name: Validate Python modules
+        run: python -m py_compile monitor.py pro_engine.py data_provider.py data_health.py
+
+      - name: Check market data health
+        env:
+          EGX_LIVE_QUOTE_URL_TEMPLATE: ${{ secrets.EGX_LIVE_QUOTE_URL_TEMPLATE }}
+          EGX_LIVE_TOKEN: ${{ secrets.EGX_LIVE_TOKEN }}
+          EGX_LIVE_AUTH_HEADER: ${{ secrets.EGX_LIVE_AUTH_HEADER }}
+          EGX_LIVE_AUTH_PREFIX: ${{ secrets.EGX_LIVE_AUTH_PREFIX }}
+        run: python data_health.py
+
       - name: Run Telegram bot and core scanner
         env:
           TOKEN: ${{ secrets.TOKEN }}
@@ -40,6 +51,10 @@ jobs:
         env:
           TOKEN: ${{ secrets.TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
+          EGX_LIVE_QUOTE_URL_TEMPLATE: ${{ secrets.EGX_LIVE_QUOTE_URL_TEMPLATE }}
+          EGX_LIVE_TOKEN: ${{ secrets.EGX_LIVE_TOKEN }}
+          EGX_LIVE_AUTH_HEADER: ${{ secrets.EGX_LIVE_AUTH_HEADER }}
+          EGX_LIVE_AUTH_PREFIX: ${{ secrets.EGX_LIVE_AUTH_PREFIX }}
         run: python pro_engine.py
 
       - name: Save bot state
@@ -47,7 +62,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add state.json alarms.json
+          git add state.json alarms.json data_health.json 2>/dev/null || true
           git diff --cached --quiet || git commit -m "Update EGX bot state"
           git pull --rebase origin main
           git push
