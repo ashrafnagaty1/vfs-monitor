@@ -50,11 +50,8 @@ jobs:
           EGX_LIVE_AUTH_PREFIX: ${{ secrets.EGX_LIVE_AUTH_PREFIX }}
         run: python data_health.py
 
-      - name: Run fast Telegram interface
-        env:
-          TOKEN: ${{ secrets.TOKEN }}
-          CHAT_ID: ${{ secrets.CHAT_ID }}
-        run: python telegram_bot.py
+      # Telegram commands are now handled instantly by the Cloudflare Worker webhook.
+      # Do not run telegram_bot.py here because Telegram getUpdates conflicts with an active webhook.
 
       - name: Run professional signal engine
         continue-on-error: true
