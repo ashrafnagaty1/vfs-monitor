@@ -1,6 +1,7 @@
 import app from "./analysis_tools_wrapper.js";
 
-const VERSION="reference-layout-v7-2026-09-14";
+const VERSION="reference-layout-v7.1-refo-2026-09-14";
+const BRAND="ReFo . EGX Smart Trader";
 
 export default {
   async fetch(req,env,ctx){
@@ -10,6 +11,13 @@ export default {
     const ct=res.headers.get("content-type")||"";
     if(!ct.includes("text/html")) return res;
     let html=await res.text();
+
+    /* Unified public branding without changing data logic. */
+    html=html
+      .replaceAll("EGX Smart Terminal",BRAND)
+      .replaceAll("EGX SMART TERMINAL",BRAND)
+      .replaceAll("EGX Smart Trader",BRAND)
+      .replace(/<title>[^<]*<\/title>/i,`<title>${BRAND}</title>`);
 
     const css=`<style id="reference-v7">
     html,body{width:100%;height:100%;overflow:hidden;background:#05070a!important}
@@ -66,11 +74,10 @@ export default {
     html=html.replace('<aside class="right">','<aside class="right">'+rightTabs);
 
     const leftTabs=`<div class="ref-left-tabs"><div class="ref-left-tab on">نظرة عامة</div><div class="ref-left-tab">الشركة</div><div class="ref-left-tab">أخبار</div><div class="ref-left-tab">التحليلات</div><div class="ref-left-tab">العمق</div></div>`;
-    html=html.replace('<div class="stockhead">','<div class="stockhead">');
     const stockEnd=html.indexOf('</div>',html.indexOf('<div class="stockhead">'));
     if(stockEnd>0) html=html.slice(0,stockEnd+6)+leftTabs+html.slice(stockEnd+6);
 
-    const footer=`<div class="ref-footer"><b>EGX SMART TERMINAL v7</b><span>بيانات تقييمية/متأخرة — ليست توصية استثمارية</span><span class="live">● متصل &nbsp; | &nbsp; Snapshot / KV</span></div>`;
+    const footer=`<div class="ref-footer"><b>${BRAND}</b><span>بيانات تقييمية/متأخرة — ليست توصية استثمارية</span><span class="live">● متصل &nbsp; | &nbsp; Snapshot / KV</span></div>`;
     html=html.replace('</body>',footer+`<div style="display:none">${VERSION}</div></body>`);
 
     const headers=new Headers(res.headers);
