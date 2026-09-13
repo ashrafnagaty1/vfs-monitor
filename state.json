@@ -5,7 +5,7 @@
   "signals": {},
   "scanner_seen": {},
   "pro_engine_snapshot": {
-    "at": "2026-09-14T01:38:49.679854+03:00",
+    "at": "2026-09-14T01:39:21.193614+03:00",
     "count": 34,
     "quote_mode": "DELAYED_EVALUATION",
     "quote_source": "borsa demo (evaluation)",
@@ -28155,7 +28155,7 @@
     "health_warning:2026-09-14:RED": "2026-09-14T00:00:24.292352+03:00"
   },
   "trade_lifecycle": {
-    "updated_at": "2026-09-14T01:38:49.781385+03:00",
+    "updated_at": "2026-09-14T01:39:21.296427+03:00",
     "quote_mode": "DELAYED_EVALUATION",
     "disclaimer": "ENTRY states require a configured live quote provider. Delayed/evaluation data stays WATCH even if the last price is above trigger.",
     "new_alerts_count": 0,
@@ -28695,7 +28695,7 @@
     }
   ],
   "signal_portfolio": {
-    "updated_at": "2026-09-14T01:38:49.960850+03:00",
+    "updated_at": "2026-09-14T01:39:21.480537+03:00",
     "mode": "LIVE_SIGNAL_TRACKING",
     "quote_mode": "DELAYED_EVALUATION",
     "disclaimer": "Tracks confirmed LIVE signal entries only. It is not a brokerage account statement, and delayed/evaluation WATCH data never creates positions or performance records.",
@@ -28715,7 +28715,7 @@
     }
   },
   "signal_guard": {
-    "updated_at": "2026-09-14T01:38:49.866056+03:00",
+    "updated_at": "2026-09-14T01:39:21.382651+03:00",
     "quote_mode": "DELAYED_EVALUATION",
     "policy": "Execution-ready requires LIVE quotes, RR >= 1.30 and no overheating blocker. Delayed/evaluation plans remain analysis-only WATCH regardless of score.",
     "counts": {
@@ -28731,7 +28731,7 @@
     "canonical_price": false,
     "price_note": "EGXpilot currentPrice is not used as the scanner/live quote source until independently verified.",
     "cache_minutes": 30,
-    "updated_at": "2026-09-13T22:38:49.679981+00:00",
+    "updated_at": "2026-09-13T22:39:21.193744+00:00",
     "selected_symbols": [
       "ORHD",
       "EPCO",
