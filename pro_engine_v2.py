@@ -40,22 +40,36 @@ def compact_detail(x):
 
 
 def egx_session(now):
-    # Python weekday: Mon=0 ... Fri=4, Sat=5, Sun=6. EGX trades Sun-Thu.
-    trading_day = now.weekday() not in (4, 5)
+    """Heuristic EGX session clock in Cairo time.
+
+    Trading days are Sunday-Thursday. We intentionally avoid calling the whole
+    period before 10:00 PRE_MARKET; midnight/overnight is CLOSED. The short
+    pre-market window starts at 09:30, regular session at 10:00, and closes
+    after 14:30. Official holidays are still not calendar-checked.
+    """
+    trading_day = now.weekday() not in (4, 5)  # Fri/Sat are weekend
     mins = now.hour * 60 + now.minute
+    pre_open = 9 * 60 + 30
+    open_min = 10 * 60
+    close_min = 14 * 60 + 30
+
     if not trading_day:
         status = "WEEKEND"
-    elif mins < 600:
+    elif pre_open <= mins < open_min:
         status = "PRE_MARKET"
-    elif mins <= 870:
+    elif open_min <= mins <= close_min:
         status = "SESSION"
     else:
         status = "CLOSED"
+
     return {
         "status": status,
         "trading_day": trading_day,
         "heuristic": True,
-        "note": "Sunday-Thursday session heuristic; official holidays are not yet calendar-checked.",
+        "pre_market_from": "09:30",
+        "session_from": "10:00",
+        "session_to": "14:30",
+        "note": "Sunday-Thursday Cairo-time heuristic; official holidays are not yet calendar-checked.",
     }
 
 
@@ -66,9 +80,11 @@ def main():
     session = egx_session(now)
 
     data_health_alert(state)
-    # Old pro_engine helpers assume Mon-Fri. Gate them here so Friday/Saturday never fire.
-    if session["trading_day"]:
+    # Intraday event alerts should never fire overnight or after the close.
+    if session["status"] == "SESSION":
         event_alerts(state, items)
+    # Scheduled reports remain available on trading days; their own time gates apply.
+    if session["trading_day"]:
         scheduled_reports(state, items)
 
     regime = market_regime(items)
