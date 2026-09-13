@@ -1,9 +1,8 @@
 import json
-import os
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
-from data_provider import provider
+from data_provider import DataProviderError, provider
 
 OUT = "data_health.json"
 CAIRO = ZoneInfo("Africa/Cairo")
@@ -31,9 +30,33 @@ def due(previous):
         before = datetime.fromisoformat(raw)
         if before.tzinfo is None:
             before = before.replace(tzinfo=CAIRO)
-        return datetime.now(CAIRO) - before >= timedelta(minutes=55)
+        # The public demo quote service has a very small shared quota. When no
+        # licensed live feed is configured, do not burn quota every hour merely
+        # for a plumbing health check.
+        interval = timedelta(minutes=55 if provider.has_live_quote else 360)
+        return datetime.now(CAIRO) - before >= interval
     except Exception:
         return True
+
+
+def _history_only_health(symbol, result, reason):
+    """Verify the historical fallback when the evaluation quote feed is throttled.
+
+    A demo quota exhaustion is a feed-availability degradation, not proof that all
+    market data is broken. Keep the status AMBER when Yahoo daily history remains
+    available, and reserve RED for cases where the fallback is unavailable too.
+    """
+    rows = provider.history(symbol, period="1mo", interval="1d")
+    last = rows[-1]
+    result["status"] = "AMBER"
+    result["quote_available"] = False
+    result["history_available"] = True
+    result["daily_close"] = float(last["close"])
+    result["degraded_reason"] = reason
+    result["message"] = (
+        "Demo quote quota is exhausted, but Yahoo EGX daily history is healthy. "
+        "System remains evaluation-only; no ENTRY should be generated without a Live Feed."
+    )
 
 
 def main():
@@ -42,8 +65,6 @@ def main():
         print("Data health check skipped: recent result exists")
         return
 
-    # The shared demo quote endpoint is quota-limited, so only one symbol is checked
-    # per hourly health cycle. A real feed can safely expand this later.
     idx = int(previous.get("rotation_index", -1)) + 1
     symbol = SYMBOLS[idx % len(SYMBOLS)]
     now = datetime.now(CAIRO)
@@ -57,6 +78,8 @@ def main():
         "symbol": symbol,
         "status": "UNKNOWN",
         "message": "",
+        "quote_available": None,
+        "history_available": None,
     }
 
     try:
@@ -67,8 +90,9 @@ def main():
         result["bid"] = h.get("bid")
         result["ask"] = h.get("ask")
         result["is_live"] = bool(h["is_live"])
+        result["quote_available"] = True
+        result["history_available"] = True
 
-        # This score is about plumbing/consistency, not whether market data is truly real-time.
         gap = abs(float(h["gap_pct"]))
         if provider.has_live_quote:
             result["status"] = "GREEN" if gap <= 15 else "AMBER"
@@ -76,6 +100,21 @@ def main():
         else:
             result["status"] = "AMBER" if gap <= 15 else "RED"
             result["message"] = "Fallback quote/history sources responded, but they are not execution-grade live EGX data."
+    except DataProviderError as exc:
+        if str(exc) == "DEMO_RATE_LIMIT" and not provider.has_live_quote:
+            try:
+                _history_only_health(symbol, result, "DEMO_RATE_LIMIT")
+            except Exception as fallback_exc:
+                result["status"] = "RED"
+                result["quote_available"] = False
+                result["history_available"] = False
+                result["message"] = (
+                    f"Demo quote quota exhausted and historical fallback failed: "
+                    f"{type(fallback_exc).__name__}: {fallback_exc}"
+                )
+        else:
+            result["status"] = "RED"
+            result["message"] = f"Data source check failed: {type(exc).__name__}: {exc}"
     except Exception as exc:
         result["status"] = "RED"
         result["message"] = f"Data source check failed: {type(exc).__name__}: {exc}"
