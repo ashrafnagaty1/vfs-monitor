@@ -1,5 +1,6 @@
 {
   "alarm_triggered": true,
   "alarms": {},
-  "telegram_update_offset": 97170334
+  "telegram_update_offset": 97170335,
+  "signals": {}
 }
