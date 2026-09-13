@@ -30,11 +30,17 @@ jobs:
       - name: Install requests
         run: pip install requests
 
-      - name: Run EGX Monitor
+      - name: Run Telegram bot and core scanner
         env:
           TOKEN: ${{ secrets.TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
         run: python monitor.py
+
+      - name: Run professional signal engine
+        env:
+          TOKEN: ${{ secrets.TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+        run: python pro_engine.py
 
       - name: Save bot state
         if: always()
