@@ -3,5 +3,61 @@
   "alarms": {},
   "telegram_update_offset": 97170336,
   "signals": {},
-  "scanner_seen": {}
+  "scanner_seen": {},
+  "pro_engine_snapshot": {
+    "at": "2026-09-13T20:42:20.003756+03:00",
+    "count": 34,
+    "top": [
+      {
+        "symbol": "POUL",
+        "score": 86,
+        "price": 39.88999938964844
+      },
+      {
+        "symbol": "ORHD",
+        "score": 84,
+        "price": 43.20000076293945
+      },
+      {
+        "symbol": "EPCO",
+        "score": 82,
+        "price": 11.720000267028809
+      },
+      {
+        "symbol": "ETEL",
+        "score": 82,
+        "price": 125.25
+      },
+      {
+        "symbol": "TMGH",
+        "score": 78,
+        "price": 99.05000305175781
+      },
+      {
+        "symbol": "SWDY",
+        "score": 73,
+        "price": 127.5
+      },
+      {
+        "symbol": "KABO",
+        "score": 70,
+        "price": 9.5
+      },
+      {
+        "symbol": "MASR",
+        "score": 70,
+        "price": 8.300000190734863
+      },
+      {
+        "symbol": "SKPC",
+        "score": 66,
+        "price": 18.5
+      },
+      {
+        "symbol": "DTPP",
+        "score": 66,
+        "price": 301.4700012207031
+      }
+    ]
+  }
 }
