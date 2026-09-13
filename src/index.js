@@ -200,8 +200,9 @@ export default {
 
     if (request.method === "POST" && url.pathname === "/sync") {
       if (!env.STATE) return Response.json({ ok: false, error: "STATE KV binding is missing" }, { status: 500 });
+      if (!env.SYNC_SECRET) return Response.json({ ok: false, error: "SYNC_SECRET is missing" }, { status: 500 });
       const auth = request.headers.get("authorization") || "";
-      if (!env.TOKEN || auth !== `Bearer ${env.TOKEN}`) return Response.json({ ok: false, error: "unauthorized" }, { status: 401 });
+      if (auth !== `Bearer ${env.SYNC_SECRET}`) return Response.json({ ok: false, error: "unauthorized" }, { status: 401 });
       try {
         const body = await request.json();
         if (!body || typeof body !== "object") throw new Error("invalid state");
