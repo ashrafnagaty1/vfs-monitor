@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "vfs-monitor",
-  "main": "src/analysis_tools_wrapper.js",
+  "main": "src/reference_layout_wrapper.js",
   "compatibility_date": "2026-09-13",
   "workers_dev": true,
   "kv_namespaces": [
