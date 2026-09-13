@@ -31,7 +31,10 @@ jobs:
         run: pip install requests
 
       - name: Validate Python modules
-        run: python -m py_compile monitor.py pro_engine.py data_provider.py data_health.py
+        run: python -m py_compile monitor.py pro_engine.py data_provider.py data_health.py self_test.py
+
+      - name: Run deterministic self tests
+        run: python self_test.py
 
       - name: Check market data health
         env:
