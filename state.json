@@ -5,11 +5,17 @@
   "signals": {},
   "scanner_seen": {},
   "pro_engine_snapshot": {
-    "at": "2026-09-13T23:35:59.727126+03:00",
+    "at": "2026-09-13T23:36:42.420404+03:00",
     "count": 34,
     "quote_mode": "DELAYED_EVALUATION",
     "quote_source": "borsa demo (evaluation)",
     "history_source": "Yahoo Finance EGX .CA daily candles",
+    "market_session": {
+      "status": "CLOSED",
+      "trading_day": true,
+      "heuristic": true,
+      "note": "Sunday-Thursday session heuristic; official holidays are not yet calendar-checked."
+    },
     "market_regime": {
       "name": "MIXED 🟡",
       "breadth": 64.70588235294117,
@@ -1842,10 +1848,10 @@
     "health_warning:2026-09-13:RED": "2026-09-13T20:45:34.853191+03:00"
   },
   "trade_lifecycle": {
-    "updated_at": "2026-09-13T23:35:59.782292+03:00",
+    "updated_at": "2026-09-13T23:36:42.481809+03:00",
     "quote_mode": "DELAYED_EVALUATION",
     "disclaimer": "ENTRY states require a configured live quote provider. Delayed/evaluation data stays WATCH even if the last price is above trigger.",
-    "new_alerts_count": 6,
+    "new_alerts_count": 0,
     "plans": [
       {
         "symbol": "ORHD",
