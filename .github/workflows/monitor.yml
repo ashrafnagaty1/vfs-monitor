@@ -70,12 +70,12 @@ jobs:
       - name: Sync state to Cloudflare Worker
         continue-on-error: true
         env:
-          TOKEN: ${{ secrets.TOKEN }}
+          SYNC_SECRET: ${{ secrets.SYNC_SECRET }}
         run: |
           if [ -f state.json ]; then
             curl --fail --silent --show-error \
               -X POST "https://vfs-monitor.folkhero3.workers.dev/sync" \
-              -H "Authorization: Bearer $TOKEN" \
+              -H "Authorization: Bearer $SYNC_SECRET" \
               -H "Content-Type: application/json" \
               --data-binary @state.json
           fi
