@@ -17,6 +17,7 @@ concurrency:
 
 jobs:
   check:
+    if: github.event_name != 'push' || github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -32,7 +33,7 @@ jobs:
 
       - name: Validate Python modules
         continue-on-error: true
-        run: python -m py_compile telegram_bot.py monitor.py pro_engine.py data_provider.py data_health.py self_test.py
+        run: python -m py_compile telegram_bot.py always_on_bot.py monitor.py pro_engine.py data_provider.py data_health.py self_test.py
 
       - name: Run deterministic self tests
         continue-on-error: true
