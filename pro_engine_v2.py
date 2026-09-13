@@ -29,6 +29,9 @@ def compact_detail(x):
         "target1": round(x["t1"], 4),
         "target2": round(x["t2"], 4),
         "target3": round(x["t3"], 4),
+        "ema20": round(x.get("ema20", 0), 4),
+        "ema50": round(x.get("ema50", 0), 4),
+        "ema200": round(x.get("ema200", 0), 4),
         "golden": bool(x["golden"]),
         "golden_low": round(x["golden_low"], 4),
         "golden_high": round(x["golden_high"], 4),
@@ -36,23 +39,16 @@ def compact_detail(x):
         "setups": list(x.get("setups") or []),
         "why": list(x.get("why") or []),
         "quote_live": bool(x.get("quote_live")),
+        "chart": list(x.get("chart") or []),
     }
 
 
 def egx_session(now):
-    """Heuristic EGX session clock in Cairo time.
-
-    Trading days are Sunday-Thursday. We intentionally avoid calling the whole
-    period before 10:00 PRE_MARKET; midnight/overnight is CLOSED. The short
-    pre-market window starts at 09:30, regular session at 10:00, and closes
-    after 14:30. Official holidays are still not calendar-checked.
-    """
-    trading_day = now.weekday() not in (4, 5)  # Fri/Sat are weekend
+    trading_day = now.weekday() not in (4, 5)
     mins = now.hour * 60 + now.minute
     pre_open = 9 * 60 + 30
     open_min = 10 * 60
     close_min = 14 * 60 + 30
-
     if not trading_day:
         status = "WEEKEND"
     elif pre_open <= mins < open_min:
@@ -61,7 +57,6 @@ def egx_session(now):
         status = "SESSION"
     else:
         status = "CLOSED"
-
     return {
         "status": status,
         "trading_day": trading_day,
@@ -78,15 +73,11 @@ def main():
     items = scan()
     now = datetime.now(CAIRO)
     session = egx_session(now)
-
     data_health_alert(state)
-    # Intraday event alerts should never fire overnight or after the close.
     if session["status"] == "SESSION":
         event_alerts(state, items)
-    # Scheduled reports remain available on trading days; their own time gates apply.
     if session["trading_day"]:
         scheduled_reports(state, items)
-
     regime = market_regime(items)
     state["pro_engine_snapshot"] = {
         "at": now.isoformat(),
