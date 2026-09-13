@@ -5,7 +5,7 @@
   "signals": {},
   "scanner_seen": {},
   "pro_engine_snapshot": {
-    "at": "2026-09-14T01:36:11.866757+03:00",
+    "at": "2026-09-14T01:36:39.249445+03:00",
     "count": 34,
     "quote_mode": "DELAYED_EVALUATION",
     "quote_source": "borsa demo (evaluation)",
@@ -123,6 +123,103 @@
         "liquidity_score": 64.87
       }
     ],
+    "secondary_analysis": {
+      "provider": "EGXpilot",
+      "role": "SECONDARY_ANALYSIS_ONLY",
+      "canonical_price": false,
+      "symbols": {
+        "ORHD": {
+          "ok": true,
+          "provider": "EGXpilot",
+          "role": "SECONDARY_ANALYSIS_ONLY",
+          "canonical_price": false,
+          "fetched_at": "2026-09-13T22:36:39.249598+00:00",
+          "score": null,
+          "bias": null,
+          "signal": null,
+          "signal_direction": null,
+          "confidence": null,
+          "regime": null,
+          "rsi": null,
+          "macd": null,
+          "macd_signal": null,
+          "atr": null,
+          "vwap": null
+        },
+        "EPCO": {
+          "ok": true,
+          "provider": "EGXpilot",
+          "role": "SECONDARY_ANALYSIS_ONLY",
+          "canonical_price": false,
+          "fetched_at": "2026-09-13T22:36:40.779279+00:00",
+          "score": null,
+          "bias": null,
+          "signal": null,
+          "signal_direction": null,
+          "confidence": null,
+          "regime": null,
+          "rsi": null,
+          "macd": null,
+          "macd_signal": null,
+          "atr": null,
+          "vwap": null
+        },
+        "POUL": {
+          "ok": true,
+          "provider": "EGXpilot",
+          "role": "SECONDARY_ANALYSIS_ONLY",
+          "canonical_price": false,
+          "fetched_at": "2026-09-13T22:36:41.616517+00:00",
+          "score": null,
+          "bias": null,
+          "signal": null,
+          "signal_direction": null,
+          "confidence": null,
+          "regime": null,
+          "rsi": null,
+          "macd": null,
+          "macd_signal": null,
+          "atr": null,
+          "vwap": null
+        },
+        "ETEL": {
+          "ok": true,
+          "provider": "EGXpilot",
+          "role": "SECONDARY_ANALYSIS_ONLY",
+          "canonical_price": false,
+          "fetched_at": "2026-09-13T22:36:43.074475+00:00",
+          "score": 67,
+          "bias": "BULLISH",
+          "signal": "BREAKOUT",
+          "signal_direction": "BULLISH",
+          "confidence": 57,
+          "regime": "VOLATILE_UPTREND",
+          "rsi": 73.2,
+          "macd": 3.992333311958916,
+          "macd_signal": 3.455211494087067,
+          "atr": 3.91,
+          "vwap": 127.1
+        },
+        "TMGH": {
+          "ok": true,
+          "provider": "EGXpilot",
+          "role": "SECONDARY_ANALYSIS_ONLY",
+          "canonical_price": false,
+          "fetched_at": "2026-09-13T22:36:44.289131+00:00",
+          "score": null,
+          "bias": null,
+          "signal": null,
+          "signal_direction": null,
+          "confidence": null,
+          "regime": null,
+          "rsi": null,
+          "macd": null,
+          "macd_signal": null,
+          "atr": null,
+          "vwap": null
+        }
+      }
+    },
     "top": [
       {
         "symbol": "ORHD",
@@ -727,7 +824,25 @@
             "close": 43.2,
             "volume": 5987926
           }
-        ]
+        ],
+        "egxpilot": {
+          "ok": true,
+          "provider": "EGXpilot",
+          "role": "SECONDARY_ANALYSIS_ONLY",
+          "canonical_price": false,
+          "fetched_at": "2026-09-13T22:36:39.249598+00:00",
+          "score": null,
+          "bias": null,
+          "signal": null,
+          "signal_direction": null,
+          "confidence": null,
+          "regime": null,
+          "rsi": null,
+          "macd": null,
+          "macd_signal": null,
+          "atr": null,
+          "vwap": null
+        }
       },
       {
         "symbol": "EPCO",
@@ -1331,7 +1446,25 @@
             "close": 11.72,
             "volume": 8286753
           }
-        ]
+        ],
+        "egxpilot": {
+          "ok": true,
+          "provider": "EGXpilot",
+          "role": "SECONDARY_ANALYSIS_ONLY",
+          "canonical_price": false,
+          "fetched_at": "2026-09-13T22:36:40.779279+00:00",
+          "score": null,
+          "bias": null,
+          "signal": null,
+          "signal_direction": null,
+          "confidence": null,
+          "regime": null,
+          "rsi": null,
+          "macd": null,
+          "macd_signal": null,
+          "atr": null,
+          "vwap": null
+        }
       },
       {
         "symbol": "POUL",
@@ -1933,7 +2066,25 @@
             "close": 39.89,
             "volume": 1974609
           }
-        ]
+        ],
+        "egxpilot": {
+          "ok": true,
+          "provider": "EGXpilot",
+          "role": "SECONDARY_ANALYSIS_ONLY",
+          "canonical_price": false,
+          "fetched_at": "2026-09-13T22:36:41.616517+00:00",
+          "score": null,
+          "bias": null,
+          "signal": null,
+          "signal_direction": null,
+          "confidence": null,
+          "regime": null,
+          "rsi": null,
+          "macd": null,
+          "macd_signal": null,
+          "atr": null,
+          "vwap": null
+        }
       },
       {
         "symbol": "ETEL",
@@ -2535,7 +2686,25 @@
             "close": 125.25,
             "volume": 3747741
           }
-        ]
+        ],
+        "egxpilot": {
+          "ok": true,
+          "provider": "EGXpilot",
+          "role": "SECONDARY_ANALYSIS_ONLY",
+          "canonical_price": false,
+          "fetched_at": "2026-09-13T22:36:43.074475+00:00",
+          "score": 67,
+          "bias": "BULLISH",
+          "signal": "BREAKOUT",
+          "signal_direction": "BULLISH",
+          "confidence": 57,
+          "regime": "VOLATILE_UPTREND",
+          "rsi": 73.2,
+          "macd": 3.992333311958916,
+          "macd_signal": 3.455211494087067,
+          "atr": 3.91,
+          "vwap": 127.1
+        }
       },
       {
         "symbol": "TMGH",
@@ -3139,7 +3308,25 @@
             "close": 99.05,
             "volume": 2074851
           }
-        ]
+        ],
+        "egxpilot": {
+          "ok": true,
+          "provider": "EGXpilot",
+          "role": "SECONDARY_ANALYSIS_ONLY",
+          "canonical_price": false,
+          "fetched_at": "2026-09-13T22:36:44.289131+00:00",
+          "score": null,
+          "bias": null,
+          "signal": null,
+          "signal_direction": null,
+          "confidence": null,
+          "regime": null,
+          "rsi": null,
+          "macd": null,
+          "macd_signal": null,
+          "atr": null,
+          "vwap": null
+        }
       },
       {
         "symbol": "KABO",
@@ -3743,7 +3930,8 @@
             "close": 9.5,
             "volume": 3934103
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "SWDY",
@@ -4345,7 +4533,8 @@
             "close": 127.5,
             "volume": 974004
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "MASR",
@@ -4947,7 +5136,8 @@
             "close": 8.3,
             "volume": 6640824
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "SKPC",
@@ -5551,7 +5741,8 @@
             "close": 18.5,
             "volume": 4264833
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "ZEOT",
@@ -6155,7 +6346,8 @@
             "close": 14.0,
             "volume": 149375
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "CCAP",
@@ -6759,7 +6951,8 @@
             "close": 6.21,
             "volume": 138428597
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "EFIH",
@@ -7363,7 +7556,8 @@
             "close": 23.99,
             "volume": 1392391
           }
-        ]
+        ],
+        "egxpilot": null
       }
     ],
     "details": [
@@ -7970,7 +8164,25 @@
             "close": 43.2,
             "volume": 5987926
           }
-        ]
+        ],
+        "egxpilot": {
+          "ok": true,
+          "provider": "EGXpilot",
+          "role": "SECONDARY_ANALYSIS_ONLY",
+          "canonical_price": false,
+          "fetched_at": "2026-09-13T22:36:39.249598+00:00",
+          "score": null,
+          "bias": null,
+          "signal": null,
+          "signal_direction": null,
+          "confidence": null,
+          "regime": null,
+          "rsi": null,
+          "macd": null,
+          "macd_signal": null,
+          "atr": null,
+          "vwap": null
+        }
       },
       {
         "symbol": "EPCO",
@@ -8574,7 +8786,25 @@
             "close": 11.72,
             "volume": 8286753
           }
-        ]
+        ],
+        "egxpilot": {
+          "ok": true,
+          "provider": "EGXpilot",
+          "role": "SECONDARY_ANALYSIS_ONLY",
+          "canonical_price": false,
+          "fetched_at": "2026-09-13T22:36:40.779279+00:00",
+          "score": null,
+          "bias": null,
+          "signal": null,
+          "signal_direction": null,
+          "confidence": null,
+          "regime": null,
+          "rsi": null,
+          "macd": null,
+          "macd_signal": null,
+          "atr": null,
+          "vwap": null
+        }
       },
       {
         "symbol": "POUL",
@@ -9176,7 +9406,25 @@
             "close": 39.89,
             "volume": 1974609
           }
-        ]
+        ],
+        "egxpilot": {
+          "ok": true,
+          "provider": "EGXpilot",
+          "role": "SECONDARY_ANALYSIS_ONLY",
+          "canonical_price": false,
+          "fetched_at": "2026-09-13T22:36:41.616517+00:00",
+          "score": null,
+          "bias": null,
+          "signal": null,
+          "signal_direction": null,
+          "confidence": null,
+          "regime": null,
+          "rsi": null,
+          "macd": null,
+          "macd_signal": null,
+          "atr": null,
+          "vwap": null
+        }
       },
       {
         "symbol": "ETEL",
@@ -9778,7 +10026,25 @@
             "close": 125.25,
             "volume": 3747741
           }
-        ]
+        ],
+        "egxpilot": {
+          "ok": true,
+          "provider": "EGXpilot",
+          "role": "SECONDARY_ANALYSIS_ONLY",
+          "canonical_price": false,
+          "fetched_at": "2026-09-13T22:36:43.074475+00:00",
+          "score": 67,
+          "bias": "BULLISH",
+          "signal": "BREAKOUT",
+          "signal_direction": "BULLISH",
+          "confidence": 57,
+          "regime": "VOLATILE_UPTREND",
+          "rsi": 73.2,
+          "macd": 3.992333311958916,
+          "macd_signal": 3.455211494087067,
+          "atr": 3.91,
+          "vwap": 127.1
+        }
       },
       {
         "symbol": "TMGH",
@@ -10382,7 +10648,25 @@
             "close": 99.05,
             "volume": 2074851
           }
-        ]
+        ],
+        "egxpilot": {
+          "ok": true,
+          "provider": "EGXpilot",
+          "role": "SECONDARY_ANALYSIS_ONLY",
+          "canonical_price": false,
+          "fetched_at": "2026-09-13T22:36:44.289131+00:00",
+          "score": null,
+          "bias": null,
+          "signal": null,
+          "signal_direction": null,
+          "confidence": null,
+          "regime": null,
+          "rsi": null,
+          "macd": null,
+          "macd_signal": null,
+          "atr": null,
+          "vwap": null
+        }
       },
       {
         "symbol": "KABO",
@@ -10986,7 +11270,8 @@
             "close": 9.5,
             "volume": 3934103
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "SWDY",
@@ -11588,7 +11873,8 @@
             "close": 127.5,
             "volume": 974004
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "MASR",
@@ -12190,7 +12476,8 @@
             "close": 8.3,
             "volume": 6640824
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "SKPC",
@@ -12794,7 +13081,8 @@
             "close": 18.5,
             "volume": 4264833
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "ZEOT",
@@ -13398,7 +13686,8 @@
             "close": 14.0,
             "volume": 149375
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "CCAP",
@@ -14002,7 +14291,8 @@
             "close": 6.21,
             "volume": 138428597
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "EFIH",
@@ -14606,7 +14896,8 @@
             "close": 23.99,
             "volume": 1392391
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "DTPP",
@@ -15208,7 +15499,8 @@
             "close": 301.47,
             "volume": 34440
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "ARCC",
@@ -15810,7 +16102,8 @@
             "close": 76.45,
             "volume": 188473
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "AMOC",
@@ -16411,7 +16704,8 @@
             "close": 13.6,
             "volume": 19695350
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "NEDA",
@@ -17015,7 +17309,8 @@
             "close": 2.78,
             "volume": 298887
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "FWRY",
@@ -17619,7 +17914,8 @@
             "close": 19.2,
             "volume": 2649405
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "ALCN",
@@ -18223,7 +18519,8 @@
             "close": 32.47,
             "volume": 284744
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "COMI",
@@ -18824,7 +19121,8 @@
             "close": 138.17,
             "volume": 5299069
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "HELI",
@@ -19428,7 +19726,8 @@
             "close": 8.0,
             "volume": 11249897
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "CIRA",
@@ -20029,7 +20328,8 @@
             "close": 37.0,
             "volume": 453104
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "ETRS",
@@ -20630,7 +20930,8 @@
             "close": 11.25,
             "volume": 502350
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "ADIB",
@@ -21233,7 +21534,8 @@
             "close": 52.49,
             "volume": 1075488
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "FAIT",
@@ -21834,7 +22136,8 @@
             "close": 47.96,
             "volume": 75109
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "JUFO",
@@ -22437,7 +22740,8 @@
             "close": 27.35,
             "volume": 355658
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "ASCM",
@@ -23037,7 +23341,8 @@
             "close": 63.4,
             "volume": 165645
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "MFPC",
@@ -23640,7 +23945,8 @@
             "close": 47.75,
             "volume": 1450237
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "ABUK",
@@ -24240,7 +24546,8 @@
             "close": 93.5,
             "volume": 994669
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "ISPH",
@@ -24840,7 +25147,8 @@
             "close": 12.98,
             "volume": 2624627
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "TALM",
@@ -25439,7 +25747,8 @@
             "close": 18.0,
             "volume": 1011018
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "SNFC",
@@ -26039,7 +26348,8 @@
             "close": 10.9,
             "volume": 766914
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "PHDC",
@@ -26637,7 +26947,8 @@
             "close": 14.45,
             "volume": 7541615
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "ORAS",
@@ -27237,7 +27548,8 @@
             "close": 71.05,
             "volume": 0
           }
-        ]
+        ],
+        "egxpilot": null
       },
       {
         "symbol": "EAST",
@@ -27832,7 +28144,8 @@
             "close": 34.8,
             "volume": 1477393
           }
-        ]
+        ],
+        "egxpilot": null
       }
     ]
   },
@@ -27842,7 +28155,7 @@
     "health_warning:2026-09-14:RED": "2026-09-14T00:00:24.292352+03:00"
   },
   "trade_lifecycle": {
-    "updated_at": "2026-09-14T01:36:11.966471+03:00",
+    "updated_at": "2026-09-14T01:36:45.259921+03:00",
     "quote_mode": "DELAYED_EVALUATION",
     "disclaimer": "ENTRY states require a configured live quote provider. Delayed/evaluation data stays WATCH even if the last price is above trigger.",
     "new_alerts_count": 0,
@@ -28382,7 +28695,7 @@
     }
   ],
   "signal_portfolio": {
-    "updated_at": "2026-09-14T01:36:12.140019+03:00",
+    "updated_at": "2026-09-14T01:36:45.418463+03:00",
     "mode": "LIVE_SIGNAL_TRACKING",
     "quote_mode": "DELAYED_EVALUATION",
     "disclaimer": "Tracks confirmed LIVE signal entries only. It is not a brokerage account statement, and delayed/evaluation WATCH data never creates positions or performance records.",
@@ -28402,13 +28715,180 @@
     }
   },
   "signal_guard": {
-    "updated_at": "2026-09-14T01:36:12.049836+03:00",
+    "updated_at": "2026-09-14T01:36:45.344096+03:00",
     "quote_mode": "DELAYED_EVALUATION",
     "policy": "Execution-ready requires LIVE quotes, RR >= 1.30 and no overheating blocker. Delayed/evaluation plans remain analysis-only WATCH regardless of score.",
     "counts": {
       "PASS": 0,
       "CAUTION": 0,
       "BLOCKED": 12
+    }
+  },
+  "egxpilot": {
+    "provider": "EGXpilot MCP",
+    "endpoint": "https://egxpilot.com/api/mcp",
+    "role": "SECONDARY_ANALYSIS_ONLY",
+    "canonical_price": false,
+    "price_note": "EGXpilot currentPrice is not used as the scanner/live quote source until independently verified.",
+    "cache_minutes": 30,
+    "updated_at": "2026-09-13T22:36:39.249575+00:00",
+    "selected_symbols": [
+      "ORHD",
+      "EPCO",
+      "POUL",
+      "ETEL",
+      "TMGH"
+    ],
+    "analysis_by_symbol": {
+      "ORHD": {
+        "ok": true,
+        "provider": "EGXpilot",
+        "role": "SECONDARY_ANALYSIS_ONLY",
+        "canonical_price": false,
+        "fetched_at": "2026-09-13T22:36:39.249598+00:00",
+        "data": {}
+      },
+      "EPCO": {
+        "ok": true,
+        "provider": "EGXpilot",
+        "role": "SECONDARY_ANALYSIS_ONLY",
+        "canonical_price": false,
+        "fetched_at": "2026-09-13T22:36:40.779279+00:00",
+        "data": {}
+      },
+      "POUL": {
+        "ok": true,
+        "provider": "EGXpilot",
+        "role": "SECONDARY_ANALYSIS_ONLY",
+        "canonical_price": false,
+        "fetched_at": "2026-09-13T22:36:41.616517+00:00",
+        "data": {}
+      },
+      "ETEL": {
+        "ok": true,
+        "provider": "EGXpilot",
+        "role": "SECONDARY_ANALYSIS_ONLY",
+        "canonical_price": false,
+        "fetched_at": "2026-09-13T22:36:43.074475+00:00",
+        "data": {
+          "symbol": "ETEL",
+          "currentPrice": 125.25,
+          "status": "OK",
+          "timestamp": "2026-09-13T22:36:44.160Z",
+          "regime": {
+            "label": "VOLATILE_UPTREND",
+            "description": "Ø§ØªØ¬Ø§Ù ØµØ§Ø¹Ø¯ Ø¹Ø§ÙÙ Ø§ÙØªØ°Ø¨Ø°Ø¨",
+            "volatility": "HIGH",
+            "trend": "TRENDING_UP"
+          },
+          "bias": {
+            "direction": "BULLISH",
+            "label": "ØµØ¹ÙØ¯Ù â Ø§Ø®ØªØ±Ø§Ù",
+            "technical": {
+              "composite": 67,
+              "dimensions": {
+                "trend": 95,
+                "momentum": 45,
+                "volatility": 40,
+                "volume": 60
+              },
+              "weights": {
+                "trend": 0.4,
+                "momentum": 0.25,
+                "volatility": 0.15,
+                "volume": 0.2
+              }
+            },
+            "rating": "Ø¥ÙØ¬Ø§Ø¨Ù"
+          },
+          "signal": {
+            "type": "BREAKOUT",
+            "direction": "BULLISH",
+            "logic": [
+              "Price above upper Bollinger Band",
+              "ADX=53 rising, trend developing",
+              "+DI > -DI confirms bullish breakout"
+            ]
+          },
+          "scores": {
+            "composite": 67,
+            "dimensions": {
+              "trend": 95,
+              "momentum": 45,
+              "volatility": 40,
+              "volume": 60
+            },
+            "regimeWeights": {
+              "trend": 0.4,
+              "momentum": 0.25,
+              "volatility": 0.15,
+              "volume": 0.2
+            },
+            "regimeLabel": "VOLATILE_UPTREND"
+          },
+          "confidence": {
+            "score": 57,
+            "method": "baseline",
+            "factors": [
+              "Baseline method: No backtest data available",
+              "Signal prior (BREAKOUT): 45",
+              "Regime alignment (VOLATILE_UPTREND): -5",
+              "Indicator agreement: 83% (5 confirmations) â +17"
+            ]
+          },
+          "risk": {
+            "stopLoss": 117.42,
+            "stopDistance": 7.83,
+            "targets": {
+              "t1": 137,
+              "t2": 144.82
+            },
+            "riskRewardRatio": 1.5,
+            "atrMultiplier": 2,
+            "viable": true,
+            "reason": null
+          },
+          "keyIndicators": {
+            "rsi": 73.2,
+            "macd": {
+              "MACD": 3.992333311958916,
+              "signal": 3.455211494087067,
+              "histogram": 0.5371218178718489
+            },
+            "adx": {
+              "adx": 53.46256030660104,
+              "pdi": 37.27999247501584,
+              "mdi": 7.281264232332249
+            },
+            "atr": 3.91,
+            "vwap": 127.1,
+            "bollingerBands": {
+              "middle": 117.76949999999981,
+              "upper": 124.88210985855385,
+              "lower": 110.65689014144577,
+              "pb": 1.025861824897067
+            },
+            "stochastic": {
+              "k": 68.91891891891892,
+              "d": 78.29606585002271
+            }
+          },
+          "dataQuality": {
+            "score": 95,
+            "totalRows": 366,
+            "validRows": 366,
+            "rejectedRows": 0
+          }
+        }
+      },
+      "TMGH": {
+        "ok": true,
+        "provider": "EGXpilot",
+        "role": "SECONDARY_ANALYSIS_ONLY",
+        "canonical_price": false,
+        "fetched_at": "2026-09-13T22:36:44.289131+00:00",
+        "data": {}
+      }
     }
   }
 }
