@@ -1,11 +1,11 @@
 {
   "alarm_triggered": true,
   "alarms": {},
-  "telegram_update_offset": 97170344,
+  "telegram_update_offset": 97170346,
   "signals": {},
   "scanner_seen": {},
   "pro_engine_snapshot": {
-    "at": "2026-09-13T20:50:00.487272+03:00",
+    "at": "2026-09-13T21:05:53.005220+03:00",
     "count": 34,
     "quote_mode": "DELAYED_EVALUATION",
     "quote_source": "borsa demo (evaluation)",
@@ -201,7 +201,6 @@
       }
     ]
   },
-  "awaiting": "advanced",
   "portfolio": {},
   "pro_engine_sent": {
     "health_warning:2026-09-13:RED": "2026-09-13T20:45:34.853191+03:00"
