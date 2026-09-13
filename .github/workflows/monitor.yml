@@ -33,7 +33,7 @@ jobs:
         run: pip install requests
 
       - name: Validate Python modules
-        run: python -m py_compile telegram_bot.py always_on_bot.py monitor.py pro_engine.py pro_engine_v2.py trade_lifecycle.py signal_guard.py portfolio_engine.py data_provider.py data_health.py self_test.py
+        run: python -m py_compile telegram_bot.py always_on_bot.py monitor.py pro_engine.py pro_engine_v2.py trade_lifecycle.py signal_guard.py portfolio_engine.py data_provider.py data_health.py egxpilot_provider.py self_test.py
 
       - name: Run deterministic self tests
         run: |
