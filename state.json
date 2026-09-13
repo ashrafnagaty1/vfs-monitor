@@ -5,7 +5,7 @@
   "signals": {},
   "scanner_seen": {},
   "pro_engine_snapshot": {
-    "at": "2026-09-13T23:48:15.091824+03:00",
+    "at": "2026-09-13T23:48:31.640768+03:00",
     "count": 34,
     "quote_mode": "DELAYED_EVALUATION",
     "quote_source": "borsa demo (evaluation)",
@@ -1848,7 +1848,7 @@
     "health_warning:2026-09-13:RED": "2026-09-13T20:45:34.853191+03:00"
   },
   "trade_lifecycle": {
-    "updated_at": "2026-09-13T23:48:15.156845+03:00",
+    "updated_at": "2026-09-13T23:48:31.708765+03:00",
     "quote_mode": "DELAYED_EVALUATION",
     "disclaimer": "ENTRY states require a configured live quote provider. Delayed/evaluation data stays WATCH even if the last price is above trigger.",
     "new_alerts_count": 0,
@@ -1872,7 +1872,24 @@
         "progress_to_t3_pct": 0.0,
         "score": 92,
         "confidence": "MEDIUM",
-        "liquidity_score": 100
+        "liquidity_score": 100,
+        "guard": {
+          "decision": "BLOCKED",
+          "quality_score": 100,
+          "blockers": [
+            "NO_LIVE_FEED"
+          ],
+          "warnings": [],
+          "execution_ready": false,
+          "metrics": {
+            "rr": 1.66,
+            "liquidity": 100.0,
+            "rsi": 66.2,
+            "adx": 18.3,
+            "volume_ratio": 2.23,
+            "distance_to_trigger_pct": 0.85
+          }
+        }
       },
       {
         "symbol": "POUL",
@@ -1893,7 +1910,24 @@
         "progress_to_t3_pct": 0.0,
         "score": 86,
         "confidence": "HIGH",
-        "liquidity_score": 100
+        "liquidity_score": 100,
+        "guard": {
+          "decision": "BLOCKED",
+          "quality_score": 100,
+          "blockers": [
+            "NO_LIVE_FEED"
+          ],
+          "warnings": [],
+          "execution_ready": false,
+          "metrics": {
+            "rr": 2.17,
+            "liquidity": 100.0,
+            "rsi": 67.6,
+            "adx": 54.4,
+            "volume_ratio": 4.94,
+            "distance_to_trigger_pct": 1.97
+          }
+        }
       },
       {
         "symbol": "ETEL",
@@ -1914,7 +1948,26 @@
         "progress_to_t3_pct": 0.0,
         "score": 82,
         "confidence": "HIGH",
-        "liquidity_score": 100
+        "liquidity_score": 100,
+        "guard": {
+          "decision": "BLOCKED",
+          "quality_score": 92,
+          "blockers": [
+            "NO_LIVE_FEED"
+          ],
+          "warnings": [
+            "HIGH_RSI"
+          ],
+          "execution_ready": false,
+          "metrics": {
+            "rr": 1.59,
+            "liquidity": 100.0,
+            "rsi": 77.0,
+            "adx": 66.5,
+            "volume_ratio": 2.69,
+            "distance_to_trigger_pct": 0.91
+          }
+        }
       },
       {
         "symbol": "TMGH",
@@ -1935,7 +1988,24 @@
         "progress_to_t3_pct": 0.0,
         "score": 82,
         "confidence": "MEDIUM",
-        "liquidity_score": 48.64
+        "liquidity_score": 48.64,
+        "guard": {
+          "decision": "BLOCKED",
+          "quality_score": 100,
+          "blockers": [
+            "NO_LIVE_FEED"
+          ],
+          "warnings": [],
+          "execution_ready": false,
+          "metrics": {
+            "rr": 2.77,
+            "liquidity": 48.6,
+            "rsi": 56.0,
+            "adx": 22.9,
+            "volume_ratio": 0.82,
+            "distance_to_trigger_pct": 1.83
+          }
+        }
       },
       {
         "symbol": "KABO",
@@ -1956,7 +2026,24 @@
         "progress_to_t3_pct": 0.0,
         "score": 74,
         "confidence": "MEDIUM",
-        "liquidity_score": 58.52
+        "liquidity_score": 58.52,
+        "guard": {
+          "decision": "BLOCKED",
+          "quality_score": 100,
+          "blockers": [
+            "NO_LIVE_FEED"
+          ],
+          "warnings": [],
+          "execution_ready": false,
+          "metrics": {
+            "rr": 2.31,
+            "liquidity": 58.5,
+            "rsi": 64.0,
+            "adx": 34.1,
+            "volume_ratio": 0.82,
+            "distance_to_trigger_pct": 2.56
+          }
+        }
       },
       {
         "symbol": "MASR",
@@ -1977,7 +2064,27 @@
         "progress_to_t3_pct": 0.0,
         "score": 70,
         "confidence": "MEDIUM",
-        "liquidity_score": 69.25
+        "liquidity_score": 69.25,
+        "guard": {
+          "decision": "BLOCKED",
+          "quality_score": 84,
+          "blockers": [
+            "NO_LIVE_FEED"
+          ],
+          "warnings": [
+            "WEAK_VOLUME",
+            "FAR_FROM_TRIGGER"
+          ],
+          "execution_ready": false,
+          "metrics": {
+            "rr": 4.53,
+            "liquidity": 69.2,
+            "rsi": 64.7,
+            "adx": 49.4,
+            "volume_ratio": 0.72,
+            "distance_to_trigger_pct": 5.57
+          }
+        }
       },
       {
         "symbol": "SKPC",
@@ -1998,7 +2105,27 @@
         "progress_to_t3_pct": 0.0,
         "score": 70,
         "confidence": "MEDIUM",
-        "liquidity_score": 54.69
+        "liquidity_score": 54.69,
+        "guard": {
+          "decision": "BLOCKED",
+          "quality_score": 84,
+          "blockers": [
+            "NO_LIVE_FEED"
+          ],
+          "warnings": [
+            "WEAK_VOLUME",
+            "FAR_FROM_TRIGGER"
+          ],
+          "execution_ready": false,
+          "metrics": {
+            "rr": 3.81,
+            "liquidity": 54.7,
+            "rsi": 62.4,
+            "adx": 32.6,
+            "volume_ratio": 0.6,
+            "distance_to_trigger_pct": 4.44
+          }
+        }
       },
       {
         "symbol": "CCAP",
@@ -2019,7 +2146,24 @@
         "progress_to_t3_pct": 0.0,
         "score": 69,
         "confidence": "MEDIUM",
-        "liquidity_score": 100
+        "liquidity_score": 100,
+        "guard": {
+          "decision": "BLOCKED",
+          "quality_score": 100,
+          "blockers": [
+            "NO_LIVE_FEED"
+          ],
+          "warnings": [],
+          "execution_ready": false,
+          "metrics": {
+            "rr": 1.37,
+            "liquidity": 100.0,
+            "rsi": 72.6,
+            "adx": 88.6,
+            "volume_ratio": 1.21,
+            "distance_to_trigger_pct": 0.64
+          }
+        }
       },
       {
         "symbol": "EFIH",
@@ -2040,7 +2184,27 @@
         "progress_to_t3_pct": 0.0,
         "score": 67,
         "confidence": "MEDIUM",
-        "liquidity_score": 36.34
+        "liquidity_score": 36.34,
+        "guard": {
+          "decision": "BLOCKED",
+          "quality_score": 84,
+          "blockers": [
+            "NO_LIVE_FEED"
+          ],
+          "warnings": [
+            "WEAK_VOLUME",
+            "FAR_FROM_TRIGGER"
+          ],
+          "execution_ready": false,
+          "metrics": {
+            "rr": 5.07,
+            "liquidity": 36.3,
+            "rsi": 43.2,
+            "adx": 42.0,
+            "volume_ratio": 0.43,
+            "distance_to_trigger_pct": 5.55
+          }
+        }
       },
       {
         "symbol": "FWRY",
@@ -2061,7 +2225,29 @@
         "progress_to_t3_pct": 0.0,
         "score": 64,
         "confidence": "MEDIUM",
-        "liquidity_score": 33.76
+        "liquidity_score": 33.76,
+        "guard": {
+          "decision": "BLOCKED",
+          "quality_score": 41,
+          "blockers": [
+            "NO_LIVE_FEED",
+            "LOW_RR"
+          ],
+          "warnings": [
+            "LOW_LIQUIDITY",
+            "WEAK_VOLUME",
+            "FAR_FROM_TRIGGER"
+          ],
+          "execution_ready": false,
+          "metrics": {
+            "rr": 1.0,
+            "liquidity": 33.8,
+            "rsi": 49.7,
+            "adx": 21.9,
+            "volume_ratio": 0.38,
+            "distance_to_trigger_pct": 999.0
+          }
+        }
       },
       {
         "symbol": "ALCN",
@@ -2082,7 +2268,28 @@
         "progress_to_t3_pct": 0.0,
         "score": 62,
         "confidence": "MEDIUM",
-        "liquidity_score": 51.08
+        "liquidity_score": 51.08,
+        "guard": {
+          "decision": "BLOCKED",
+          "quality_score": 59,
+          "blockers": [
+            "NO_LIVE_FEED",
+            "LOW_RR"
+          ],
+          "warnings": [
+            "WEAK_VOLUME",
+            "FAR_FROM_TRIGGER"
+          ],
+          "execution_ready": false,
+          "metrics": {
+            "rr": 1.0,
+            "liquidity": 51.1,
+            "rsi": 56.2,
+            "adx": 28.8,
+            "volume_ratio": 0.31,
+            "distance_to_trigger_pct": 999.0
+          }
+        }
       },
       {
         "symbol": "COMI",
@@ -2103,7 +2310,28 @@
         "progress_to_t3_pct": 0.0,
         "score": 58,
         "confidence": "LOW",
-        "liquidity_score": 64.87
+        "liquidity_score": 64.87,
+        "guard": {
+          "decision": "BLOCKED",
+          "quality_score": 57,
+          "blockers": [
+            "NO_LIVE_FEED",
+            "LOW_RR"
+          ],
+          "warnings": [
+            "WEAK_TREND",
+            "FAR_FROM_TRIGGER"
+          ],
+          "execution_ready": false,
+          "metrics": {
+            "rr": 1.0,
+            "liquidity": 64.9,
+            "rsi": 53.0,
+            "adx": 0.9,
+            "volume_ratio": 1.64,
+            "distance_to_trigger_pct": 999.0
+          }
+        }
       }
     ]
   },
@@ -2160,7 +2388,7 @@
     }
   ],
   "signal_portfolio": {
-    "updated_at": "2026-09-13T23:48:15.201302+03:00",
+    "updated_at": "2026-09-13T23:48:31.799837+03:00",
     "mode": "LIVE_SIGNAL_TRACKING",
     "quote_mode": "DELAYED_EVALUATION",
     "disclaimer": "Tracks confirmed LIVE signal entries only. It is not a brokerage account statement, and delayed/evaluation WATCH data never creates positions or performance records.",
@@ -2177,6 +2405,16 @@
       "best_r": 0.0,
       "worst_r": 0.0,
       "open_positions": 0
+    }
+  },
+  "signal_guard": {
+    "updated_at": "2026-09-13T23:48:31.754084+03:00",
+    "quote_mode": "DELAYED_EVALUATION",
+    "policy": "Execution-ready requires LIVE quotes, RR >= 1.30 and no overheating blocker. Delayed/evaluation plans remain analysis-only WATCH regardless of score.",
+    "counts": {
+      "PASS": 0,
+      "CAUTION": 0,
+      "BLOCKED": 12
     }
   }
 }
