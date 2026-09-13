@@ -50,8 +50,8 @@ jobs:
           EGX_LIVE_AUTH_PREFIX: ${{ secrets.EGX_LIVE_AUTH_PREFIX }}
         run: python data_health.py
 
-      # Telegram commands are now handled instantly by the Cloudflare Worker webhook.
-      # Do not run telegram_bot.py here because Telegram getUpdates conflicts with an active webhook.
+      # Telegram commands are handled instantly by the Cloudflare Worker webhook.
+      # Do not run telegram_bot.py because Telegram getUpdates conflicts with an active webhook.
 
       - name: Run professional signal engine
         continue-on-error: true
@@ -66,6 +66,19 @@ jobs:
 
       - name: Build WATCH ENTRY lifecycle
         run: python trade_lifecycle.py
+
+      - name: Sync state to Cloudflare Worker
+        continue-on-error: true
+        env:
+          TOKEN: ${{ secrets.TOKEN }}
+        run: |
+          if [ -f state.json ]; then
+            curl --fail --silent --show-error \
+              -X POST "https://vfs-monitor.folkhero3.workers.dev/sync" \
+              -H "Authorization: Bearer $TOKEN" \
+              -H "Content-Type: application/json" \
+              --data-binary @state.json
+          fi
 
       - name: Save bot state
         if: always()
