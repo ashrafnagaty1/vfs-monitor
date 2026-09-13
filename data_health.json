@@ -1,10 +1,10 @@
 {
-  "checked_at": "2026-09-13T21:54:40.622153+03:00",
-  "rotation_index": 1,
+  "checked_at": "2026-09-13T22:52:22.644186+03:00",
+  "rotation_index": 2,
   "mode": "DELAYED_EVALUATION",
   "quote_source": "borsa demo (evaluation)",
   "history_source": "Yahoo Finance EGX .CA daily candles",
-  "symbol": "ABUK",
+  "symbol": "SWDY",
   "status": "RED",
   "message": "Data source check failed: DataProviderError: DEMO_RATE_LIMIT"
 }
