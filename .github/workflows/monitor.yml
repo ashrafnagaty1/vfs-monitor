@@ -2,8 +2,7 @@ name: EGX Smart Scanner
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
@@ -34,7 +33,7 @@ jobs:
         run: pip install requests
 
       - name: Validate Python modules
-        run: python -m py_compile telegram_bot.py always_on_bot.py monitor.py pro_engine.py trade_lifecycle.py data_provider.py data_health.py self_test.py
+        run: python -m py_compile telegram_bot.py always_on_bot.py monitor.py pro_engine.py pro_engine_v2.py trade_lifecycle.py data_provider.py data_health.py self_test.py
 
       - name: Run deterministic self tests
         run: |
@@ -50,11 +49,8 @@ jobs:
           EGX_LIVE_AUTH_PREFIX: ${{ secrets.EGX_LIVE_AUTH_PREFIX }}
         run: python data_health.py
 
-      # Telegram commands are handled instantly by the Cloudflare Worker webhook.
-      # Do not run telegram_bot.py because Telegram getUpdates conflicts with an active webhook.
-
-      - name: Run professional signal engine
-        continue-on-error: true
+      # Telegram commands are handled by the Cloudflare Worker webhook.
+      - name: Run enriched professional signal engine
         env:
           TOKEN: ${{ secrets.TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
@@ -62,47 +58,41 @@ jobs:
           EGX_LIVE_TOKEN: ${{ secrets.EGX_LIVE_TOKEN }}
           EGX_LIVE_AUTH_HEADER: ${{ secrets.EGX_LIVE_AUTH_HEADER }}
           EGX_LIVE_AUTH_PREFIX: ${{ secrets.EGX_LIVE_AUTH_PREFIX }}
-        run: python pro_engine.py
+        run: python pro_engine_v2.py
 
       - name: Build WATCH ENTRY lifecycle
         run: python trade_lifecycle.py
 
       - name: Sync state to Cloudflare Worker
-        continue-on-error: true
         env:
           SYNC_SECRET: ${{ secrets.SYNC_SECRET }}
         run: |
-          if [ -f state.json ]; then
-            curl --fail --silent --show-error \
-              -X POST "https://vfs-monitor.folkhero3.workers.dev/sync" \
-              -H "Authorization: Bearer $SYNC_SECRET" \
-              -H "Content-Type: application/json" \
-              --data-binary @state.json
-          fi
+          test -n "$SYNC_SECRET" || { echo "SYNC_SECRET missing"; exit 1; }
+          test -f state.json || { echo "state.json missing"; exit 1; }
+          curl --fail-with-body --show-error \
+            -X POST "https://vfs-monitor.folkhero3.workers.dev/sync" \
+            -H "Authorization: Bearer $SYNC_SECRET" \
+            -H "Content-Type: application/json" \
+            --data-binary @state.json
 
       - name: Save bot state
         if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
           mkdir -p /tmp/egx-state
           for f in state.json alarms.json data_health.json; do
             [ -f "$f" ] && cp "$f" "/tmp/egx-state/$f"
           done
-
           git fetch origin main
           git reset --hard origin/main
-
           for f in state.json alarms.json data_health.json; do
             [ -f "/tmp/egx-state/$f" ] && cp "/tmp/egx-state/$f" "$f"
           done
-
           git add state.json alarms.json data_health.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "No state changes to save"
             exit 0
           fi
-
           git commit -m "Update EGX bot state"
           git push origin HEAD:main
