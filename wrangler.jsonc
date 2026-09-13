@@ -3,5 +3,11 @@
   "name": "vfs-monitor",
   "main": "src/index.js",
   "compatibility_date": "2026-09-13",
-  "workers_dev": true
+  "workers_dev": true,
+  "kv_namespaces": [
+    {
+      "binding": "STATE",
+      "id": "6047940bf80445489df059179f3d6ffc"
+    }
+  ]
 }
