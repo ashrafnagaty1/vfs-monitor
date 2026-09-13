@@ -1,0 +1,10 @@
+{
+  "checked_at": "2026-09-13T20:45:31.282568+03:00",
+  "rotation_index": 0,
+  "mode": "DELAYED_EVALUATION",
+  "quote_source": "borsa demo (evaluation)",
+  "history_source": "Yahoo Finance EGX .CA daily candles",
+  "symbol": "COMI",
+  "status": "RED",
+  "message": "Data source check failed: DataProviderError: DEMO_RATE_LIMIT"
+}

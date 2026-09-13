@@ -5,61 +5,205 @@
   "signals": {},
   "scanner_seen": {},
   "pro_engine_snapshot": {
-    "at": "2026-09-13T20:44:37.507216+03:00",
+    "at": "2026-09-13T20:45:35.210346+03:00",
     "count": 34,
-    "top": [
+    "quote_mode": "DELAYED_EVALUATION",
+    "quote_source": "borsa demo (evaluation)",
+    "history_source": "Yahoo Finance EGX .CA daily candles",
+    "market_regime": {
+      "name": "MIXED 🟡",
+      "breadth": 64.70588235294117,
+      "avg_mom": 1.808479190957182,
+      "avg_score": 57.85294117647059
+    },
+    "watchlist_next_session": [
+      {
+        "symbol": "ORHD",
+        "score": 92,
+        "confidence": "MEDIUM",
+        "trigger": 43.57,
+        "stop": 42.0729,
+        "liquidity_score": 100
+      },
       {
         "symbol": "POUL",
         "score": 86,
-        "price": 39.88999938964844
-      },
-      {
-        "symbol": "ORHD",
-        "score": 84,
-        "price": 43.20000076293945
-      },
-      {
-        "symbol": "EPCO",
-        "score": 82,
-        "price": 11.720000267028809
+        "confidence": "HIGH",
+        "trigger": 40.69,
+        "stop": 38.5254,
+        "liquidity_score": 100
       },
       {
         "symbol": "ETEL",
         "score": 82,
-        "price": 125.25
+        "confidence": "HIGH",
+        "trigger": 126.4,
+        "stop": 121.3569,
+        "liquidity_score": 100
       },
       {
         "symbol": "TMGH",
-        "score": 78,
-        "price": 99.05000305175781
-      },
-      {
-        "symbol": "SWDY",
-        "score": 73,
-        "price": 127.5
+        "score": 82,
+        "confidence": "MEDIUM",
+        "trigger": 100.9,
+        "stop": 96.9654,
+        "liquidity_score": 48.64
       },
       {
         "symbol": "KABO",
-        "score": 70,
-        "price": 9.5
+        "score": 74,
+        "confidence": "MEDIUM",
+        "trigger": 9.75,
+        "stop": 9.1177,
+        "liquidity_score": 58.52
       },
       {
         "symbol": "MASR",
         "score": 70,
-        "price": 8.300000190734863
+        "confidence": "MEDIUM",
+        "trigger": 8.79,
+        "stop": 8.0223,
+        "liquidity_score": 69.25
       },
       {
         "symbol": "SKPC",
-        "score": 66,
-        "price": 18.5
+        "score": 70,
+        "confidence": "MEDIUM",
+        "trigger": 19.36,
+        "stop": 17.8889,
+        "liquidity_score": 54.69
       },
       {
-        "symbol": "DTPP",
-        "score": 66,
-        "price": 301.4700012207031
+        "symbol": "CCAP",
+        "score": 69,
+        "confidence": "MEDIUM",
+        "trigger": 6.25,
+        "stop": 5.9923,
+        "liquidity_score": 100
+      },
+      {
+        "symbol": "EFIH",
+        "score": 67,
+        "confidence": "MEDIUM",
+        "trigger": 25.4,
+        "stop": 23.2974,
+        "liquidity_score": 36.34
+      },
+      {
+        "symbol": "FWRY",
+        "score": 64,
+        "confidence": "MEDIUM",
+        "trigger": 19.69,
+        "stop": 18.816,
+        "liquidity_score": 33.76
+      },
+      {
+        "symbol": "ALCN",
+        "score": 62,
+        "confidence": "MEDIUM",
+        "trigger": 34.18,
+        "stop": 31.2494,
+        "liquidity_score": 51.08
+      },
+      {
+        "symbol": "COMI",
+        "score": 58,
+        "confidence": "LOW",
+        "trigger": 142.5,
+        "stop": 135.314,
+        "liquidity_score": 64.87
+      }
+    ],
+    "top": [
+      {
+        "symbol": "ORHD",
+        "score": 92,
+        "confidence": "MEDIUM",
+        "price": 43.20000076293945,
+        "liquidity_score": 100
+      },
+      {
+        "symbol": "EPCO",
+        "score": 86,
+        "confidence": "HIGH",
+        "price": 11.720000267028809,
+        "liquidity_score": 100
+      },
+      {
+        "symbol": "POUL",
+        "score": 86,
+        "confidence": "HIGH",
+        "price": 39.88999938964844,
+        "liquidity_score": 100
+      },
+      {
+        "symbol": "ETEL",
+        "score": 82,
+        "confidence": "HIGH",
+        "price": 125.25,
+        "liquidity_score": 100
+      },
+      {
+        "symbol": "TMGH",
+        "score": 82,
+        "confidence": "MEDIUM",
+        "price": 99.05000305175781,
+        "liquidity_score": 48.64
+      },
+      {
+        "symbol": "KABO",
+        "score": 74,
+        "confidence": "MEDIUM",
+        "price": 9.5,
+        "liquidity_score": 58.52
+      },
+      {
+        "symbol": "SWDY",
+        "score": 73,
+        "confidence": "MEDIUM",
+        "price": 127.5,
+        "liquidity_score": 85.05
+      },
+      {
+        "symbol": "MASR",
+        "score": 70,
+        "confidence": "MEDIUM",
+        "price": 8.300000190734863,
+        "liquidity_score": 69.25
+      },
+      {
+        "symbol": "SKPC",
+        "score": 70,
+        "confidence": "MEDIUM",
+        "price": 18.5,
+        "liquidity_score": 54.69
+      },
+      {
+        "symbol": "ZEOT",
+        "score": 70,
+        "confidence": "MEDIUM",
+        "price": 14.0,
+        "liquidity_score": 27.2
+      },
+      {
+        "symbol": "CCAP",
+        "score": 69,
+        "confidence": "MEDIUM",
+        "price": 6.210000038146973,
+        "liquidity_score": 100
+      },
+      {
+        "symbol": "EFIH",
+        "score": 67,
+        "confidence": "MEDIUM",
+        "price": 23.989999771118164,
+        "liquidity_score": 36.34
       }
     ]
   },
   "awaiting": "advanced",
-  "portfolio": {}
+  "portfolio": {},
+  "pro_engine_sent": {
+    "health_warning:2026-09-13:RED": "2026-09-13T20:45:34.853191+03:00"
+  }
 }
