@@ -1,4 +1,4 @@
-import app from "./analysis_tools_wrapper.js";
+import app from "./reference_layout_wrapper.js";
 
 const VERSION="interactive-chart-v1-2026-09-14";
 export default {
