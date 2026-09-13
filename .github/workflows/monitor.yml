@@ -33,12 +33,13 @@ jobs:
         run: pip install requests
 
       - name: Validate Python modules
-        run: python -m py_compile telegram_bot.py always_on_bot.py monitor.py pro_engine.py pro_engine_v2.py trade_lifecycle.py data_provider.py data_health.py self_test.py
+        run: python -m py_compile telegram_bot.py always_on_bot.py monitor.py pro_engine.py pro_engine_v2.py trade_lifecycle.py portfolio_engine.py data_provider.py data_health.py self_test.py
 
       - name: Run deterministic self tests
         run: |
           python self_test.py
           python -c "from trade_lifecycle import self_test; self_test(); print('trade lifecycle self-test: PASS')"
+          python -c "from portfolio_engine import self_test; self_test(); print('portfolio engine self-test: PASS')"
 
       - name: Check market data health
         continue-on-error: true
@@ -49,7 +50,6 @@ jobs:
           EGX_LIVE_AUTH_PREFIX: ${{ secrets.EGX_LIVE_AUTH_PREFIX }}
         run: python data_health.py
 
-      # Telegram commands are handled by the Cloudflare Worker webhook.
       - name: Run enriched professional signal engine
         env:
           TOKEN: ${{ secrets.TOKEN }}
@@ -62,6 +62,9 @@ jobs:
 
       - name: Build WATCH ENTRY lifecycle
         run: python trade_lifecycle.py
+
+      - name: Update signal portfolio and performance
+        run: python portfolio_engine.py
 
       - name: Sync state to Cloudflare Worker
         env:
