@@ -1,4 +1,4 @@
-"""EGX Pro Engine v2: enriches the persisted snapshot without changing provider semantics."""
+"""EGX Pro Engine v2: enriched persisted snapshot with EGX session awareness."""
 from datetime import datetime
 from pro_engine import (
     CAIRO, STATE_FILE, provider, load_json, save_state, scan, market_regime,
@@ -39,19 +39,46 @@ def compact_detail(x):
     }
 
 
+def egx_session(now):
+    # Python weekday: Mon=0 ... Fri=4, Sat=5, Sun=6. EGX trades Sun-Thu.
+    trading_day = now.weekday() not in (4, 5)
+    mins = now.hour * 60 + now.minute
+    if not trading_day:
+        status = "WEEKEND"
+    elif mins < 600:
+        status = "PRE_MARKET"
+    elif mins <= 870:
+        status = "SESSION"
+    else:
+        status = "CLOSED"
+    return {
+        "status": status,
+        "trading_day": trading_day,
+        "heuristic": True,
+        "note": "Sunday-Thursday session heuristic; official holidays are not yet calendar-checked.",
+    }
+
+
 def main():
     state = load_json(STATE_FILE, {})
     items = scan()
+    now = datetime.now(CAIRO)
+    session = egx_session(now)
+
     data_health_alert(state)
-    event_alerts(state, items)
-    scheduled_reports(state, items)
+    # Old pro_engine helpers assume Mon-Fri. Gate them here so Friday/Saturday never fire.
+    if session["trading_day"]:
+        event_alerts(state, items)
+        scheduled_reports(state, items)
+
     regime = market_regime(items)
     state["pro_engine_snapshot"] = {
-        "at": datetime.now(CAIRO).isoformat(),
+        "at": now.isoformat(),
         "count": len(items),
         "quote_mode": "LIVE" if provider.has_live_quote else "DELAYED_EVALUATION",
         "quote_source": provider.quote_source_name,
         "history_source": provider.history_source_name,
+        "market_session": session,
         "market_regime": regime,
         "watchlist_next_session": build_watchlist(items),
         "top": [compact_detail(x) for x in items[:12]],
