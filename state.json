@@ -5,7 +5,7 @@
   "signals": {},
   "scanner_seen": {},
   "pro_engine_snapshot": {
-    "at": "2026-09-13T23:43:29.311563+03:00",
+    "at": "2026-09-13T23:43:55.351938+03:00",
     "count": 34,
     "quote_mode": "DELAYED_EVALUATION",
     "quote_source": "borsa demo (evaluation)",
@@ -1848,7 +1848,7 @@
     "health_warning:2026-09-13:RED": "2026-09-13T20:45:34.853191+03:00"
   },
   "trade_lifecycle": {
-    "updated_at": "2026-09-13T23:43:29.377370+03:00",
+    "updated_at": "2026-09-13T23:43:55.408628+03:00",
     "quote_mode": "DELAYED_EVALUATION",
     "disclaimer": "ENTRY states require a configured live quote provider. Delayed/evaluation data stays WATCH even if the last price is above trigger.",
     "new_alerts_count": 0,
