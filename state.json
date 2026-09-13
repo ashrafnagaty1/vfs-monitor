@@ -5,7 +5,7 @@
   "signals": {},
   "scanner_seen": {},
   "pro_engine_snapshot": {
-    "at": "2026-09-14T00:21:37.186713+03:00",
+    "at": "2026-09-14T00:23:38.112508+03:00",
     "count": 34,
     "quote_mode": "DELAYED_EVALUATION",
     "quote_source": "borsa demo (evaluation)",
@@ -27842,7 +27842,7 @@
     "health_warning:2026-09-14:RED": "2026-09-14T00:00:24.292352+03:00"
   },
   "trade_lifecycle": {
-    "updated_at": "2026-09-14T00:21:37.285812+03:00",
+    "updated_at": "2026-09-14T00:23:38.298743+03:00",
     "quote_mode": "DELAYED_EVALUATION",
     "disclaimer": "ENTRY states require a configured live quote provider. Delayed/evaluation data stays WATCH even if the last price is above trigger.",
     "new_alerts_count": 0,
@@ -28382,7 +28382,7 @@
     }
   ],
   "signal_portfolio": {
-    "updated_at": "2026-09-14T00:21:37.495162+03:00",
+    "updated_at": "2026-09-14T00:23:38.597654+03:00",
     "mode": "LIVE_SIGNAL_TRACKING",
     "quote_mode": "DELAYED_EVALUATION",
     "disclaimer": "Tracks confirmed LIVE signal entries only. It is not a brokerage account statement, and delayed/evaluation WATCH data never creates positions or performance records.",
@@ -28402,7 +28402,7 @@
     }
   },
   "signal_guard": {
-    "updated_at": "2026-09-14T00:21:37.376916+03:00",
+    "updated_at": "2026-09-14T00:23:38.501848+03:00",
     "quote_mode": "DELAYED_EVALUATION",
     "policy": "Execution-ready requires LIVE quotes, RR >= 1.30 and no overheating blocker. Delayed/evaluation plans remain analysis-only WATCH regardless of score.",
     "counts": {
