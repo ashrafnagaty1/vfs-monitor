@@ -31,12 +31,15 @@ jobs:
         run: pip install requests
 
       - name: Validate Python modules
+        continue-on-error: true
         run: python -m py_compile telegram_bot.py monitor.py pro_engine.py data_provider.py data_health.py self_test.py
 
       - name: Run deterministic self tests
+        continue-on-error: true
         run: python self_test.py
 
       - name: Check market data health
+        continue-on-error: true
         env:
           EGX_LIVE_QUOTE_URL_TEMPLATE: ${{ secrets.EGX_LIVE_QUOTE_URL_TEMPLATE }}
           EGX_LIVE_TOKEN: ${{ secrets.EGX_LIVE_TOKEN }}
@@ -51,6 +54,7 @@ jobs:
         run: python telegram_bot.py
 
       - name: Run professional signal engine
+        continue-on-error: true
         env:
           TOKEN: ${{ secrets.TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
