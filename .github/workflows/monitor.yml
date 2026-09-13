@@ -32,12 +32,12 @@ jobs:
         run: pip install requests
 
       - name: Validate Python modules
-        continue-on-error: true
-        run: python -m py_compile telegram_bot.py always_on_bot.py monitor.py pro_engine.py data_provider.py data_health.py self_test.py
+        run: python -m py_compile telegram_bot.py always_on_bot.py monitor.py pro_engine.py trade_lifecycle.py data_provider.py data_health.py self_test.py
 
       - name: Run deterministic self tests
-        continue-on-error: true
-        run: python self_test.py
+        run: |
+          python self_test.py
+          python -c "from trade_lifecycle import self_test; self_test(); print('trade lifecycle self-test: PASS')"
 
       - name: Check market data health
         continue-on-error: true
@@ -64,6 +64,9 @@ jobs:
           EGX_LIVE_AUTH_HEADER: ${{ secrets.EGX_LIVE_AUTH_HEADER }}
           EGX_LIVE_AUTH_PREFIX: ${{ secrets.EGX_LIVE_AUTH_PREFIX }}
         run: python pro_engine.py
+
+      - name: Build WATCH ENTRY lifecycle
+        run: python trade_lifecycle.py
 
       - name: Save bot state
         if: always()
