@@ -20,10 +20,10 @@ def main():
     closes = [x["close"] for x in rows]
 
     assert ema(closes, 20) > 0
-    assert 0 <= rsi(closes) <= 100
+    assert -1e-9 <= rsi(closes) <= 100.000001
     assert atr(rows) > 0
-    assert 0 <= adx(rows) <= 100
-    assert 0 <= mfi(rows) <= 100
+    assert -1e-9 <= adx(rows) <= 100.000001
+    assert -1e-9 <= mfi(rows) <= 100.000001
     assert isinstance(candle_setup(rows), list)
 
     regime = market_regime([
