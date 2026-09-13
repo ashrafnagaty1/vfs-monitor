@@ -31,7 +31,7 @@ jobs:
         run: pip install requests
 
       - name: Validate Python modules
-        run: python -m py_compile monitor.py pro_engine.py data_provider.py data_health.py self_test.py
+        run: python -m py_compile telegram_bot.py monitor.py pro_engine.py data_provider.py data_health.py self_test.py
 
       - name: Run deterministic self tests
         run: python self_test.py
@@ -44,11 +44,11 @@ jobs:
           EGX_LIVE_AUTH_PREFIX: ${{ secrets.EGX_LIVE_AUTH_PREFIX }}
         run: python data_health.py
 
-      - name: Run Telegram bot and core scanner
+      - name: Run fast Telegram interface
         env:
           TOKEN: ${{ secrets.TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
-        run: python monitor.py
+        run: python telegram_bot.py
 
       - name: Run professional signal engine
         env:
