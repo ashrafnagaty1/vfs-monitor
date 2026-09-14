@@ -302,7 +302,7 @@ def self_test():
                     "signal_id": "COMI-a1",
                     "status": "WATCH",
                     "trigger": 78.0,
-                    "dynamic_stop": 74.5,
+                    "dynamic_stop": 74.0,
                     "target1": 82.0,
                     "target2": 86.0,
                     "target3": 90.0,
