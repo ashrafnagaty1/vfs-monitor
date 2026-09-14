@@ -19,6 +19,7 @@ import bot_opportunities
 import bot_market
 import bot_personal_portfolio
 import bot_assistant
+import bot_reports
 
 telegram_bot = bot_experience.apply(telegram_bot)
 telegram_bot = bot_watchlist.apply(telegram_bot)
@@ -32,6 +33,7 @@ telegram_bot = bot_opportunities.apply(telegram_bot)
 telegram_bot = bot_market.apply(telegram_bot)
 telegram_bot = bot_personal_portfolio.apply(telegram_bot)
 telegram_bot = bot_assistant.apply(telegram_bot)
+telegram_bot = bot_reports.apply(telegram_bot)
 
 CAIRO = ZoneInfo("Africa/Cairo")
 RUNNING = True
