@@ -53,7 +53,7 @@ jobs:
           python -c "from trade_lifecycle import self_test; self_test(); print('trade lifecycle self-test: PASS')"
           python -c "from signal_guard import self_test; self_test(); print('signal guard self-test: PASS')"
           python -c "from portfolio_engine import self_test; self_test(); print('portfolio engine self-test: PASS')"
-          python -c "import telegram_bot, bot_experience; bot_experience.apply(telegram_bot); assert telegram_bot.MAIN_MENU['keyboard'][0][0] == '📊 الشاشة اللحظية'; print('bot experience self-test: PASS')"
+          python -c "import telegram_bot, bot_experience; bot_experience.apply(telegram_bot); assert telegram_bot.MAIN_MENU['keyboard'][0][0] == '📊 الشاشة اللحظية'; assert abs(bot_experience._rr(10, 9, 12)-2.0) < 1e-9; assert bot_experience._plan_status({'price':11,'res20':10,'quote_live':False})[0] == 'WATCH'; assert bot_experience._plan_status({'price':10,'res20':10,'quote_live':True})[0] == 'ENTRY'; print('bot experience self-test: PASS')"
 
       - name: Check market data health
         continue-on-error: true
