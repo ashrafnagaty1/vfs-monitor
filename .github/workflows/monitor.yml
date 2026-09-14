@@ -38,7 +38,7 @@ jobs:
         run: pip install requests
 
       - name: Validate Python modules
-        run: python -m py_compile telegram_bot.py bot_experience.py bot_watchlist.py bot_alerts.py bot_smart_money.py bot_gann.py bot_opportunities.py bot_market.py smart_money.py gann_analysis.py always_on_bot.py monitor.py pro_engine.py pro_engine_v2.py trade_lifecycle.py signal_guard.py portfolio_engine.py data_provider.py data_health.py egxpilot_provider.py self_test.py
+        run: python -m py_compile telegram_bot.py bot_experience.py bot_watchlist.py bot_alerts.py bot_smart_money.py bot_gann.py bot_harmonic.py bot_opportunities.py bot_market.py smart_money.py gann_analysis.py harmonic_analysis.py always_on_bot.py monitor.py pro_engine.py pro_engine_v2.py trade_lifecycle.py signal_guard.py portfolio_engine.py data_provider.py data_health.py egxpilot_provider.py self_test.py
 
       - name: Validate dashboard JavaScript
         run: |
@@ -56,12 +56,14 @@ jobs:
           python bot_smart_money.py
           python gann_analysis.py
           python bot_gann.py
+          python harmonic_analysis.py
+          python bot_harmonic.py
           python bot_opportunities.py
           python bot_market.py
           python -c "from trade_lifecycle import self_test; self_test(); print('trade lifecycle self-test: PASS')"
           python -c "from signal_guard import self_test; self_test(); print('signal guard self-test: PASS')"
           python -c "from portfolio_engine import self_test; self_test(); print('portfolio engine self-test: PASS')"
-          python -c "import telegram_bot, bot_experience, bot_watchlist, bot_alerts, bot_smart_money, bot_gann, bot_opportunities, bot_market; bot_experience.apply(telegram_bot); bot_watchlist.apply(telegram_bot); bot_alerts.apply(telegram_bot); bot_smart_money.apply(telegram_bot); bot_gann.apply(telegram_bot); bot_opportunities.apply(telegram_bot); bot_market.apply(telegram_bot); assert telegram_bot.MAIN_MENU['keyboard'][0][0] == '📊 الشاشة اللحظية'; assert any('📋 قائمة المتابعة' in row for row in telegram_bot.MAIN_MENU['keyboard']); assert abs(bot_experience._rr(10, 9, 12)-2.0) < 1e-9; assert bot_experience._plan_status({'price':11,'res20':10,'quote_live':False})[0] == 'WATCH'; assert bot_experience._plan_status({'price':10,'res20':10,'quote_live':True})[0] == 'ENTRY'; assert bot_alerts._parse_price('75,5') == 75.5; assert any('💧 سيولة العينة' in row for row in bot_market.MARKET_MENU['keyboard']); assert bot_gann.GANN_MENU['keyboard'][0][0] == '🔄 تحديث جان'; print('bot experience self-test: PASS')"
+          python -c "import telegram_bot, bot_experience, bot_watchlist, bot_alerts, bot_smart_money, bot_gann, bot_harmonic, bot_opportunities, bot_market; bot_experience.apply(telegram_bot); bot_watchlist.apply(telegram_bot); bot_alerts.apply(telegram_bot); bot_smart_money.apply(telegram_bot); bot_gann.apply(telegram_bot); bot_harmonic.apply(telegram_bot); bot_opportunities.apply(telegram_bot); bot_market.apply(telegram_bot); assert telegram_bot.MAIN_MENU['keyboard'][0][0] == '📊 الشاشة اللحظية'; assert any('📋 قائمة المتابعة' in row for row in telegram_bot.MAIN_MENU['keyboard']); assert abs(bot_experience._rr(10, 9, 12)-2.0) < 1e-9; assert bot_experience._plan_status({'price':11,'res20':10,'quote_live':False})[0] == 'WATCH'; assert bot_experience._plan_status({'price':10,'res20':10,'quote_live':True})[0] == 'ENTRY'; assert bot_alerts._parse_price('75,5') == 75.5; assert any('💧 سيولة العينة' in row for row in bot_market.MARKET_MENU['keyboard']); assert bot_gann.GANN_MENU['keyboard'][0][0] == '🔄 تحديث جان'; assert bot_harmonic.HARMONIC_MENU['keyboard'][0][0] == '🔄 تحديث الهارمونيك'; print('bot experience self-test: PASS')"
           python - <<'PY'
           import bot_experience as b
           runtime = {
