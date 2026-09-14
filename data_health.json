@@ -1,10 +1,12 @@
 {
-  "checked_at": "2026-09-13T23:48:28.701249+03:00",
-  "rotation_index": 3,
+  "checked_at": "2026-09-14T06:43:32.589535+03:00",
+  "rotation_index": 4,
   "mode": "DELAYED_EVALUATION",
   "quote_source": "borsa demo (evaluation)",
   "history_source": "Yahoo Finance EGX .CA daily candles",
-  "symbol": "FWRY",
+  "symbol": "TMGH",
   "status": "RED",
-  "message": "Data source check failed: DataProviderError: DEMO_RATE_LIMIT"
+  "message": "Data source check failed: DataProviderError: SHORT_HISTORY",
+  "quote_available": null,
+  "history_available": null
 }
