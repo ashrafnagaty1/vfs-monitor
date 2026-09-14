@@ -132,6 +132,8 @@ jobs:
           test -n "$SYNC_SECRET" || { echo "SYNC_SECRET missing"; exit 1; }
           test -f state.json || { echo "state.json missing"; exit 1; }
           curl --fail-with-body --show-error \
+            --retry 3 --retry-delay 2 --retry-all-errors \
+            --connect-timeout 10 --max-time 30 \
             -X POST "https://vfs-monitor.folkhero3.workers.dev/sync" \
             -H "Authorization: Bearer $SYNC_SECRET" \
             -H "Content-Type: application/json" \
