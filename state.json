@@ -5,7 +5,7 @@
   "signals": {},
   "scanner_seen": {},
   "pro_engine_snapshot": {
-    "at": "2026-09-14T11:41:44.127503+03:00",
+    "at": "2026-09-14T12:48:43.226746+03:00",
     "count": 34,
     "quote_mode": "DELAYED_EVALUATION",
     "quote_source": "borsa demo (evaluation)",
@@ -85,25 +85,25 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T08:41:44.127634+00:00",
-          "score": null,
-          "bias": null,
-          "signal": null,
-          "signal_direction": null,
-          "confidence": null,
-          "regime": null,
-          "rsi": null,
-          "macd": null,
-          "macd_signal": null,
-          "atr": null,
-          "vwap": null
+          "fetched_at": "2026-09-14T09:48:43.226923+00:00",
+          "score": 70,
+          "bias": "BULLISH",
+          "signal": "BREAKOUT",
+          "signal_direction": "BULLISH",
+          "confidence": 57,
+          "regime": "VOLATILE_UPTREND",
+          "rsi": 72.7,
+          "macd": 0.33469939548815475,
+          "macd_signal": 0.3221341494942536,
+          "atr": 0.36,
+          "vwap": 9.89
         },
         "CIRA": {
           "ok": true,
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T08:41:45.640403+00:00",
+          "fetched_at": "2026-09-14T09:48:44.504331+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -121,7 +121,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T08:41:47.177890+00:00",
+          "fetched_at": "2026-09-14T09:48:45.705523+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -139,7 +139,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T08:41:49.708942+00:00",
+          "fetched_at": "2026-09-14T09:48:46.706619+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -157,7 +157,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T08:41:50.533922+00:00",
+          "fetched_at": "2026-09-14T09:48:47.701375+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -781,18 +781,18 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T08:41:44.127634+00:00",
-          "score": null,
-          "bias": null,
-          "signal": null,
-          "signal_direction": null,
-          "confidence": null,
-          "regime": null,
-          "rsi": null,
-          "macd": null,
-          "macd_signal": null,
-          "atr": null,
-          "vwap": null
+          "fetched_at": "2026-09-14T09:48:43.226923+00:00",
+          "score": 70,
+          "bias": "BULLISH",
+          "signal": "BREAKOUT",
+          "signal_direction": "BULLISH",
+          "confidence": 57,
+          "regime": "VOLATILE_UPTREND",
+          "rsi": 72.7,
+          "macd": 0.33469939548815475,
+          "macd_signal": 0.3221341494942536,
+          "atr": 0.36,
+          "vwap": 9.89
         }
       },
       {
@@ -1404,7 +1404,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T08:41:45.640403+00:00",
+          "fetched_at": "2026-09-14T09:48:44.504331+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -2024,7 +2024,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T08:41:47.177890+00:00",
+          "fetched_at": "2026-09-14T09:48:45.705523+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -2646,7 +2646,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T08:41:49.708942+00:00",
+          "fetched_at": "2026-09-14T09:48:46.706619+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -3269,7 +3269,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T08:41:50.533922+00:00",
+          "fetched_at": "2026-09-14T09:48:47.701375+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -8166,18 +8166,18 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T08:41:44.127634+00:00",
-          "score": null,
-          "bias": null,
-          "signal": null,
-          "signal_direction": null,
-          "confidence": null,
-          "regime": null,
-          "rsi": null,
-          "macd": null,
-          "macd_signal": null,
-          "atr": null,
-          "vwap": null
+          "fetched_at": "2026-09-14T09:48:43.226923+00:00",
+          "score": 70,
+          "bias": "BULLISH",
+          "signal": "BREAKOUT",
+          "signal_direction": "BULLISH",
+          "confidence": 57,
+          "regime": "VOLATILE_UPTREND",
+          "rsi": 72.7,
+          "macd": 0.33469939548815475,
+          "macd_signal": 0.3221341494942536,
+          "atr": 0.36,
+          "vwap": 9.89
         }
       },
       {
@@ -8789,7 +8789,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T08:41:45.640403+00:00",
+          "fetched_at": "2026-09-14T09:48:44.504331+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -9409,7 +9409,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T08:41:47.177890+00:00",
+          "fetched_at": "2026-09-14T09:48:45.705523+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -10031,7 +10031,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T08:41:49.708942+00:00",
+          "fetched_at": "2026-09-14T09:48:46.706619+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -10654,7 +10654,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T08:41:50.533922+00:00",
+          "fetched_at": "2026-09-14T09:48:47.701375+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -28203,7 +28203,7 @@
     "delayed_mode:2026-09-14": "2026-09-14T10:46:07.818953+03:00"
   },
   "trade_lifecycle": {
-    "updated_at": "2026-09-14T11:41:51.462634+03:00",
+    "updated_at": "2026-09-14T12:48:48.553105+03:00",
     "quote_mode": "DELAYED_EVALUATION",
     "disclaimer": "ENTRY states require a configured live quote provider. Delayed/evaluation data stays WATCH even if the last price is above trigger.",
     "new_alerts_count": 0,
@@ -28585,7 +28585,7 @@
   ],
   "signal_portfolio": {
     "schema_version": 2,
-    "updated_at": "2026-09-14T11:41:51.601917+03:00",
+    "updated_at": "2026-09-14T12:48:49.025948+03:00",
     "mode": "LIVE_SIGNAL_TRACKING",
     "quote_mode": "DELAYED_EVALUATION",
     "disclaimer": "Tracks confirmed LIVE signal entries only. It is not a brokerage account statement, and delayed/evaluation WATCH data never creates positions or performance records.",
@@ -28606,7 +28606,7 @@
     }
   },
   "signal_guard": {
-    "updated_at": "2026-09-14T11:41:51.534949+03:00",
+    "updated_at": "2026-09-14T12:48:48.651193+03:00",
     "quote_mode": "DELAYED_EVALUATION",
     "policy": "Execution-ready requires LIVE quotes, RR >= 1.30 and no overheating blocker. Delayed/evaluation plans remain analysis-only WATCH regardless of score.",
     "counts": {
@@ -28622,7 +28622,7 @@
     "canonical_price": false,
     "price_note": "EGXpilot currentPrice is not used as the scanner/live quote source until independently verified.",
     "cache_minutes": 30,
-    "updated_at": "2026-09-14T08:41:44.127626+00:00",
+    "updated_at": "2026-09-14T09:48:43.226908+00:00",
     "selected_symbols": [
       "KABO",
       "CIRA",
@@ -28785,15 +28785,124 @@
         "provider": "EGXpilot",
         "role": "SECONDARY_ANALYSIS_ONLY",
         "canonical_price": false,
-        "fetched_at": "2026-09-14T08:41:44.127634+00:00",
-        "data": {}
+        "fetched_at": "2026-09-14T09:48:43.226923+00:00",
+        "data": {
+          "symbol": "KABO",
+          "currentPrice": 10,
+          "status": "OK",
+          "timestamp": "2026-09-14T09:48:44.414Z",
+          "regime": {
+            "label": "VOLATILE_UPTREND",
+            "description": "Ø§ØªØ¬Ø§Ù ØµØ§Ø¹Ø¯ Ø¹Ø§ÙÙ Ø§ÙØªØ°Ø¨Ø°Ø¨",
+            "volatility": "HIGH",
+            "trend": "TRENDING_UP"
+          },
+          "bias": {
+            "direction": "BULLISH",
+            "label": "ØµØ¹ÙØ¯Ù â Ø§Ø®ØªØ±Ø§Ù",
+            "technical": {
+              "composite": 70,
+              "dimensions": {
+                "trend": 95,
+                "momentum": 45,
+                "volatility": 40,
+                "volume": 75
+              },
+              "weights": {
+                "trend": 0.4,
+                "momentum": 0.25,
+                "volatility": 0.15,
+                "volume": 0.2
+              }
+            },
+            "rating": "Ø¥ÙØ¬Ø§Ø¨Ù"
+          },
+          "signal": {
+            "type": "BREAKOUT",
+            "direction": "BULLISH",
+            "logic": [
+              "Price above upper Bollinger Band",
+              "ADX=43 rising, trend developing",
+              "+DI > -DI confirms bullish breakout"
+            ]
+          },
+          "scores": {
+            "composite": 70,
+            "dimensions": {
+              "trend": 95,
+              "momentum": 45,
+              "volatility": 40,
+              "volume": 75
+            },
+            "regimeWeights": {
+              "trend": 0.4,
+              "momentum": 0.25,
+              "volatility": 0.15,
+              "volume": 0.2
+            },
+            "regimeLabel": "VOLATILE_UPTREND"
+          },
+          "confidence": {
+            "score": 57,
+            "method": "baseline",
+            "factors": [
+              "Baseline method: No backtest data available",
+              "Signal prior (BREAKOUT): 45",
+              "Regime alignment (VOLATILE_UPTREND): -5",
+              "Indicator agreement: 83% (5 confirmations) â +17"
+            ]
+          },
+          "risk": {
+            "stopLoss": 9.29,
+            "stopDistance": 0.71,
+            "targets": {
+              "t1": 11.06,
+              "t2": 11.78
+            },
+            "riskRewardRatio": 1.49,
+            "atrMultiplier": 2,
+            "viable": true,
+            "reason": null
+          },
+          "keyIndicators": {
+            "rsi": 72.7,
+            "macd": {
+              "MACD": 0.33469939548815475,
+              "signal": 0.3221341494942536,
+              "histogram": 0.01256524599390113
+            },
+            "adx": {
+              "adx": 43.150060444154256,
+              "pdi": 35.75302976790941,
+              "mdi": 9.649039893058443
+            },
+            "atr": 0.36,
+            "vwap": 9.89,
+            "bollingerBands": {
+              "middle": 9.229000000000006,
+              "upper": 9.760635213280692,
+              "lower": 8.697364786719321,
+              "pb": 1.2251212680610493
+            },
+            "stochastic": {
+              "k": 86.61417322834646,
+              "d": 81.18062802390678
+            }
+          },
+          "dataQuality": {
+            "score": 97,
+            "totalRows": 366,
+            "validRows": 366,
+            "rejectedRows": 0
+          }
+        }
       },
       "CIRA": {
         "ok": true,
         "provider": "EGXpilot",
         "role": "SECONDARY_ANALYSIS_ONLY",
         "canonical_price": false,
-        "fetched_at": "2026-09-14T08:41:45.640403+00:00",
+        "fetched_at": "2026-09-14T09:48:44.504331+00:00",
         "data": {}
       },
       "MASR": {
@@ -28801,7 +28910,7 @@
         "provider": "EGXpilot",
         "role": "SECONDARY_ANALYSIS_ONLY",
         "canonical_price": false,
-        "fetched_at": "2026-09-14T08:41:47.177890+00:00",
+        "fetched_at": "2026-09-14T09:48:45.705523+00:00",
         "data": {}
       },
       "CCAP": {
@@ -28809,7 +28918,7 @@
         "provider": "EGXpilot",
         "role": "SECONDARY_ANALYSIS_ONLY",
         "canonical_price": false,
-        "fetched_at": "2026-09-14T08:41:49.708942+00:00",
+        "fetched_at": "2026-09-14T09:48:46.706619+00:00",
         "data": {}
       },
       "DTPP": {
@@ -28817,7 +28926,7 @@
         "provider": "EGXpilot",
         "role": "SECONDARY_ANALYSIS_ONLY",
         "canonical_price": false,
-        "fetched_at": "2026-09-14T08:41:50.533922+00:00",
+        "fetched_at": "2026-09-14T09:48:47.701375+00:00",
         "data": {}
       }
     }
@@ -28827,21 +28936,21 @@
       "signal_id": "ORHD-ec3fe19fd885",
       "setup_signature": "ORHD|43.5700|41.4703",
       "first_seen": "2026-09-14T11:41:51.462634+03:00",
-      "last_seen": "2026-09-14T11:41:51.462634+03:00",
+      "last_seen": "2026-09-14T12:48:48.553105+03:00",
       "active": true
     },
     "POUL": {
       "signal_id": "POUL-ab6d3829e00e",
       "setup_signature": "POUL|40.9900|38.3214",
       "first_seen": "2026-09-14T11:41:51.462634+03:00",
-      "last_seen": "2026-09-14T11:41:51.462634+03:00",
+      "last_seen": "2026-09-14T12:48:48.553105+03:00",
       "active": true
     },
     "ETEL": {
       "signal_id": "ETEL-72a58442588f",
       "setup_signature": "ETEL|131.0000|123.5009",
       "first_seen": "2026-09-14T11:41:51.462634+03:00",
-      "last_seen": "2026-09-14T11:41:51.462634+03:00",
+      "last_seen": "2026-09-14T12:48:48.553105+03:00",
       "active": true
     },
     "TMGH": {
@@ -28880,7 +28989,7 @@
       "signal_id": "CCAP-af4ccf81c061",
       "setup_signature": "CCAP|6.2700|6.0883",
       "first_seen": "2026-09-14T11:41:51.462634+03:00",
-      "last_seen": "2026-09-14T11:41:51.462634+03:00",
+      "last_seen": "2026-09-14T12:48:48.553105+03:00",
       "active": true
     },
     "EFIH": {
@@ -28919,14 +29028,14 @@
       "signal_id": "CIRA-7478c3a04c3c",
       "setup_signature": "CIRA|38.9900|36.2134",
       "first_seen": "2026-09-14T11:41:51.462634+03:00",
-      "last_seen": "2026-09-14T11:41:51.462634+03:00",
+      "last_seen": "2026-09-14T12:48:48.553105+03:00",
       "active": true
     },
     "FAIT": {
       "signal_id": "FAIT-921fcbaca31e",
       "setup_signature": "FAIT|48.3500|45.5871",
       "first_seen": "2026-09-14T11:41:51.462634+03:00",
-      "last_seen": "2026-09-14T11:41:51.462634+03:00",
+      "last_seen": "2026-09-14T12:48:48.553105+03:00",
       "active": true
     }
   }

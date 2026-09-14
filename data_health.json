@@ -1,10 +1,10 @@
 {
-  "checked_at": "2026-09-14T06:44:34.908285+03:00",
-  "rotation_index": 4,
+  "checked_at": "2026-09-14T12:48:39.153818+03:00",
+  "rotation_index": 5,
   "mode": "DELAYED_EVALUATION",
   "quote_source": "borsa demo (evaluation)",
   "history_source": "Yahoo Finance EGX .CA daily candles",
-  "symbol": "TMGH",
+  "symbol": "EAST",
   "status": "RED",
   "message": "Data source check failed: DataProviderError: SHORT_HISTORY",
   "quote_available": null,
