@@ -39,6 +39,16 @@ STOCK_ACTION_MENU = _keyboard([
     ["📊 الشاشة اللحظية", "🏠 القائمة الرئيسية"],
 ])
 
+PORTFOLIO_MENU = _keyboard([
+    ["🚀 الإشارات النشطة", "📈 تقرير الأداء"],
+    ["🔄 تحديث المحفظة", "🏠 القائمة الرئيسية"],
+])
+
+SIGNALS_MENU = _keyboard([
+    ["💼 محفظتي", "📈 تقرير الأداء"],
+    ["🎯 فرص اليوم", "🏠 القائمة الرئيسية"],
+])
+
 
 def _send_keyboard(base, text, chat_id, keyboard):
     if not base.TOKEN:
@@ -87,6 +97,128 @@ def _rr(entry, stop, target):
     risk = max(0.0, float(entry) - float(stop))
     reward = max(0.0, float(target) - float(entry))
     return reward / risk if risk > 0 else 0.0
+
+
+def _as_list(value):
+    """Accept schema-v2 lists and legacy dict-shaped collections safely."""
+    if isinstance(value, list):
+        return value
+    if isinstance(value, dict):
+        return list(value.values())
+    return []
+
+
+def _runtime_state(base):
+    try:
+        return base.load_json(base.STATE_FILE, {}) or {}
+    except Exception:
+        return {}
+
+
+def _num(value, digits=2):
+    try:
+        return f"{float(value):.{digits}f}"
+    except Exception:
+        return "-"
+
+
+def _quote_mode_label(mode):
+    return "🟢 LIVE مؤكد" if mode == "LIVE" else "🟡 DELAYED / EVALUATION"
+
+
+def _build_active_signals_text(runtime):
+    lifecycle = runtime.get("trade_lifecycle") or {}
+    plans = _as_list(lifecycle.get("plans"))
+    quote_mode = lifecycle.get("quote_mode") or "DELAYED_EVALUATION"
+    if not plans:
+        return (
+            "🚀 <b>الإشارات النشطة</b>\n\n"
+            "لا توجد خطط نشطة محفوظة حاليًا.\n"
+            f"📡 {_quote_mode_label(quote_mode)}"
+        )
+
+    rank = {"T3": 0, "T2": 1, "T1": 2, "ENTRY": 3, "WATCH": 4}
+    plans = sorted(
+        plans,
+        key=lambda p: (rank.get(str(p.get("lifecycle_status") or p.get("status") or "WATCH"), 9), -float(p.get("score") or 0)),
+    )
+    lines = [
+        "🚀 <b>الإشارات النشطة</b>",
+        f"📡 {_quote_mode_label(quote_mode)}",
+        "",
+    ]
+    for p in plans[:10]:
+        status = str(p.get("lifecycle_status") or p.get("status") or "WATCH")
+        icon = {"WATCH": "🟡", "ENTRY": "🟢", "T1": "1️⃣", "T2": "2️⃣", "T3": "3️⃣"}.get(status, "•")
+        sid = str(p.get("signal_id") or "-")
+        lines.extend([
+            f"{icon} <b>{p.get('symbol', '-')}</b> · {status} · Score {_num(p.get('score'), 0)}",
+            f"   ID <code>{sid}</code>",
+            f"   Trigger {_num(p.get('trigger'))} · Stop {_num(p.get('dynamic_stop') or p.get('initial_stop'))}",
+            f"   T1 {_num(p.get('target1'))} · T2 {_num(p.get('target2'))} · T3 {_num(p.get('target3'))}",
+        ])
+    if quote_mode != "LIVE":
+        lines.extend(["", "⚠️ البيانات الحالية لا تسمح بتحويل WATCH إلى ENTRY؛ لا يتم إنشاء صفقة من مصدر متأخر."])
+    return "\n".join(lines)
+
+
+def _build_portfolio_text(runtime):
+    portfolio = runtime.get("signal_portfolio") or {}
+    quote_mode = portfolio.get("quote_mode") or (runtime.get("trade_lifecycle") or {}).get("quote_mode") or "DELAYED_EVALUATION"
+    open_positions = _as_list(portfolio.get("open_positions"))
+    closed = _as_list(portfolio.get("closed_trades"))
+    lines = [
+        "💼 <b>محفظة إشارات ReFo</b>",
+        f"📡 {_quote_mode_label(quote_mode)}",
+        f"🟢 مراكز مفتوحة: <b>{len(open_positions)}</b> · 📁 مغلقة: <b>{len(closed)}</b>",
+        "",
+    ]
+    if not open_positions:
+        lines.append("لا توجد مراكز إشارات مفتوحة حاليًا.")
+    else:
+        for pos in open_positions[:8]:
+            status = str(pos.get("lifecycle_status") or pos.get("stage") or "ENTRY")
+            lines.extend([
+                f"📌 <b>{pos.get('symbol', '-')}</b> · {status}",
+                f"   ID <code>{pos.get('signal_id', '-')}</code>",
+                f"   Entry {_num(pos.get('entry_price'))} · Last {_num(pos.get('last_price'))}",
+                f"   Stop {_num(pos.get('dynamic_stop') or pos.get('initial_stop'))} · P/L {_num(pos.get('unrealized_r'))}R",
+                f"   T1 {_num(pos.get('target1'))} · T2 {_num(pos.get('target2'))} · T3 {_num(pos.get('target3'))}",
+            ])
+    lines.extend([
+        "",
+        "⚠️ هذه محفظة تتبع إشارات مؤكدة وليست كشف حساب وساطة. البيانات delayed لا تنشئ مراكز جديدة.",
+    ])
+    return "\n".join(lines)
+
+
+def _build_performance_text(runtime):
+    portfolio = runtime.get("signal_portfolio") or {}
+    perf = portfolio.get("performance") or {}
+    events = _as_list(portfolio.get("events"))
+    lines = [
+        "📈 <b>تقرير أداء إشارات ReFo</b>",
+        f"الصفقات المغلقة: <b>{int(perf.get('closed_trades') or 0)}</b> · المفتوحة: <b>{int(perf.get('open_positions') or 0)}</b>",
+        f"✅ فوز {int(perf.get('wins') or 0)} · ❌ خسارة {int(perf.get('losses') or 0)} · ➖ تعادل {int(perf.get('breakeven') or 0)}",
+        f"🎯 Win rate: <b>{_num(perf.get('win_rate_pct'), 1)}%</b>",
+        f"⚖️ Total R: <b>{_num(perf.get('total_r'))}R</b> · Avg R: <b>{_num(perf.get('avg_r'))}R</b>",
+        f"🏆 Best: {_num(perf.get('best_r'))}R · Worst: {_num(perf.get('worst_r'))}R",
+    ]
+    if events:
+        labels = {"ENTRY": "🟢 ENTRY", "T1": "1️⃣ T1", "T2": "2️⃣ T2", "T3": "3️⃣ T3", "CLOSED": "🔒 CLOSED"}
+        lines.append("\n🧾 <b>آخر أحداث دورة الصفقة</b>")
+        for e in events[-8:][::-1]:
+            event = str(e.get("event") or "-")
+            label = labels.get(event, event)
+            detail = f" · {e.get('detail')}" if e.get("detail") else ""
+            lines.append(f"• {e.get('symbol', '-')} · {label} @ {_num(e.get('price'))}{detail}")
+    else:
+        lines.append("\nلا توجد أحداث تداول مؤكدة مسجلة بعد.")
+    lines.extend([
+        "",
+        "ℹ️ التقرير يحتسب فقط ENTRY المؤكد في وضع LIVE؛ WATCH الناتج من delayed/evaluation مستبعد من الأداء.",
+    ])
+    return "\n".join(lines)
 
 
 def _render_stock_card(base, chat_id, state, symbol, advanced=False):
@@ -231,6 +363,18 @@ def apply(base):
             else:
                 state["user_watchlist"] = [x for x in watch if x != sym]
                 _send_keyboard(base, f"🗑️ تم إلغاء متابعة <b>{sym}</b>.", chat_id, STOCK_ACTION_MENU)
+            return True
+
+        if text == "🚀 الإشارات النشطة":
+            _send_keyboard(base, _build_active_signals_text(_runtime_state(base)), chat_id, SIGNALS_MENU)
+            return True
+
+        if text in ("💼 محفظتي", "🔄 تحديث المحفظة"):
+            _send_keyboard(base, _build_portfolio_text(_runtime_state(base)), chat_id, PORTFOLIO_MENU)
+            return True
+
+        if text == "📈 تقرير الأداء":
+            _send_keyboard(base, _build_performance_text(_runtime_state(base)), chat_id, PORTFOLIO_MENU)
             return True
 
         if text == "🗺️ السوق والقطاعات":
