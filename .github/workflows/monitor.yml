@@ -38,7 +38,7 @@ jobs:
         run: pip install requests
 
       - name: Validate Python modules
-        run: python -m py_compile telegram_bot.py always_on_bot.py monitor.py pro_engine.py pro_engine_v2.py trade_lifecycle.py signal_guard.py portfolio_engine.py data_provider.py data_health.py egxpilot_provider.py self_test.py
+        run: python -m py_compile telegram_bot.py bot_experience.py always_on_bot.py monitor.py pro_engine.py pro_engine_v2.py trade_lifecycle.py signal_guard.py portfolio_engine.py data_provider.py data_health.py egxpilot_provider.py self_test.py
 
       - name: Validate dashboard JavaScript
         run: |
@@ -53,6 +53,7 @@ jobs:
           python -c "from trade_lifecycle import self_test; self_test(); print('trade lifecycle self-test: PASS')"
           python -c "from signal_guard import self_test; self_test(); print('signal guard self-test: PASS')"
           python -c "from portfolio_engine import self_test; self_test(); print('portfolio engine self-test: PASS')"
+          python -c "import telegram_bot, bot_experience; bot_experience.apply(telegram_bot); assert telegram_bot.MAIN_MENU['keyboard'][0][0] == '📊 الشاشة اللحظية'; print('bot experience self-test: PASS')"
 
       - name: Check market data health
         continue-on-error: true
