@@ -12,12 +12,14 @@ import bot_watchlist
 import bot_alerts
 import bot_smart_money
 import bot_opportunities
+import bot_market
 
 telegram_bot = bot_experience.apply(telegram_bot)
 telegram_bot = bot_watchlist.apply(telegram_bot)
 telegram_bot = bot_alerts.apply(telegram_bot)
 telegram_bot = bot_smart_money.apply(telegram_bot)
 telegram_bot = bot_opportunities.apply(telegram_bot)
+telegram_bot = bot_market.apply(telegram_bot)
 
 CAIRO = ZoneInfo("Africa/Cairo")
 RUNNING = True
