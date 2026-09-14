@@ -7,6 +7,9 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 import telegram_bot
+import bot_experience
+
+telegram_bot = bot_experience.apply(telegram_bot)
 
 CAIRO = ZoneInfo("Africa/Cairo")
 RUNNING = True
@@ -53,7 +56,7 @@ def main():
     if not telegram_bot.TOKEN or not telegram_bot.CHAT_ID:
         raise RuntimeError("TOKEN and CHAT_ID environment variables are required")
 
-    log("EGX always-on Telegram service started")
+    log("ReFo EGX always-on Telegram service started")
     log("Telegram polling is continuous; professional engine remains periodic")
 
     next_engine = 0.0
@@ -86,7 +89,7 @@ def main():
 
         time.sleep(max(0.2, POLL_SLEEP_SECONDS))
 
-    log("EGX always-on Telegram service stopped")
+    log("ReFo EGX always-on Telegram service stopped")
 
 
 if __name__ == "__main__":
