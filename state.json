@@ -5,7 +5,7 @@
   "signals": {},
   "scanner_seen": {},
   "pro_engine_snapshot": {
-    "at": "2026-09-14T19:45:56.686005+03:00",
+    "at": "2026-09-14T19:46:21.453305+03:00",
     "count": 34,
     "quote_mode": "DELAYED_EVALUATION",
     "quote_source": "borsa demo (evaluation)",
@@ -28204,7 +28204,7 @@
     "close:2026-09-14": "2026-09-14T14:47:03.129411+03:00"
   },
   "trade_lifecycle": {
-    "updated_at": "2026-09-14T19:45:56.787897+03:00",
+    "updated_at": "2026-09-14T19:46:21.582230+03:00",
     "quote_mode": "DELAYED_EVALUATION",
     "disclaimer": "ENTRY states require a configured live quote provider. Delayed/evaluation data stays WATCH even if the last price is above trigger.",
     "new_alerts_count": 0,
@@ -28586,7 +28586,7 @@
   ],
   "signal_portfolio": {
     "schema_version": 2,
-    "updated_at": "2026-09-14T19:45:56.940819+03:00",
+    "updated_at": "2026-09-14T19:46:21.762020+03:00",
     "mode": "LIVE_SIGNAL_TRACKING",
     "quote_mode": "DELAYED_EVALUATION",
     "disclaimer": "Tracks confirmed LIVE signal entries only. It is not a brokerage account statement, and delayed/evaluation WATCH data never creates positions or performance records.",
@@ -28607,7 +28607,7 @@
     }
   },
   "signal_guard": {
-    "updated_at": "2026-09-14T19:45:56.865334+03:00",
+    "updated_at": "2026-09-14T19:46:21.667672+03:00",
     "quote_mode": "DELAYED_EVALUATION",
     "policy": "Execution-ready requires LIVE quotes, RR >= 1.30 and no overheating blocker. Delayed/evaluation plans remain analysis-only WATCH regardless of score.",
     "counts": {
@@ -28623,7 +28623,7 @@
     "canonical_price": false,
     "price_note": "EGXpilot currentPrice is not used as the scanner/live quote source until independently verified.",
     "cache_minutes": 30,
-    "updated_at": "2026-09-14T16:45:56.686137+00:00",
+    "updated_at": "2026-09-14T16:46:21.453437+00:00",
     "selected_symbols": [
       "KABO",
       "CIRA",
@@ -28937,21 +28937,21 @@
       "signal_id": "ORHD-ec3fe19fd885",
       "setup_signature": "ORHD|43.5700|41.4703",
       "first_seen": "2026-09-14T11:41:51.462634+03:00",
-      "last_seen": "2026-09-14T19:45:56.787897+03:00",
+      "last_seen": "2026-09-14T19:46:21.582230+03:00",
       "active": true
     },
     "POUL": {
       "signal_id": "POUL-ab6d3829e00e",
       "setup_signature": "POUL|40.9900|38.3214",
       "first_seen": "2026-09-14T11:41:51.462634+03:00",
-      "last_seen": "2026-09-14T19:45:56.787897+03:00",
+      "last_seen": "2026-09-14T19:46:21.582230+03:00",
       "active": true
     },
     "ETEL": {
       "signal_id": "ETEL-72a58442588f",
       "setup_signature": "ETEL|131.0000|123.5009",
       "first_seen": "2026-09-14T11:41:51.462634+03:00",
-      "last_seen": "2026-09-14T19:45:56.787897+03:00",
+      "last_seen": "2026-09-14T19:46:21.582230+03:00",
       "active": true
     },
     "TMGH": {
@@ -28990,7 +28990,7 @@
       "signal_id": "CCAP-af4ccf81c061",
       "setup_signature": "CCAP|6.2700|6.0883",
       "first_seen": "2026-09-14T11:41:51.462634+03:00",
-      "last_seen": "2026-09-14T19:45:56.787897+03:00",
+      "last_seen": "2026-09-14T19:46:21.582230+03:00",
       "active": true
     },
     "EFIH": {
@@ -29029,14 +29029,14 @@
       "signal_id": "CIRA-7478c3a04c3c",
       "setup_signature": "CIRA|38.9900|36.2134",
       "first_seen": "2026-09-14T11:41:51.462634+03:00",
-      "last_seen": "2026-09-14T19:45:56.787897+03:00",
+      "last_seen": "2026-09-14T19:46:21.582230+03:00",
       "active": true
     },
     "FAIT": {
       "signal_id": "FAIT-921fcbaca31e",
       "setup_signature": "FAIT|48.3500|45.5871",
       "first_seen": "2026-09-14T11:41:51.462634+03:00",
-      "last_seen": "2026-09-14T19:45:56.787897+03:00",
+      "last_seen": "2026-09-14T19:46:21.582230+03:00",
       "active": true
     }
   }
