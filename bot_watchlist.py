@@ -253,7 +253,11 @@ def self_test():
     assert "DELAYED / EVALUATION" in text
     assert "WATCH" in text
     assert "SWDY" in text
-    assert "ENTRY" not in text
+    # The safety explanation intentionally mentions the word ENTRY. Verify instead
+    # that no delayed symbol row is rendered with ENTRY as its actual lifecycle status.
+    symbol_rows = [line for line in text.splitlines() if line[:2].rstrip(")").isdigit() or "<b>COMI</b>" in line or "<b>SWDY</b>" in line]
+    assert symbol_rows
+    assert all(" · ENTRY" not in line for line in symbol_rows)
 
 
 if __name__ == "__main__":
