@@ -129,15 +129,26 @@ jobs:
           for f in state.json alarms.json data_health.json; do
             [ -f "$f" ] && cp "$f" "/tmp/egx-state/$f"
           done
-          git fetch origin main
-          git reset --hard origin/main
-          for f in state.json alarms.json data_health.json; do
-            [ -f "/tmp/egx-state/$f" ] && cp "/tmp/egx-state/$f" "$f"
+
+          for attempt in 1 2 3; do
+            echo "State save attempt $attempt/3"
+            git fetch origin main
+            git reset --hard origin/main
+            for f in state.json alarms.json data_health.json; do
+              [ -f "/tmp/egx-state/$f" ] && cp "/tmp/egx-state/$f" "$f"
+            done
+            git add state.json alarms.json data_health.json 2>/dev/null || true
+            if git diff --cached --quiet; then
+              echo "No state changes to save"
+              exit 0
+            fi
+            git commit -m "Update EGX bot state"
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "Concurrent main update detected; retrying against latest main"
+            sleep 2
           done
-          git add state.json alarms.json data_health.json 2>/dev/null || true
-          if git diff --cached --quiet; then
-            echo "No state changes to save"
-            exit 0
-          fi
-          git commit -m "Update EGX bot state"
-          git push origin HEAD:main
+
+          echo "Failed to persist state after 3 safe retries"
+          exit 1
