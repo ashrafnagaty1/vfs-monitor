@@ -1,10 +1,10 @@
 {
-  "checked_at": "2026-09-14T19:37:48.702958+03:00",
-  "rotation_index": 6,
+  "checked_at": "2026-09-15T02:23:43.960767+03:00",
+  "rotation_index": 7,
   "mode": "DELAYED_EVALUATION",
   "quote_source": "borsa demo (evaluation)",
   "history_source": "Yahoo Finance EGX .CA daily candles",
-  "symbol": "COMI",
+  "symbol": "ABUK",
   "status": "RED",
   "message": "Demo quote quota exhausted and historical fallback failed: DataProviderError: SHORT_HISTORY",
   "quote_available": false,

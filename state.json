@@ -5,7 +5,7 @@
   "signals": {},
   "scanner_seen": {},
   "pro_engine_snapshot": {
-    "at": "2026-09-15T00:46:57.335833+03:00",
+    "at": "2026-09-15T02:23:46.270501+03:00",
     "count": 34,
     "quote_mode": "DELAYED_EVALUATION",
     "quote_source": "borsa demo (evaluation)",
@@ -85,7 +85,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T21:46:57.700858+00:00",
+          "fetched_at": "2026-09-14T23:23:46.270638+00:00",
           "score": 70,
           "bias": "BULLISH",
           "signal": "BREAKOUT",
@@ -103,7 +103,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T21:46:58.856540+00:00",
+          "fetched_at": "2026-09-14T23:23:47.916127+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -121,7 +121,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T21:46:59.899998+00:00",
+          "fetched_at": "2026-09-14T23:23:49.523706+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -139,7 +139,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T21:47:00.776854+00:00",
+          "fetched_at": "2026-09-14T23:23:51.050855+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -157,7 +157,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T21:47:01.649285+00:00",
+          "fetched_at": "2026-09-14T23:23:52.564203+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -781,7 +781,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T21:46:57.700858+00:00",
+          "fetched_at": "2026-09-14T23:23:46.270638+00:00",
           "score": 70,
           "bias": "BULLISH",
           "signal": "BREAKOUT",
@@ -1404,7 +1404,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T21:46:58.856540+00:00",
+          "fetched_at": "2026-09-14T23:23:47.916127+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -2024,7 +2024,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T21:46:59.899998+00:00",
+          "fetched_at": "2026-09-14T23:23:49.523706+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -2646,7 +2646,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T21:47:00.776854+00:00",
+          "fetched_at": "2026-09-14T23:23:51.050855+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -3269,7 +3269,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T21:47:01.649285+00:00",
+          "fetched_at": "2026-09-14T23:23:52.564203+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -8166,7 +8166,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T21:46:57.700858+00:00",
+          "fetched_at": "2026-09-14T23:23:46.270638+00:00",
           "score": 70,
           "bias": "BULLISH",
           "signal": "BREAKOUT",
@@ -8789,7 +8789,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T21:46:58.856540+00:00",
+          "fetched_at": "2026-09-14T23:23:47.916127+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -9409,7 +9409,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T21:46:59.899998+00:00",
+          "fetched_at": "2026-09-14T23:23:49.523706+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -10031,7 +10031,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T21:47:00.776854+00:00",
+          "fetched_at": "2026-09-14T23:23:51.050855+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -10654,7 +10654,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-14T21:47:01.649285+00:00",
+          "fetched_at": "2026-09-14T23:23:52.564203+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -28205,7 +28205,7 @@
     "health_warning:2026-09-15:RED": "2026-09-15T00:46:57.335923+03:00"
   },
   "trade_lifecycle": {
-    "updated_at": "2026-09-15T00:47:02.787041+03:00",
+    "updated_at": "2026-09-15T02:23:53.520980+03:00",
     "quote_mode": "DELAYED_EVALUATION",
     "disclaimer": "ENTRY states require a configured live quote provider. Delayed/evaluation data stays WATCH even if the last price is above trigger.",
     "new_alerts_count": 0,
@@ -28587,7 +28587,7 @@
   ],
   "signal_portfolio": {
     "schema_version": 2,
-    "updated_at": "2026-09-15T00:47:02.959488+03:00",
+    "updated_at": "2026-09-15T02:23:53.687608+03:00",
     "mode": "LIVE_SIGNAL_TRACKING",
     "quote_mode": "DELAYED_EVALUATION",
     "disclaimer": "Tracks confirmed LIVE signal entries only. It is not a brokerage account statement, and delayed/evaluation WATCH data never creates positions or performance records.",
@@ -28608,7 +28608,7 @@
     }
   },
   "signal_guard": {
-    "updated_at": "2026-09-15T00:47:02.869592+03:00",
+    "updated_at": "2026-09-15T02:23:53.604568+03:00",
     "quote_mode": "DELAYED_EVALUATION",
     "policy": "Execution-ready requires LIVE quotes, RR >= 1.30 and no overheating blocker. Delayed/evaluation plans remain analysis-only WATCH regardless of score.",
     "counts": {
@@ -28624,7 +28624,7 @@
     "canonical_price": false,
     "price_note": "EGXpilot currentPrice is not used as the scanner/live quote source until independently verified.",
     "cache_minutes": 30,
-    "updated_at": "2026-09-14T21:46:57.700840+00:00",
+    "updated_at": "2026-09-14T23:23:46.270626+00:00",
     "selected_symbols": [
       "KABO",
       "CIRA",
@@ -28787,12 +28787,12 @@
         "provider": "EGXpilot",
         "role": "SECONDARY_ANALYSIS_ONLY",
         "canonical_price": false,
-        "fetched_at": "2026-09-14T21:46:57.700858+00:00",
+        "fetched_at": "2026-09-14T23:23:46.270638+00:00",
         "data": {
           "symbol": "KABO",
           "currentPrice": 10,
           "status": "OK",
-          "timestamp": "2026-09-14T21:46:58.719Z",
+          "timestamp": "2026-09-14T23:23:47.739Z",
           "regime": {
             "label": "VOLATILE_UPTREND",
             "description": "Ø§ØªØ¬Ø§Ù ØµØ§Ø¹Ø¯ Ø¹Ø§ÙÙ Ø§ÙØªØ°Ø¨Ø°Ø¨",
@@ -28904,7 +28904,7 @@
         "provider": "EGXpilot",
         "role": "SECONDARY_ANALYSIS_ONLY",
         "canonical_price": false,
-        "fetched_at": "2026-09-14T21:46:58.856540+00:00",
+        "fetched_at": "2026-09-14T23:23:47.916127+00:00",
         "data": {}
       },
       "MASR": {
@@ -28912,7 +28912,7 @@
         "provider": "EGXpilot",
         "role": "SECONDARY_ANALYSIS_ONLY",
         "canonical_price": false,
-        "fetched_at": "2026-09-14T21:46:59.899998+00:00",
+        "fetched_at": "2026-09-14T23:23:49.523706+00:00",
         "data": {}
       },
       "CCAP": {
@@ -28920,7 +28920,7 @@
         "provider": "EGXpilot",
         "role": "SECONDARY_ANALYSIS_ONLY",
         "canonical_price": false,
-        "fetched_at": "2026-09-14T21:47:00.776854+00:00",
+        "fetched_at": "2026-09-14T23:23:51.050855+00:00",
         "data": {}
       },
       "DTPP": {
@@ -28928,7 +28928,7 @@
         "provider": "EGXpilot",
         "role": "SECONDARY_ANALYSIS_ONLY",
         "canonical_price": false,
-        "fetched_at": "2026-09-14T21:47:01.649285+00:00",
+        "fetched_at": "2026-09-14T23:23:52.564203+00:00",
         "data": {}
       }
     }
@@ -28938,21 +28938,21 @@
       "signal_id": "ORHD-ec3fe19fd885",
       "setup_signature": "ORHD|43.5700|41.4703",
       "first_seen": "2026-09-14T11:41:51.462634+03:00",
-      "last_seen": "2026-09-15T00:47:02.787041+03:00",
+      "last_seen": "2026-09-15T02:23:53.520980+03:00",
       "active": true
     },
     "POUL": {
       "signal_id": "POUL-ab6d3829e00e",
       "setup_signature": "POUL|40.9900|38.3214",
       "first_seen": "2026-09-14T11:41:51.462634+03:00",
-      "last_seen": "2026-09-15T00:47:02.787041+03:00",
+      "last_seen": "2026-09-15T02:23:53.520980+03:00",
       "active": true
     },
     "ETEL": {
       "signal_id": "ETEL-72a58442588f",
       "setup_signature": "ETEL|131.0000|123.5009",
       "first_seen": "2026-09-14T11:41:51.462634+03:00",
-      "last_seen": "2026-09-15T00:47:02.787041+03:00",
+      "last_seen": "2026-09-15T02:23:53.520980+03:00",
       "active": true
     },
     "TMGH": {
@@ -28991,7 +28991,7 @@
       "signal_id": "CCAP-af4ccf81c061",
       "setup_signature": "CCAP|6.2700|6.0883",
       "first_seen": "2026-09-14T11:41:51.462634+03:00",
-      "last_seen": "2026-09-15T00:47:02.787041+03:00",
+      "last_seen": "2026-09-15T02:23:53.520980+03:00",
       "active": true
     },
     "EFIH": {
@@ -29030,14 +29030,14 @@
       "signal_id": "CIRA-7478c3a04c3c",
       "setup_signature": "CIRA|38.9900|36.2134",
       "first_seen": "2026-09-14T11:41:51.462634+03:00",
-      "last_seen": "2026-09-15T00:47:02.787041+03:00",
+      "last_seen": "2026-09-15T02:23:53.520980+03:00",
       "active": true
     },
     "FAIT": {
       "signal_id": "FAIT-921fcbaca31e",
       "setup_signature": "FAIT|48.3500|45.5871",
       "first_seen": "2026-09-14T11:41:51.462634+03:00",
-      "last_seen": "2026-09-15T00:47:02.787041+03:00",
+      "last_seen": "2026-09-15T02:23:53.520980+03:00",
       "active": true
     }
   }
