@@ -17,6 +17,7 @@ import bot_elliott
 import bot_temporal
 import bot_opportunities
 import bot_market
+import bot_personal_portfolio
 
 telegram_bot = bot_experience.apply(telegram_bot)
 telegram_bot = bot_watchlist.apply(telegram_bot)
@@ -28,6 +29,7 @@ telegram_bot = bot_elliott.apply(telegram_bot)
 telegram_bot = bot_temporal.apply(telegram_bot)
 telegram_bot = bot_opportunities.apply(telegram_bot)
 telegram_bot = bot_market.apply(telegram_bot)
+telegram_bot = bot_personal_portfolio.apply(telegram_bot)
 
 CAIRO = ZoneInfo("Africa/Cairo")
 RUNNING = True
@@ -74,7 +76,7 @@ def main():
     if not telegram_bot.TOKEN or not telegram_bot.CHAT_ID:
         raise RuntimeError("TOKEN and CHAT_ID environment variables are required")
 
-    log("ReFo EGX always-on Telegram service started")
+    log("ReFo . EGX Smart Trader always-on Telegram service started")
     log("Telegram polling is continuous; professional engine remains periodic")
 
     next_engine = 0.0
@@ -107,7 +109,7 @@ def main():
 
         time.sleep(max(0.2, POLL_SLEEP_SECONDS))
 
-    log("ReFo EGX always-on Telegram service stopped")
+    log("ReFo . EGX Smart Trader always-on Telegram service stopped")
 
 
 if __name__ == "__main__":
