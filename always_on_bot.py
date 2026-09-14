@@ -9,9 +9,11 @@ from zoneinfo import ZoneInfo
 import telegram_bot
 import bot_experience
 import bot_watchlist
+import bot_alerts
 
 telegram_bot = bot_experience.apply(telegram_bot)
 telegram_bot = bot_watchlist.apply(telegram_bot)
+telegram_bot = bot_alerts.apply(telegram_bot)
 
 CAIRO = ZoneInfo("Africa/Cairo")
 RUNNING = True
