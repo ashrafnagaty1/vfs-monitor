@@ -1,29 +1,316 @@
 import base from "./index.js";
 
-const WORKER_VERSION="market-terminal-v3.1-2026-09-14";
-const DASHBOARD_URL="https://vfs-monitor.folkhero3.workers.dev/dashboard";
-const SECTORS={ORHD:"عقارات",TMGH:"عقارات",MASR:"عقارات",PHDC:"عقارات",HELI:"عقارات",ETEL:"اتصالات",FWRY:"مدفوعات وتكنولوجيا مالية",EFIH:"مدفوعات وتكنولوجيا مالية",POUL:"أغذية",JUFO:"أغذية",DOMT:"أغذية",KABO:"منسوجات",ORWE:"منسوجات",SKPC:"بتروكيماويات",ABUK:"أسمدة وكيماويات",MFPC:"أسمدة وكيماويات",CCAP:"استثمارات",ALCN:"نقل ولوجستيات",SWDY:"صناعة ومعدات",COMI:"بنوك",CIEB:"بنوك",ADIB:"بنوك",EPCO:"رعاية صحية",CLHO:"رعاية صحية",ISPH:"رعاية صحية",ZEOT:"أغذية"};
-function esc(v){return String(v==null?"":v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
-function n(v,d=2){const x=Number(v);return Number.isFinite(x)?x.toFixed(d):"-"}
-async function tg(env,chat,text,extra={}){const r=await fetch(`https://api.telegram.org/bot${env.TOKEN}/sendMessage`,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({chat_id:chat,text,parse_mode:"HTML",disable_web_page_preview:true,...extra})});return r.ok}
-function confidence(count){return count>=4?"عالية":count>=2?"متوسطة":"ضعيفة"}
-function confidenceWeight(count){return count>=4?1:count===3?.95:count===2?.88:.72}
-function sectorScore(r){const mom5=Math.max(-10,Math.min(10,r.m5));const mom20=Math.max(-15,Math.min(15,r.m20));const vol=Math.max(0,Math.min(3,r.vol));const breadth=Math.max(0,Math.min(1,r.positiveShare));const raw=r.score*.58+(mom5+10)*.65+(mom20+15)*.28+vol*3.2+breadth*8;return raw*confidenceWeight(r.count)}
-function build(state){const top=Array.isArray(state?.pro_engine_snapshot?.top)?state.pro_engine_snapshot.top:[],groups={};for(const t of top){const sec=SECTORS[String(t.symbol||"").toUpperCase()]||"غير مصنف";(groups[sec]??=[]).push(t)}const rows=Object.entries(groups).map(([name,a])=>{const avg=k=>a.reduce((x,z)=>x+Number(z[k]||0),0)/a.length;const r={name,count:a.length,symbols:a.map(x=>x.symbol),score:avg("score"),m5:avg("momentum_5d"),m20:avg("momentum_20d"),vol:avg("volume_ratio"),positiveShare:a.filter(x=>Number(x.momentum_5d||0)>0).length/a.length};r.rank=sectorScore(r);return r}).sort((a,b)=>b.rank-a.rank);let o="🗺️ <b>Sector Radar V2.2 — خريطة القطاعات الفنية</b>\n<i>ترتيب فني للعينة الحالية، وليس مؤشر قطاعات رسميًا من EGX.</i>\n\n";if(!rows.length)return o+"لا توجد بيانات قطاعية كافية.";rows.slice(0,10).forEach((r,i)=>{const icon=r.m5>2?"🟢":r.m5<0?"🔴":"🟡";o+=`${i+1}. ${icon} <b>${esc(r.name)}</b> — ثقة ${confidence(r.count)}\nالأسهم: ${esc(r.symbols.join(" • "))}\nAvg Score ${n(r.score,0)} | Mom5 ${n(r.m5)}% | Mom20 ${n(r.m20)}% | Vol ${n(r.vol)}x\nSector Rank ${n(r.rank,1)} | حجم العينة ${r.count}\n\n`});return o}
-function dashboardHtml(){return `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#07111f"><title>EGX Smart Terminal</title><style>*{box-sizing:border-box}body{margin:0;background:#06101c;color:#d8e4ef;font-family:Arial,Tahoma,sans-serif}header{position:sticky;top:0;z-index:5;background:#081625;border-bottom:1px solid #19324a;padding:11px 14px;display:flex;gap:12px;align-items:center;justify-content:space-between}.brand{font-weight:800;color:#fff}.tag{font-size:11px;padding:5px 8px;border-radius:10px;background:#14273b;color:#8fb7d9}.wrap{padding:12px;max-width:1200px;margin:auto}.warning{background:#3a2a0c;border:1px solid #735516;color:#ffd77a;padding:10px 12px;border-radius:10px;margin-bottom:10px;font-size:13px}.ok{background:#0d3324;border-color:#1e6848;color:#83efb7}.bad{background:#3a1717;border-color:#713232;color:#ff9e9e}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}.kpi,.panel{background:#0b1928;border:1px solid #17344d;border-radius:12px}.kpi{padding:11px}.kpi small{color:#7f9db7}.kpi b{display:block;margin-top:6px;font-size:18px}.layout{display:grid;grid-template-columns:1.55fr .85fr;gap:10px}.panel{overflow:hidden}.pt{padding:10px 12px;border-bottom:1px solid #17344d;font-weight:700;color:#fff}.scroll{overflow:auto;max-height:66vh}table{border-collapse:collapse;width:100%;min-width:780px;font-size:12px}th{position:sticky;top:0;background:#102238;color:#88a9c5;text-align:center;padding:9px 7px;border-bottom:1px solid #23425d}td{text-align:center;padding:9px 7px;border-bottom:1px solid #122b40}.sym{font-weight:800;color:#fff}.high,.entry{color:#56d98b}.med,.watch{color:#ffd166}.low{color:#ff7d7d}.row{cursor:pointer}.row:hover,.row.sel{background:#112940}.detail{padding:12px}.name{font-size:26px;font-weight:900;color:#fff}.price{font-size:30px;margin:8px 0}.pill{display:inline-block;padding:4px 8px;border-radius:10px;background:#142a3e;margin:2px;font-size:11px}.levels{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:10px}.lv{padding:9px;background:#091522;border:1px solid #16324b;border-radius:9px}.lv small{color:#7895ad}.lv b{display:block;margin-top:5px}.reasons{margin-top:10px;font-size:12px;line-height:1.7;color:#adc2d4}.foot{padding:10px;text-align:center;color:#62819b;font-size:11px}@media(max-width:820px){.grid{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}.scroll{max-height:48vh}}</style></head><body><header><div class="brand">EGX SMART TERMINAL</div><div id="clock" class="tag">JS…</div></header><div class="wrap"><div id="warn" class="warning">بدء تحميل Snapshot…</div><div class="grid"><div class="kpi"><small>حالة السوق</small><b id="session">—</b></div><div class="kpi"><small>Market Regime</small><b id="regime">—</b></div><div class="kpi"><small>Breadth</small><b id="breadth">—</b></div><div class="kpi"><small>Avg Score</small><b id="avgscore">—</b></div></div><div class="layout"><section class="panel"><div class="pt">Market Watch / الفرص الفنية</div><div class="scroll"><table><thead><tr><th>السهم</th><th>السعر</th><th>Score</th><th>الحالة</th><th>Trigger</th><th>Stop</th><th>RR</th><th>RSI</th><th>ADX</th><th>Vol</th></tr></thead><tbody id="rows"><tr><td colspan="10">جارٍ التحميل…</td></tr></tbody></table></div></section><aside class="panel"><div class="pt">Technical Terminal</div><div id="detail" class="detail">اختر سهمًا من الجدول</div></aside></div><div class="foot" id="foot">EGX Smart Scanner | ${WORKER_VERSION}</div></div><script>
-(function(){
-'use strict';
-var DATA=null,SELECTED=null;
-function el(id){return document.getElementById(id)}
-function fmt(v,d){var x=Number(v);return isFinite(x)?x.toFixed(d==null?2:d):'-'}
-function safe(v){return String(v==null?'':v).replace(/[&<>]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[m]})}
-function sessionLabel(s){var m={SESSION:'🟢 مفتوح',PRE_MARKET:'🟠 ما قبل الجلسة',CLOSED:'⚫ مغلق',WEEKEND:'🔒 عطلة'};return m[s]||s||'-'}
-function setWarn(text,cls){el('warn').className='warning '+(cls||'');el('warn').textContent=text}
-function detail(sym){SELECTED=sym;var all=document.querySelectorAll('.row');for(var i=0;i<all.length;i++)all[i].classList.toggle('sel',all[i].getAttribute('data-s')===sym);var list=(DATA.snapshot.details&&DATA.snapshot.details.length?DATA.snapshot.details:DATA.snapshot.top)||[];var t={},p={};for(var j=0;j<list.length;j++)if(list[j].symbol===sym){t=list[j];break}for(var k=0;k<(DATA.plans||[]).length;k++)if(DATA.plans[k].symbol===sym){p=DATA.plans[k];break}var stop=p.dynamic_stop!=null?p.dynamic_stop:(p.initial_stop!=null?p.initial_stop:t.stop);var t1=p.target1!=null?p.target1:t.target1,t2=p.target2!=null?p.target2:t.target2,t3=p.target3!=null?p.target3:t.target3;var why=(t.why||[]).join(' • ')||'—',setups=(t.setups||[]).join(' + ')||'—';el('detail').innerHTML='<div class="name">'+safe(sym)+'</div><div class="price">'+fmt(t.price)+'</div><span class="pill">Score '+fmt(t.score,0)+'</span><span class="pill">'+safe(t.confidence||'-')+'</span><span class="pill">'+safe(p.status||'WATCH')+'</span><div class="levels"><div class="lv"><small>Trigger</small><b>'+fmt(p.trigger)+'</b></div><div class="lv"><small>Dynamic Stop</small><b>'+fmt(stop)+'</b></div><div class="lv"><small>T1</small><b>'+fmt(t1)+'</b></div><div class="lv"><small>T2</small><b>'+fmt(t2)+'</b></div><div class="lv"><small>T3</small><b>'+fmt(t3)+'</b></div><div class="lv"><small>RR→T1</small><b>'+fmt(p.rr_to_t1_now)+'</b></div><div class="lv"><small>RSI / ADX</small><b>'+fmt(t.rsi,1)+' / '+fmt(t.adx,1)+'</b></div><div class="lv"><small>MFI / Vol</small><b>'+fmt(t.mfi,1)+' / '+fmt(t.volume_ratio)+'x</b></div></div><div class="reasons"><b>Patterns:</b> '+safe(setups)+'<br><b>الأسباب:</b> '+safe(why)+'<br><b>Support20:</b> '+fmt(t.support_20)+' &nbsp; <b>Resistance20:</b> '+fmt(t.resistance_20)+'</div>'}
-function draw(){var x=DATA.snapshot||{},r=x.market_regime||{},ses=x.market_session||{};el('session').textContent=sessionLabel(ses.status);el('regime').textContent=r.name||'-';el('breadth').textContent=fmt(r.breadth,1)+'%';el('avgscore').textContent=fmt(r.avg_score,1);if(x.quote_mode==='LIVE')setWarn('🟢 مصدر أسعار حي','ok');else setWarn('⚠️ بيانات تقييم/متأخرة وليست لحظية للتنفيذ — '+(x.quote_source||'-'),'');var plans={};(DATA.plans||[]).forEach(function(p){plans[p.symbol]=p});var arr=x.top||[],tbody=el('rows');tbody.innerHTML='';if(!arr.length){tbody.innerHTML='<tr><td colspan="10">لا توجد بيانات في Snapshot</td></tr>';return}arr.forEach(function(t){var p=plans[t.symbol]||{},st=p.status||'WATCH',tr=document.createElement('tr');tr.className='row';tr.setAttribute('data-s',t.symbol);tr.innerHTML='<td class="sym">'+safe(t.symbol)+'</td><td>'+fmt(t.price)+'</td><td class="'+(t.confidence==='HIGH'?'high':t.confidence==='LOW'?'low':'med')+'">'+fmt(t.score,0)+'</td><td class="'+(st==='ENTRY'?'entry':'watch')+'">'+safe(st)+'</td><td>'+fmt(p.trigger)+'</td><td>'+fmt(p.dynamic_stop!=null?p.dynamic_stop:(p.initial_stop!=null?p.initial_stop:t.stop))+'</td><td>'+fmt(p.rr_to_t1_now)+'</td><td>'+fmt(t.rsi,1)+'</td><td>'+fmt(t.adx,1)+'</td><td>'+fmt(t.volume_ratio)+'x</td>';tr.addEventListener('click',function(){detail(t.symbol)});tbody.appendChild(tr)});el('foot').textContent='آخر تحديث: '+(x.at||'-')+' | '+(x.quote_source||'-')+' | '+(DATA.version||'');detail(SELECTED||arr[0].symbol)}
-async function load(){setWarn('جارٍ تحميل آخر Snapshot…','');try{var r=await fetch(new URL('/dashboard-state',window.location.origin).toString()+'?t='+Date.now(),{cache:'no-store',credentials:'same-origin'});var txt=await r.text();if(!r.ok)throw new Error('HTTP '+r.status+' '+txt.slice(0,120));var obj=JSON.parse(txt);if(!obj.ok||!obj.snapshot)throw new Error(obj.error||'state_missing');DATA=obj;draw()}catch(err){setWarn('تعذر تحميل Snapshot: '+(err&&err.message?err.message:String(err)),'bad');el('rows').innerHTML='<tr><td colspan="10">فشل تحميل البيانات — حاول إعادة فتح الشاشة</td></tr>'}}
-function tick(){try{el('clock').textContent=new Date().toLocaleTimeString('ar-EG',{timeZone:'Africa/Cairo'})}catch(_){el('clock').textContent=new Date().toLocaleTimeString()}}
-tick();setInterval(tick,1000);load();setInterval(load,30000);
-})();
-</script></body></html>`}
-export default{async fetch(req,env,ctx){const u=new URL(req.url);if(req.method==="GET"&&u.pathname==="/sector-version")return Response.json({ok:true,worker_version:WORKER_VERSION,main:"src/sector_enhanced.js",state_binding:!!env.STATE});if(req.method==="GET"&&u.pathname==="/dashboard")return new Response(dashboardHtml(),{headers:{"content-type":"text/html; charset=UTF-8","cache-control":"no-store, no-cache, must-revalidate","pragma":"no-cache"}});if(req.method==="GET"&&(u.pathname==="/dashboard-state"||u.pathname==="/api/state")){if(!env.STATE)return Response.json({ok:false,error:"STATE_binding_missing",version:WORKER_VERSION},{status:500,headers:{"cache-control":"no-store"}});try{const raw=await env.STATE.get("latest");if(!raw)return Response.json({ok:false,error:"KV_latest_missing",version:WORKER_VERSION},{status:503,headers:{"cache-control":"no-store"}});const s=JSON.parse(raw);if(!s?.pro_engine_snapshot)return Response.json({ok:false,error:"pro_engine_snapshot_missing",keys:Object.keys(s||{}),version:WORKER_VERSION},{status:503,headers:{"cache-control":"no-store"}});return Response.json({ok:true,version:WORKER_VERSION,snapshot:s.pro_engine_snapshot,plans:Array.isArray(s?.trade_lifecycle?.plans)?s.trade_lifecycle.plans:[],alerts:Array.isArray(s?.trade_alerts)?s.trade_alerts.slice(-20):[]},{headers:{"cache-control":"no-store, no-cache, must-revalidate"}})}catch(e){return Response.json({ok:false,error:"state_parse_failed",detail:String(e&&e.message?e.message:e),version:WORKER_VERSION},{status:500,headers:{"cache-control":"no-store"}})}}if(req.method==="POST"&&u.pathname==="/telegram"){let body;try{body=await req.clone().json()}catch(_){body=null}const text=body?.message?.text,chat=body?.message?.chat?.id;if(text==="📊 الشاشة اللحظية"&&(!env.CHAT_ID||String(chat)===String(env.CHAT_ID))){await tg(env,chat,"📊 <b>EGX Smart Terminal</b>\nافتح الشاشة التفاعلية من الزر بالأسفل.",{reply_markup:{inline_keyboard:[[{text:"فتح الشاشة 📊",web_app:{url:DASHBOARD_URL}}]]}});return Response.json({ok:true,feature:"market-terminal-v3.1",worker_version:WORKER_VERSION})}if(text==="🗺️ أداء القطاعات"&&(!env.CHAT_ID||String(chat)===String(env.CHAT_ID))){try{const state=env.STATE?await env.STATE.get("latest","json"):null;await tg(env,chat,build(state));return Response.json({ok:true,feature:"sector-radar-v2.2",worker_version:WORKER_VERSION})}catch(e){console.error(e);return Response.json({ok:false,error:"enhanced_view_failed"},{status:200})}}}return base.fetch(req,env,ctx)}};
+const WORKER_VERSION = "market-terminal-v4.0-pro-tv-2026";
+const DASHBOARD_URL = "https://vfs-monitor.folkhero3.workers.dev/dashboard";
+
+const SECTORS = {
+  ORHD: "عقارات", TMGH: "عقارات", MASR: "عقارات", PHDC: "عقارات", HELI: "عقارات",
+  ETEL: "اتصالات", FWRY: "مدفوعات وتكنولوجيا مالية", EFIH: "مدفوعات وتكنولوجيا مالية",
+  POUL: "أغذية", JUFO: "أغذية", DOMT: "أغذية", ZEOT: "أغذية", KABO: "منسوجات", ORWE: "منسوجات",
+  SKPC: "بتروكيماويات", ABUK: "أسمدة وكيماويات", MFPC: "أسمدة وكيماويات", CCAP: "استثمارات",
+  ALCN: "نقل ولوجستيات", SWDY: "صناعة ومعدات", COMI: "بنوك", CIEB: "بنوك", ADIB: "بنوك",
+  EPCO: "رعاية صحية", CLHO: "رعاية صحية", ISPH: "رعاية صحية"
+};
+
+function esc(v) { return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+function n(v, d = 2) { const x = Number(v); return Number.isFinite(x) ? x.toFixed(d) : "-"; }
+
+async function tg(env, chat, text, extra = {}) {
+  const r = await fetch(`https://api.telegram.org/bot${env.TOKEN}/sendMessage`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ chat_id: chat, text, parse_mode: "HTML", disable_web_page_preview: true, ...extra })
+  });
+  return r.ok;
+}
+
+function dashboardHtml() {
+  return `<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#06090e">
+  <title>EGX Pro Terminal</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #06080c; color: #d0dbe5; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Tahoma, sans-serif; font-size: 11px; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+    
+    /* Top Header */
+    header { background: #0b0f15; border-bottom: 1px solid #1a222c; padding: 6px 12px; display: flex; align-items: center; justify-content: space-between; min-height: 38px; }
+    .brand { font-weight: 900; color: #fff; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+    .brand span { color: #00e676; font-size: 10px; background: #003314; padding: 2px 6px; border-radius: 4px; border: 1px solid #005a24; }
+    .stats-bar { display: flex; gap: 8px; }
+    .stat-pill { background: #111720; border: 1px solid #202b38; padding: 3px 8px; border-radius: 4px; font-size: 10px; color: #8fa2b5; }
+    .stat-pill b { color: #fff; margin-right: 4px; }
+
+    /* Main Grid Layout */
+    .terminal-body { display: grid; grid-template-columns: 280px 1fr 300px; flex: 1; height: calc(100vh - 66px); direction: ltr; }
+    
+    /* Left: Technical Analysis & Signals */
+    .left-panel { background: #080c11; border-right: 1px solid #1a222c; direction: rtl; padding: 10px; overflow-y: auto; }
+    .stock-title { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #1a232e; padding-bottom: 8px; }
+    .stock-title h1 { font-size: 24px; color: #fff; font-weight: 900; }
+    .stock-title .cur-price { font-size: 22px; font-weight: 800; }
+    
+    .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin: 10px 0; }
+    .kpi-card { background: #0e141c; border: 1px solid #1c2735; padding: 6px 8px; border-radius: 4px; }
+    .kpi-card small { color: #6e8294; display: block; font-size: 9px; }
+    .kpi-card b { color: #fff; font-size: 12px; margin-top: 2px; display: block; }
+    
+    .signal-box { background: #0e1724; border: 1px solid #233448; border-radius: 5px; padding: 8px; margin-top: 10px; line-height: 1.6; }
+    .signal-box b { color: #4fa3ff; }
+
+    /* Center: TradingView Chart */
+    .center-panel { background: #040609; position: relative; display: flex; flex-direction: column; min-width: 0; }
+    #tv_chart { width: 100%; height: 100%; flex: 1; }
+
+    /* Right: Market Watchlist */
+    .right-panel { background: #090d13; border-left: 1px solid #1a222c; direction: rtl; display: flex; flex-direction: column; overflow: hidden; }
+    .panel-header { padding: 8px 10px; border-bottom: 1px solid #1a222c; font-weight: 800; color: #fff; display: flex; justify-content: space-between; align-items: center; }
+    .watch-table-header { display: grid; grid-template-columns: 1.2fr 0.9fr 0.7fr 0.7fr; padding: 6px 8px; background: #0d131a; border-bottom: 1px solid #1a222c; color: #6a7c8d; font-weight: bold; font-size: 9px; }
+    .watch-list { flex: 1; overflow-y: auto; }
+    .watch-item { display: grid; grid-template-columns: 1.2fr 0.9fr 0.7fr 0.7fr; padding: 8px; border-bottom: 1px solid #121820; align-items: center; cursor: pointer; text-decoration: none; color: inherit; }
+    .watch-item:hover, .watch-item.active { background: #131c26; }
+    .watch-item .sym { font-weight: 800; color: #fff; }
+    .watch-item .sym small { display: block; font-size: 8px; color: #627586; font-weight: normal; }
+    .watch-item .val { font-family: monospace; }
+    
+    /* Bottom Ticker */
+    footer { height: 28px; background: #070a0e; border-top: 1px solid #19212a; display: flex; align-items: center; padding: 0 10px; overflow: hidden; white-space: nowrap; font-family: monospace; font-size: 10px; gap: 16px; }
+
+    .up { color: #00e676; }
+    .down { color: #ff5252; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">EGX SMART TERMINAL <span id="sess-status">متصل</span></div>
+    <div class="stats-bar">
+      <div class="stat-pill">السوق: <b id="regime">—</b></div>
+      <div class="stat-pill">Breadth: <b id="breadth">—</b></div>
+      <div class="stat-pill">Avg Score: <b id="avgscore">—</b></div>
+    </div>
+  </header>
+
+  <div class="terminal-body">
+    <!-- Left Details -->
+    <aside class="left-panel">
+      <div class="stock-title">
+        <h1 id="det-sym">COMI</h1>
+        <div class="cur-price" id="det-price">0.00</div>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><small>الدخول (Trigger)</small><b id="det-trg">-</b></div>
+        <div class="kpi-card"><small>وقف الخسارة (Stop)</small><b id="det-stop" class="down">-</b></div>
+        <div class="kpi-card"><small>الهدف الأول (T1)</small><b id="det-t1" class="up">-</b></div>
+        <div class="kpi-card"><small>الهدف الثاني (T2)</small><b id="det-t2" class="up">-</b></div>
+        <div class="kpi-card"><small>RSI / ADX</small><b id="det-tech">-</b></div>
+        <div class="kpi-card"><small>حجم السيولة</small><b id="det-vol">-</b></div>
+      </div>
+      <div class="signal-box">
+        <div><b>النمط الفني:</b> <span id="det-setup">—</span></div>
+        <div style="margin-top:4px;"><b>الأسباب:</b> <span id="det-why">—</span></div>
+        <div style="margin-top:4px;"><b>الدعم والمقاومة:</b> <span id="det-sr">—</span></div>
+      </div>
+    </aside>
+
+    <!-- Center Chart -->
+    <main class="center-panel">
+      <div id="tv_chart"></div>
+    </main>
+
+    <!-- Right Watchlist -->
+    <aside class="right-panel">
+      <div class="panel-header">
+        <span>قائمة الأسهم المتابعة</span>
+        <small id="stock-count">0 سهم</small>
+      </div>
+      <div class="watch-table-header">
+        <span>السهم</span>
+        <span>السعر</span>
+        <span>السيولة</span>
+        <span>Score</span>
+      </div>
+      <div class="watch-list" id="watchlist">
+        <!-- Rows dynamically injected -->
+      </div>
+    </aside>
+  </div>
+
+  <footer id="ticker">
+    <span>تحميل شريط الأسعار...</span>
+  </footer>
+
+  <script>
+    if (window.Telegram && window.Telegram.WebApp) {
+      window.Telegram.WebApp.ready();
+      window.Telegram.WebApp.expand();
+    }
+
+    var CURRENT_SYM = "COMI";
+    var RAW_DATA = null;
+
+    function renderTradingView(symbol) {
+      document.getElementById("tv_chart").innerHTML = "";
+      new TradingView.widget({
+        "autosize": true,
+        "symbol": "EGX:" + symbol,
+        "interval": "D",
+        "timezone": "Africa/Cairo",
+        "theme": "dark",
+        "style": "1",
+        "locale": "ar_AE",
+        "toolbar_bg": "#080c11",
+        "enable_publishing": false,
+        "allow_symbol_change": false,
+        "container_id": "tv_chart",
+        "studies": [
+          "MASimple@tv-basicstudies",
+          "Volume@tv-basicstudies"
+        ]
+      });
+    }
+
+    function selectStock(sym) {
+      CURRENT_SYM = sym;
+      renderTradingView(sym);
+      updateDetails(sym);
+      
+      var items = document.querySelectorAll('.watch-item');
+      items.forEach(function(el) {
+        el.classList.toggle('active', el.getAttribute('data-s') === sym);
+      });
+    }
+
+    function updateDetails(sym) {
+      if (!RAW_DATA) return;
+      var list = RAW_DATA.snapshot.details || RAW_DATA.snapshot.top || [];
+      var t = list.find(function(x){ return x.symbol === sym; }) || {};
+      var plans = RAW_DATA.plans || [];
+      var p = plans.find(function(x){ return x.symbol === sym; }) || {};
+
+      document.getElementById("det-sym").textContent = sym;
+      document.getElementById("det-price").textContent = Number(t.price || 0).toFixed(2);
+      document.getElementById("det-trg").textContent = p.trigger ? Number(p.trigger).toFixed(2) : "-";
+      document.getElementById("det-stop").textContent = (p.dynamic_stop || p.initial_stop || t.stop) ? Number(p.dynamic_stop || p.initial_stop || t.stop).toFixed(2) : "-";
+      document.getElementById("det-t1").textContent = (p.target1 || t.target1) ? Number(p.target1 || t.target1).toFixed(2) : "-";
+      document.getElementById("det-t2").textContent = (p.target2 || t.target2) ? Number(p.target2 || t.target2).toFixed(2) : "-";
+      document.getElementById("det-tech").textContent = (t.rsi ? Number(t.rsi).toFixed(1) : "-") + " / " + (t.adx ? Number(t.adx).toFixed(1) : "-");
+      document.getElementById("det-vol").textContent = t.volume_ratio ? (Number(t.volume_ratio).toFixed(1) + "x") : "-";
+      document.getElementById("det-setup").textContent = (t.setups && t.setups.length) ? t.setups.join(" + ") : "اتجاه عام";
+      document.getElementById("det-why").textContent = (t.why && t.why.length) ? t.why.join(" • ") : "متابعة سيولة";
+      document.getElementById("det-sr").textContent = "S: " + (t.support_20 || "-") + " | R: " + (t.resistance_20 || "-");
+    }
+
+    async function loadData() {
+      try {
+        var res = await fetch("/dashboard-state?t=" + Date.now(), { cache: "no-store" });
+        var data = await res.json();
+        if (!data.ok || !data.snapshot) return;
+        RAW_DATA = data;
+
+        var snap = data.snapshot;
+        document.getElementById("regime").textContent = (snap.market_regime && snap.market_regime.name) || "-";
+        document.getElementById("breadth").textContent = (snap.market_regime && snap.market_regime.breadth ? Number(snap.market_regime.breadth).toFixed(1) + "%" : "-");
+        document.getElementById("avgscore").textContent = (snap.market_regime && snap.market_regime.avg_score ? Number(snap.market_regime.avg_score).toFixed(0) : "-");
+
+        var top = snap.top || [];
+        document.getElementById("stock-count").textContent = top.length + " سهم";
+        
+        var container = document.getElementById("watchlist");
+        container.innerHTML = "";
+        
+        var tickerHtml = "";
+
+        top.forEach(function(stock, idx) {
+          var row = document.createElement("div");
+          row.className = "watch-item" + (stock.symbol === CURRENT_SYM ? " active" : "");
+          row.setAttribute("data-s", stock.symbol);
+          row.onclick = function() { selectStock(stock.symbol); };
+
+          row.innerHTML = 
+            '<div class="sym">' + stock.symbol + '<small>' + (stock.score || 0) + ' pts</small></div>' +
+            '<div class="val">' + Number(stock.price || 0).toFixed(2) + '</div>' +
+            '<div class="val ' + (stock.volume_ratio >= 1.2 ? 'up' : '') + '">' + Number(stock.volume_ratio || 0).toFixed(1) + 'x</div>' +
+            '<div class="val">' + Number(stock.score || 0).toFixed(0) + '</div>';
+          
+          container.appendChild(row);
+
+          tickerHtml += '<span><b>' + stock.symbol + '</b>: ' + Number(stock.price || 0).toFixed(2) + '</span>';
+        });
+
+        document.getElementById("ticker").innerHTML = tickerHtml;
+
+        if (!CURRENT_SYM && top.length > 0) {
+          selectStock(top[0].symbol);
+        } else {
+          updateDetails(CURRENT_SYM);
+        }
+
+      } catch (e) {
+        console.error("Fetch failed", e);
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", function() {
+      renderTradingView(CURRENT_SYM);
+      loadData();
+      setInterval(loadData, 25000);
+    });
+  </script>
+</body>
+</html>`;
+}
+
+export default {
+  async fetch(req, env, ctx) {
+    const u = new URL(req.url);
+
+    if (req.method === "GET" && u.pathname === "/sector-version") {
+      return Response.json({ ok: true, worker_version: WORKER_VERSION, main: "src/sector_enhanced.js", state_binding: !!env.STATE });
+    }
+
+    if (req.method === "GET" && u.pathname === "/dashboard") {
+      return new Response(dashboardHtml(), {
+        headers: { "content-type": "text/html; charset=UTF-8", "cache-control": "no-store, no-cache, must-revalidate" }
+      });
+    }
+
+    if (req.method === "GET" && (u.pathname === "/dashboard-state" || u.pathname === "/api/state")) {
+      if (!env.STATE) return Response.json({ ok: false, error: "STATE_binding_missing" }, { status: 500 });
+      try {
+        const raw = await env.STATE.get("latest");
+        if (!raw) return Response.json({ ok: false, error: "KV_latest_missing" }, { status: 503 });
+        const s = JSON.parse(raw);
+        return Response.json({
+          ok: true,
+          snapshot: s.pro_engine_snapshot || {},
+          plans: Array.isArray(s?.trade_lifecycle?.plans) ? s.trade_lifecycle.plans : [],
+          alerts: Array.isArray(s?.trade_alerts) ? s.trade_alerts.slice(-20) : []
+        });
+      } catch (e) {
+        return Response.json({ ok: false, error: "state_parse_failed" }, { status: 500 });
+      }
+    }
+
+    if (req.method === "POST" && u.pathname === "/telegram") {
+      let body;
+      try { body = await req.clone().json(); } catch (_) { body = null; }
+      const text = body?.message?.text, chat = body?.message?.chat?.id;
+
+      if (text === "📊 الشاشة اللحظية" && (!env.CHAT_ID || String(chat) === String(env.CHAT_ID))) {
+        await tg(env, chat, "📊 <b>EGX Smart Terminal Pro</b>\nافتح الشاشة التفاعلية الحية من الزر أدناه:", {
+          reply_markup: {
+            inline_keyboard: [[{ text: "🚀 فتح الشاشة اللحظية", web_app: { url: DASHBOARD_URL } }]]
+          }
+        });
+        return Response.json({ ok: true, feature: "market-terminal-v4.0" });
+      }
+    }
+
+    return base.fetch(req, env, ctx);
+  }
+};
