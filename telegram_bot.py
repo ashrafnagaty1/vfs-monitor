@@ -10,6 +10,7 @@ API = f"https://api.telegram.org/bot{TOKEN}"
 STATE_FILE = "state.json"
 ALARMS_FILE = "alarms.json"
 CAIRO = ZoneInfo("Africa/Cairo")
+BRAND = "ReFo . EGX Smart Trader"
 
 MAIN_MENU = {
     "keyboard": [
@@ -81,7 +82,7 @@ def fast_market_watch(chat_id, state):
     if not top:
         send("⚠️ لا توجد لقطة سوق جاهزة الآن. سيعيد المحرك بناءها في دورة الفحص التالية.", chat_id, True)
         return
-    lines = ["📊 <b>الشاشة اللحظية</b>", market_status(), ""]
+    lines = [f"📊 <b>{BRAND} — الشاشة اللحظية</b>", market_status(), ""]
     for i, x in enumerate(top[:12], 1):
         conf = x.get("confidence", "-")
         liq = x.get("liquidity_score", "-")
@@ -200,7 +201,7 @@ def handle(chat_id, text, state):
     text = (text or "").strip()
     if text in ("/start", "/menu", "🏠 القائمة الرئيسية"):
         state.pop("awaiting", None)
-        send("📈 <b>EGX Smart Scanner PRO</b>\n\nاختر من القائمة الرئيسية.\n" + market_status(), chat_id, True)
+        send(f"📈 <b>{BRAND}</b>\n\nمساعد قرار وتحليل للسوق المصري — وليس ضمانًا للربح.\nاختر من القائمة الرئيسية.\n{market_status()}", chat_id, True)
         return True
     if text == "📊 الشاشة اللحظية":
         state.pop("awaiting", None); fast_market_watch(chat_id, state); return True
@@ -231,7 +232,7 @@ def handle(chat_id, text, state):
         state["awaiting"] = "advanced"; send("🤖 اكتب رمز السهم وسأعطيك قراءة فنية متقدمة.", chat_id); return True
     if text == "⚙️ الإعدادات":
         snap = snapshot(state)
-        send(f"⚙️ <b>الإعدادات</b>\n\nالفحص: كل 5 دقائق تقريبًا\nالمصدر: {snap.get('quote_source','غير محدد')}\nالوضع: {snap.get('quote_mode','-')}\nآخر Snapshot: {snap.get('at','-')}", chat_id, True); return True
+        send(f"⚙️ <b>{BRAND} — الإعدادات</b>\n\nالفحص: كل 5 دقائق تقريبًا\nالمصدر: {snap.get('quote_source','غير محدد')}\nالوضع: {snap.get('quote_mode','-')}\nآخر Snapshot: {snap.get('at','-')}", chat_id, True); return True
     awaiting = state.get("awaiting")
     if awaiting in ("analysis", "advanced"):
         state.pop("awaiting", None)
