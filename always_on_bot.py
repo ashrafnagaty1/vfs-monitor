@@ -14,6 +14,7 @@ import bot_smart_money
 import bot_gann
 import bot_harmonic
 import bot_elliott
+import bot_temporal
 import bot_opportunities
 import bot_market
 
@@ -24,6 +25,7 @@ telegram_bot = bot_smart_money.apply(telegram_bot)
 telegram_bot = bot_gann.apply(telegram_bot)
 telegram_bot = bot_harmonic.apply(telegram_bot)
 telegram_bot = bot_elliott.apply(telegram_bot)
+telegram_bot = bot_temporal.apply(telegram_bot)
 telegram_bot = bot_opportunities.apply(telegram_bot)
 telegram_bot = bot_market.apply(telegram_bot)
 
