@@ -1,12 +1,12 @@
 {
-  "checked_at": "2026-09-14T12:48:39.153818+03:00",
-  "rotation_index": 5,
+  "checked_at": "2026-09-14T19:37:48.702958+03:00",
+  "rotation_index": 6,
   "mode": "DELAYED_EVALUATION",
   "quote_source": "borsa demo (evaluation)",
   "history_source": "Yahoo Finance EGX .CA daily candles",
-  "symbol": "EAST",
+  "symbol": "COMI",
   "status": "RED",
-  "message": "Data source check failed: DataProviderError: SHORT_HISTORY",
-  "quote_available": null,
-  "history_available": null
+  "message": "Demo quote quota exhausted and historical fallback failed: DataProviderError: SHORT_HISTORY",
+  "quote_available": false,
+  "history_available": false
 }
