@@ -54,6 +54,31 @@ jobs:
           python -c "from signal_guard import self_test; self_test(); print('signal guard self-test: PASS')"
           python -c "from portfolio_engine import self_test; self_test(); print('portfolio engine self-test: PASS')"
           python -c "import telegram_bot, bot_experience; bot_experience.apply(telegram_bot); assert telegram_bot.MAIN_MENU['keyboard'][0][0] == '📊 الشاشة اللحظية'; assert abs(bot_experience._rr(10, 9, 12)-2.0) < 1e-9; assert bot_experience._plan_status({'price':11,'res20':10,'quote_live':False})[0] == 'WATCH'; assert bot_experience._plan_status({'price':10,'res20':10,'quote_live':True})[0] == 'ENTRY'; print('bot experience self-test: PASS')"
+          python - <<'PY'
+          import bot_experience as b
+          runtime = {
+              'trade_lifecycle': {
+                  'quote_mode': 'DELAYED_EVALUATION',
+                  'plans': {'TEST': {'signal_id': 'TEST-a1', 'symbol': 'TEST', 'status': 'WATCH', 'trigger': 10, 'initial_stop': 9, 'target1': 11, 'target2': 12, 'target3': 13, 'score': 80}},
+              },
+              'signal_portfolio': {
+                  'schema_version': 2,
+                  'quote_mode': 'DELAYED_EVALUATION',
+                  'open_positions': {},
+                  'closed_trades': [],
+                  'events': [],
+                  'performance': {'closed_trades': 0, 'open_positions': 0, 'wins': 0, 'losses': 0, 'breakeven': 0, 'win_rate_pct': 0, 'total_r': 0, 'avg_r': 0, 'best_r': 0, 'worst_r': 0},
+              },
+          }
+          signals = b._build_active_signals_text(runtime)
+          portfolio = b._build_portfolio_text(runtime)
+          performance = b._build_performance_text(runtime)
+          assert 'TEST-a1' in signals and 'WATCH' in signals
+          assert 'DELAYED / EVALUATION' in signals
+          assert 'لا توجد مراكز إشارات مفتوحة' in portfolio
+          assert '0.0%' in performance
+          print('telegram lifecycle views self-test: PASS')
+          PY
 
       - name: Check market data health
         continue-on-error: true
