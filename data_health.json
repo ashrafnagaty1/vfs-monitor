@@ -1,12 +1,12 @@
 {
-  "checked_at": "2026-09-15T09:40:57.220509+03:00",
-  "rotation_index": 8,
+  "checked_at": "2026-09-15T19:55:36.351405+03:00",
+  "rotation_index": 9,
   "mode": "DELAYED_EVALUATION",
   "quote_source": "borsa demo (evaluation)",
   "history_source": "Yahoo Finance EGX .CA daily candles",
-  "symbol": "SWDY",
+  "symbol": "FWRY",
   "status": "RED",
-  "message": "Data source check failed: DataProviderError: SHORT_HISTORY",
-  "quote_available": null,
-  "history_available": null
+  "message": "Demo quote quota exhausted and historical fallback failed: DataProviderError: SHORT_HISTORY",
+  "quote_available": false,
+  "history_available": false
 }
