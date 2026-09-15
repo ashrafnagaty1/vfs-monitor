@@ -8,7 +8,7 @@ from zoneinfo import ZoneInfo
 
 TOKEN = os.environ.get("TOKEN")
 CHAT_ID = os.environ.get("CHAT_ID")
-WEBAPP_URL = os.environ.get("WEBAPP_URL", "https://vfs-monitor.onrender.com")  # رابط الـ Web App الخاص بك
+WEBAPP_URL = os.environ.get("WEBAPP_URL", "https://vfs-monitor.onrender.com")
 ALARMS_FILE = "alarms.json"
 STATE_FILE = "state.json"
 TELEGRAM_API = f"https://api.telegram.org/bot{TOKEN}"
@@ -62,8 +62,11 @@ def send(message, chat_id=None, menu=True, reply_markup=None):
     elif menu:
         payload["reply_markup"] = json.dumps(MAIN_MENU, ensure_ascii=False)
     
-    r = requests.post(f"{TELEGRAM_API}/sendMessage", data=payload, timeout=20)
-    r.raise_for_status()
+    try:
+        r = requests.post(f"{TELEGRAM_API}/sendMessage", data=payload, timeout=20)
+        r.raise_for_status()
+    except Exception as e:
+        print("Telegram send error:", e)
 
 
 def load_json(path, default):
@@ -75,8 +78,11 @@ def load_json(path, default):
 
 
 def save_json(path, data):
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    try:
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        print("Save JSON error:", e)
 
 
 def normalize_symbol(text):
@@ -394,23 +400,7 @@ def scan_market(limit=10):
     return found[:limit]
 
 
-def send_opportunities(chat_id):
-    items = scan_market(8)
-    if not items:
-        send("⚠️ تعذر تكوين قائمة الفرص من مصدر البيانات الحالي.", chat_id, True)
-        return
-    lines = ["🎯 <b>أفضل فرص اليوم</b>", market_status(), ""]
-    for i, a in enumerate(items, 1):
-        lines.append(
-            f"{i}) {a['icon']} <b>{a['symbol']}</b> — {a['score']}/100 — {a['status']}\n"
-            f"   {a['price']:.2f} | RSI {a['rsi']:.0f} | Vol {a['volume_ratio']:.1f}x | {a['pattern']}"
-        )
-    lines.append("\n⚠️ <i>ترتيب فني آلي من بيانات قد تكون متأخرة.</i>")
-    send("\n".join(lines), chat_id, True)
-
-
 def send_market_watch(chat_id):
-    # إرسال الشاشة اللحظية مع زر تفاعلي (Inline) يفتح الويب آب بكامل طاقته ومساحته الواسعة
     inline_keyboard = {
         "inline_keyboard": [
             [
@@ -426,6 +416,21 @@ def send_market_watch(chat_id):
         "اضغط على الزر أدناه لفتح واجهة التداول والشارت الاحترافي بكامل الشاشة:"
     )
     send(msg, chat_id, menu=True, reply_markup=inline_keyboard)
+
+
+def send_opportunities(chat_id):
+    items = scan_market(8)
+    if not items:
+        send("⚠️ تعذر تكوين قائمة الفرص من مصدر البيانات الحالي.", chat_id, True)
+        return
+    lines = ["🎯 <b>أفضل فرص اليوم</b>", market_status(), ""]
+    for i, a in enumerate(items, 1):
+        lines.append(
+            f"{i}) {a['icon']} <b>{a['symbol']}</b> — {a['score']}/100 — {a['status']}\n"
+            f"   {a['price']:.2f} | RSI {a['rsi']:.0f} | Vol {a['volume_ratio']:.1f}x | {a['pattern']}"
+        )
+    lines.append("\n⚠️ <i>ترتيب فني آلي من بيانات قد تكون متأخرة.</i>")
+    send("\n".join(lines), chat_id, True)
 
 
 def send_golden_zones(chat_id):
@@ -941,7 +946,7 @@ def end_of_day_report(state):
     state["last_eod_report"] = day
     lines = ["📋 <b>تقرير نهاية الجلسة</b>", f"📅 {day}", ""]
     signals = state.get("signals", {})
-    active = [(sym, s) for sym, s in signals.items() if s.get("status"] not in ("CLOSED_T3", "STOPPED")]
+    active = [(sym, s) for sym, s in signals.items() if s.get("status") not in ("CLOSED_T3", "STOPPED")]
     lines.append(f"الإشارات النشطة: <b>{len(active)}</b>")
     for sym, s in active[:8]:
         lines.append(f"• {sym}: أعلى هدف T{s.get('highest_target', 0)} | Stop {s.get('stop', 0):.2f}")
@@ -971,31 +976,37 @@ def cleanup_state(state):
     state["scanner_seen"] = keep
 
 
-alarms_data = load_json(ALARMS_FILE, {"alarms": []})
-state = load_json(STATE_FILE, {"alarms": {}})
-state.setdefault("alarms", {})
-changed = False
+if __name__ == "__main__":
+    try:
+        alarms_data = load_json(ALARMS_FILE, {"alarms": []})
+        state = load_json(STATE_FILE, {"alarms": {}})
+        state.setdefault("alarms", {})
+        changed = False
 
-try:
-    changed = process_updates(state, alarms_data) or changed
-except Exception as e:
-    print("Telegram updates:", e)
-try:
-    changed = monitor_price_alarms(state, alarms_data) or changed
-except Exception as e:
-    print("Price alarms:", e)
-try:
-    changed = auto_scanner(state) or changed
-except Exception as e:
-    print("Auto scanner:", e)
-try:
-    changed = track_signals(state) or changed
-except Exception as e:
-    print("Signal tracking:", e)
-try:
-    changed = end_of_day_report(state) or changed
-except Exception as e:
-    print("EOD report:", e)
-cleanup_state(state)
-if changed:
-    save_json(STATE_FILE, state)
+        try:
+            changed = process_updates(state, alarms_data) or changed
+        except Exception as e:
+            print("Telegram updates error:", e)
+        try:
+            changed = monitor_price_alarms(state, alarms_data) or changed
+        except Exception as e:
+            print("Price alarms error:", e)
+        try:
+            changed = auto_scanner(state) or changed
+        except Exception as e:
+            print("Auto scanner error:", e)
+        try:
+            changed = track_signals(state) or changed
+        except Exception as e:
+            print("Signal tracking error:", e)
+        try:
+            changed = end_of_day_report(state) or changed
+        except Exception as e:
+            print("EOD report error:", e)
+            
+        cleanup_state(state)
+        if changed:
+            save_json(STATE_FILE, state)
+    except Exception as fatal:
+        print("Fatal error in main execution:", fatal)
+        # نخرج بسلام أو نسمح بإنهاء نظيف حسب الحاجة
