@@ -46,7 +46,7 @@ MAIN_MENU = {
 }
 
 
-def send(message, chat_id=None, menu=False):
+def send(message, chat_id=None, menu=True):
     if not TOKEN:
         return
     payload = {
@@ -55,8 +55,9 @@ def send(message, chat_id=None, menu=False):
         "parse_mode": "HTML",
         "disable_web_page_preview": True,
     }
-    if menu:
-        payload["reply_markup"] = json.dumps(MAIN_MENU, ensure_ascii=False)
+    # فرض إرفاق القائمة والأزرار مع كل رسالة لضمان ثبات الكيبورد
+    payload["reply_markup"] = json.dumps(MAIN_MENU, ensure_ascii=False)
+    
     r = requests.post(f"{TELEGRAM_API}/sendMessage", data=payload, timeout=20)
     r.raise_for_status()
 
@@ -508,7 +509,7 @@ def add_alarm_command(alarms_data, text, chat_id):
 def remove_alarm_command(alarms_data, text, chat_id):
     parts = text.split(maxsplit=1)
     if len(parts) < 2:
-        send("الصيغة: <code>/remove_alert COMI</code>", chat_id, True)
+        send("الصيغة: <code>/remove_alarm COMI</code>", chat_id, True)
         return False
     key = parts[1].strip().upper()
     removed = 0
