@@ -8,6 +8,7 @@ from zoneinfo import ZoneInfo
 
 TOKEN = os.environ.get("TOKEN")
 CHAT_ID = os.environ.get("CHAT_ID")
+WEBAPP_URL = os.environ.get("WEBAPP_URL", "https://vfs-monitor.onrender.com")  # رابط الـ Web App الخاص بك
 ALARMS_FILE = "alarms.json"
 STATE_FILE = "state.json"
 TELEGRAM_API = f"https://api.telegram.org/bot{TOKEN}"
@@ -46,7 +47,7 @@ MAIN_MENU = {
 }
 
 
-def send(message, chat_id=None, menu=True):
+def send(message, chat_id=None, menu=True, reply_markup=None):
     if not TOKEN:
         return
     payload = {
@@ -55,8 +56,11 @@ def send(message, chat_id=None, menu=True):
         "parse_mode": "HTML",
         "disable_web_page_preview": True,
     }
-    # فرض إرفاق القائمة والأزرار مع كل رسالة لضمان ثبات الكيبورد
-    payload["reply_markup"] = json.dumps(MAIN_MENU, ensure_ascii=False)
+    
+    if reply_markup:
+        payload["reply_markup"] = json.dumps(reply_markup, ensure_ascii=False)
+    elif menu:
+        payload["reply_markup"] = json.dumps(MAIN_MENU, ensure_ascii=False)
     
     r = requests.post(f"{TELEGRAM_API}/sendMessage", data=payload, timeout=20)
     r.raise_for_status()
@@ -406,16 +410,22 @@ def send_opportunities(chat_id):
 
 
 def send_market_watch(chat_id):
-    items = scan_market(12)
-    lines = ["📊 <b>Market Watch — EGX Smart Scanner</b>", market_status(), ""]
-    for a in items:
-        arrow = "▲" if a["momentum"] > 0 else "▼"
-        lines.append(
-            f"{a['icon']} <b>{a['symbol']}</b> {a['price']:.2f}  {arrow}{abs(a['momentum']):.1f}%  "
-            f"V {a['volume_ratio']:.1f}x  Score {a['score']}"
-        )
-    lines.append("\nℹ️ <i>شاشة تحليل؛ ليست أسعار تنفيذ لحظية قبل ربط Live Feed مرخص.</i>")
-    send("\n".join(lines), chat_id, True)
+    # إرسال الشاشة اللحظية مع زر تفاعلي (Inline) يفتح الويب آب بكامل طاقته ومساحته الواسعة
+    inline_keyboard = {
+        "inline_keyboard": [
+            [
+                {
+                    "text": "🌐 فتح الشاشة اللحظية بملء الشاشة",
+                    "web_app": {"url": WEBAPP_URL}
+                }
+            ]
+        ]
+    }
+    msg = (
+        f"📊 <b>Market Watch — EGX Smart Scanner</b>\n{market_status()}\n\n"
+        "اضغط على الزر أدناه لفتح واجهة التداول والشارت الاحترافي بكامل الشاشة:"
+    )
+    send(msg, chat_id, menu=True, reply_markup=inline_keyboard)
 
 
 def send_golden_zones(chat_id):
@@ -931,7 +941,7 @@ def end_of_day_report(state):
     state["last_eod_report"] = day
     lines = ["📋 <b>تقرير نهاية الجلسة</b>", f"📅 {day}", ""]
     signals = state.get("signals", {})
-    active = [(sym, s) for sym, s in signals.items() if s.get("status") not in ("CLOSED_T3", "STOPPED")]
+    active = [(sym, s) for sym, s in signals.items() if s.get("status"] not in ("CLOSED_T3", "STOPPED")]
     lines.append(f"الإشارات النشطة: <b>{len(active)}</b>")
     for sym, s in active[:8]:
         lines.append(f"• {sym}: أعلى هدف T{s.get('highest_target', 0)} | Stop {s.get('stop', 0):.2f}")
