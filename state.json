@@ -5,7 +5,7 @@
   "signals": {},
   "scanner_seen": {},
   "pro_engine_snapshot": {
-    "at": "2026-09-15T19:55:40.357559+03:00",
+    "at": "2026-09-15T22:37:27.814980+03:00",
     "count": 34,
     "quote_mode": "DELAYED_EVALUATION",
     "quote_source": "borsa demo (evaluation)",
@@ -77,7 +77,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-15T16:55:40.357709+00:00",
+          "fetched_at": "2026-09-15T19:37:27.815133+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -95,7 +95,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-15T16:55:41.701913+00:00",
+          "fetched_at": "2026-09-15T19:37:29.163131+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -113,7 +113,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-15T16:55:43.289276+00:00",
+          "fetched_at": "2026-09-15T19:37:30.631064+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -131,7 +131,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-15T16:55:44.902563+00:00",
+          "fetched_at": "2026-09-15T19:37:31.483840+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -149,7 +149,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-15T16:55:46.710215+00:00",
+          "fetched_at": "2026-09-15T19:37:32.325817+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -773,7 +773,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-15T16:55:40.357709+00:00",
+          "fetched_at": "2026-09-15T19:37:27.815133+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -1393,7 +1393,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-15T16:55:41.701913+00:00",
+          "fetched_at": "2026-09-15T19:37:29.163131+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -2016,7 +2016,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-15T16:55:43.289276+00:00",
+          "fetched_at": "2026-09-15T19:37:30.631064+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -2636,7 +2636,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-15T16:55:44.902563+00:00",
+          "fetched_at": "2026-09-15T19:37:31.483840+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -3258,7 +3258,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-15T16:55:46.710215+00:00",
+          "fetched_at": "2026-09-15T19:37:32.325817+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -8153,7 +8153,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-15T16:55:40.357709+00:00",
+          "fetched_at": "2026-09-15T19:37:27.815133+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -8773,7 +8773,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-15T16:55:41.701913+00:00",
+          "fetched_at": "2026-09-15T19:37:29.163131+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -9396,7 +9396,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-15T16:55:43.289276+00:00",
+          "fetched_at": "2026-09-15T19:37:30.631064+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -10016,7 +10016,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-15T16:55:44.902563+00:00",
+          "fetched_at": "2026-09-15T19:37:31.483840+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -10638,7 +10638,7 @@
           "provider": "EGXpilot",
           "role": "SECONDARY_ANALYSIS_ONLY",
           "canonical_price": false,
-          "fetched_at": "2026-09-15T16:55:46.710215+00:00",
+          "fetched_at": "2026-09-15T19:37:32.325817+00:00",
           "score": null,
           "bias": null,
           "signal": null,
@@ -28217,7 +28217,7 @@
     "close:2026-09-15": "2026-09-15T15:08:34.839905+03:00"
   },
   "trade_lifecycle": {
-    "updated_at": "2026-09-15T19:55:47.973198+03:00",
+    "updated_at": "2026-09-15T22:37:33.887890+03:00",
     "quote_mode": "DELAYED_EVALUATION",
     "disclaimer": "ENTRY states require a configured live quote provider. Delayed/evaluation data stays WATCH even if the last price is above trigger.",
     "new_alerts_count": 0,
@@ -28577,7 +28577,7 @@
   ],
   "signal_portfolio": {
     "schema_version": 2,
-    "updated_at": "2026-09-15T19:55:48.143011+03:00",
+    "updated_at": "2026-09-15T22:37:34.066153+03:00",
     "mode": "LIVE_SIGNAL_TRACKING",
     "quote_mode": "DELAYED_EVALUATION",
     "disclaimer": "Tracks confirmed LIVE signal entries only. It is not a brokerage account statement, and delayed/evaluation WATCH data never creates positions or performance records.",
@@ -28598,7 +28598,7 @@
     }
   },
   "signal_guard": {
-    "updated_at": "2026-09-15T19:55:48.073261+03:00",
+    "updated_at": "2026-09-15T22:37:33.975417+03:00",
     "quote_mode": "DELAYED_EVALUATION",
     "policy": "Execution-ready requires LIVE quotes, RR >= 1.30 and no overheating blocker. Delayed/evaluation plans remain analysis-only WATCH regardless of score.",
     "counts": {
@@ -28614,7 +28614,7 @@
     "canonical_price": false,
     "price_note": "EGXpilot currentPrice is not used as the scanner/live quote source until independently verified.",
     "cache_minutes": 30,
-    "updated_at": "2026-09-15T16:55:40.357696+00:00",
+    "updated_at": "2026-09-15T19:37:27.815120+00:00",
     "selected_symbols": [
       "TALM",
       "CIRA",
@@ -28894,7 +28894,7 @@
         "provider": "EGXpilot",
         "role": "SECONDARY_ANALYSIS_ONLY",
         "canonical_price": false,
-        "fetched_at": "2026-09-15T16:55:41.701913+00:00",
+        "fetched_at": "2026-09-15T19:37:29.163131+00:00",
         "data": {}
       },
       "MASR": {
@@ -28910,7 +28910,7 @@
         "provider": "EGXpilot",
         "role": "SECONDARY_ANALYSIS_ONLY",
         "canonical_price": false,
-        "fetched_at": "2026-09-15T16:55:46.710215+00:00",
+        "fetched_at": "2026-09-15T19:37:32.325817+00:00",
         "data": {}
       },
       "DTPP": {
@@ -28918,7 +28918,7 @@
         "provider": "EGXpilot",
         "role": "SECONDARY_ANALYSIS_ONLY",
         "canonical_price": false,
-        "fetched_at": "2026-09-15T16:55:44.902563+00:00",
+        "fetched_at": "2026-09-15T19:37:31.483840+00:00",
         "data": {}
       },
       "TALM": {
@@ -28926,7 +28926,7 @@
         "provider": "EGXpilot",
         "role": "SECONDARY_ANALYSIS_ONLY",
         "canonical_price": false,
-        "fetched_at": "2026-09-15T16:55:40.357709+00:00",
+        "fetched_at": "2026-09-15T19:37:27.815133+00:00",
         "data": {}
       },
       "SNFC": {
@@ -28934,7 +28934,7 @@
         "provider": "EGXpilot",
         "role": "SECONDARY_ANALYSIS_ONLY",
         "canonical_price": false,
-        "fetched_at": "2026-09-15T16:55:43.289276+00:00",
+        "fetched_at": "2026-09-15T19:37:30.631064+00:00",
         "data": {}
       }
     }
@@ -28976,7 +28976,7 @@
       "signal_id": "KABO-9da483603c19",
       "setup_signature": "KABO|10.1700|9.1454",
       "first_seen": "2026-09-15T15:08:42.462416+03:00",
-      "last_seen": "2026-09-15T19:55:47.973198+03:00",
+      "last_seen": "2026-09-15T22:37:33.887890+03:00",
       "active": true
     },
     "MASR": {
@@ -29039,28 +29039,28 @@
       "signal_id": "CIRA-b6aecefba06b",
       "setup_signature": "CIRA|39.4000|36.9631",
       "first_seen": "2026-09-15T15:08:42.462416+03:00",
-      "last_seen": "2026-09-15T19:55:47.973198+03:00",
+      "last_seen": "2026-09-15T22:37:33.887890+03:00",
       "active": true
     },
     "FAIT": {
       "signal_id": "FAIT-7979b6720b8b",
       "setup_signature": "FAIT|48.3500|44.2871",
       "first_seen": "2026-09-15T15:08:42.462416+03:00",
-      "last_seen": "2026-09-15T19:55:47.973198+03:00",
+      "last_seen": "2026-09-15T22:37:33.887890+03:00",
       "active": true
     },
     "SNFC": {
       "signal_id": "SNFC-a7ae311047ef",
       "setup_signature": "SNFC|11.2000|10.8560",
       "first_seen": "2026-09-15T15:08:42.462416+03:00",
-      "last_seen": "2026-09-15T19:55:47.973198+03:00",
+      "last_seen": "2026-09-15T22:37:33.887890+03:00",
       "active": true
     },
     "HELI": {
       "signal_id": "HELI-111137a8cfa5",
       "setup_signature": "HELI|8.4000|7.6766",
       "first_seen": "2026-09-15T15:08:42.462416+03:00",
-      "last_seen": "2026-09-15T19:55:47.973198+03:00",
+      "last_seen": "2026-09-15T22:37:33.887890+03:00",
       "active": true
     }
   }
