@@ -8,7 +8,7 @@ from zoneinfo import ZoneInfo
 
 TOKEN = os.environ.get("TOKEN")
 CHAT_ID = os.environ.get("CHAT_ID")
-WEBAPP_URL = os.environ.get("WEBAPP_URL", "https://vfs-monitor.onrender.com")
+WEBAPP_URL = os.environ.get("WEBAPP_URL", "https://refogx-pro.folkhero3.workers.dev/")
 ALARMS_FILE = "alarms.json"
 STATE_FILE = "state.json"
 TELEGRAM_API = f"https://api.telegram.org/bot{TOKEN}"
@@ -1009,4 +1009,3 @@ if __name__ == "__main__":
             save_json(STATE_FILE, state)
     except Exception as fatal:
         print("Fatal error in main execution:", fatal)
-        # نخرج بسلام أو نسمح بإنهاء نظيف حسب الحاجة
