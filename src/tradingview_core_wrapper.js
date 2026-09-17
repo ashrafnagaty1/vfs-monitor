@@ -1,6 +1,6 @@
 import app from "./stock_panel_wrapper.js";
 
-const VERSION = "tradingview-core-v1-2026-09-17";
+const VERSION = "tradingview-core-v2-2026-09-17";
 
 function safeSymbol(v){
   const s=String(v||"").toUpperCase().replace(/[^A-Z0-9_.-]/g,"");
@@ -25,50 +25,53 @@ export default {
       ? requested
       : safeSymbol(snap?.top?.[0]?.symbol||requested);
 
-    // The historical terminal already loads s3.tradingview.com/tv.js. Add it only if a future
-    // upstream layout removes it; do not load multiple chart engines into the protected region.
     if(!html.includes("https://s3.tradingview.com/tv.js")){
       html=html.replace("</head>",'<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script></head>');
     }
 
     const css=`<style id="refo-tv-core-style">
-      .center{display:flex!important;flex-direction:column!important;min-width:0!important;overflow:hidden!important}
+      .center{display:flex!important;flex-direction:column!important;min-width:0!important;overflow:hidden!important;background:#05070a!important}
       .centerhead{flex:0 0 auto!important}
-      .analysis-toolbar,.live-tools,.indicator-tools,.indicator-deck,.real-indicator-deck,.analysis-box{display:none!important}
+      .analysis-toolbar,.live-tools,.indicator-tools,.indicator-deck,.real-indicator-deck,.analysis-box,.indicators{display:none!important}
       .chartbar{display:none!important}
-      .chart{display:block!important;position:relative!important;flex:1 1 auto!important;min-height:360px!important;padding:0!important;overflow:hidden!important;background:#05070a!important}
-      #refo_tv_core{position:absolute;inset:0;width:100%;height:100%;background:#05070a;z-index:20}
-      #refo_tv_core_status{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#718394;background:#05070a;z-index:19;font-size:11px}
-      @media(max-width:900px){.chart{min-height:480px!important}}
+      #tradingview_box{position:relative!important;display:block!important;flex:1 1 auto!important;width:100%!important;height:100%!important;min-height:520px!important;overflow:hidden!important;background:#05070a!important}
+      #refo_tv_core_status{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#718394;background:#05070a;z-index:2;font-size:11px}
+      @media(max-width:900px){#tradingview_box{min-height:480px!important}}
     </style>`;
     html=html.replace("</head>",css+"</head>");
 
-    // Replace only the chart contents after every legacy wrapper has finished. This isolates
-    // TradingView from ReFo SVG/indicator/drawing overlays while preserving the surrounding UI.
-    const marker='<div class="chart"';
-    const start=html.indexOf(marker);
-    if(start!==-1){
-      const openEnd=html.indexOf('>',start);
-      const indicators=html.indexOf('<div class="indicators">',openEnd);
-      if(openEnd!==-1 && indicators!==-1){
-        html=html.slice(0,openEnd+1)+`<div id="refo_tv_core_status">جاري تحميل TradingView…</div><div id="refo_tv_core"></div></div>`+html.slice(indicators);
+    // Final-stage protection: replace the complete legacy chart region after every ReFo wrapper.
+    // The old terminal's native #tradingview_box is restored as the only chart container.
+    const centerStart=html.indexOf('<section class="center"');
+    const rightStart=centerStart!==-1 ? html.indexOf('<aside class="right"',centerStart) : -1;
+    if(centerStart!==-1 && rightStart!==-1){
+      const centerOpenEnd=html.indexOf('>',centerStart);
+      if(centerOpenEnd!==-1){
+        html=html.slice(0,centerOpenEnd+1)+
+          '<div id="tradingview_box"><div id="refo_tv_core_status">جاري تحميل TradingView…</div></div></section>\n\n    '+
+          html.slice(rightStart);
       }
     }
+
+    // Remove legacy initializers so exactly one TradingView instance owns the protected container.
+    html=html.replace(/function initTV\(\)[\s\S]*?window\.addEventListener\("DOMContentLoaded", initTV\);/g,'');
 
     const script=`<script id="refo-tv-core-script">(()=>{
       const symbol=${JSON.stringify(sym)};
       const status=document.getElementById('refo_tv_core_status');
-      const box=document.getElementById('refo_tv_core');
+      const box=document.getElementById('tradingview_box');
       if(!box)return;
-      function fail(msg){if(status){status.style.zIndex='21';status.textContent=msg;}}
+      function fail(msg){if(status){status.style.zIndex='3';status.textContent=msg;}}
+      let tries=0;
       function boot(){
         if(!window.TradingView || typeof window.TradingView.widget!=='function'){
+          if(++tries<40){setTimeout(boot,250);return;}
           fail('تعذر تحميل مكتبة TradingView');
           return;
         }
         try{
-          box.innerHTML='';
-          new TradingView.widget({
+          if(status)status.remove();
+          new window.TradingView.widget({
             autosize:true,
             symbol:'EGX:'+symbol,
             interval:'D',
@@ -76,19 +79,18 @@ export default {
             theme:'dark',
             style:'1',
             locale:'ar_AE',
-            toolbar_bg:'#080c11',
+            toolbar_bg:'#090d12',
             enable_publishing:false,
             hide_side_toolbar:false,
             allow_symbol_change:true,
             save_image:false,
-            container_id:'refo_tv_core',
+            container_id:'tradingview_box',
             studies:['MASimple@tv-basicstudies','Volume@tv-basicstudies']
           });
-          if(status)status.remove();
         }catch(e){fail('تعذر تشغيل TradingView داخل الشاشة');}
       }
-      if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(boot,0),{once:true});
-      else setTimeout(boot,0);
+      if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});
+      else boot();
     })();</script>`;
     html=html.replace("</body>",script+`<div style="display:none">${VERSION}</div></body>`);
 
