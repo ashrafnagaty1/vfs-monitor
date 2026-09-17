@@ -2,9 +2,10 @@ name: V11 Reference Final
 
 on:
   push:
-    branches: [refo-v11-reference-final]
+    branches: [main, refo-v11-reference-final, refo-v11-runtime-hardening]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   bot-regression:
@@ -15,13 +16,15 @@ jobs:
         with:
           python-version: '3.11'
       - name: Syntax compile
-        run: python -m py_compile telegram_bot.py bot_experience.py bot_watchlist.py bot_alerts.py bot_smart_money.py bot_gann.py bot_harmonic.py bot_elliott.py bot_temporal.py bot_opportunities.py bot_market.py bot_personal_portfolio.py bot_assistant.py bot_reports.py always_on_bot.py pro_engine_v2.py v11_reference_selftest.py
+        run: python -m py_compile telegram_bot.py bot_experience.py bot_watchlist.py bot_alerts.py bot_smart_money.py bot_gann.py bot_harmonic.py bot_elliott.py bot_temporal.py bot_opportunities.py bot_market.py bot_personal_portfolio.py bot_assistant.py bot_reports.py bot_reference_menu.py bot_live_screen.py always_on_bot.py pro_engine_v2.py v11_reference_selftest.py
       - name: V11 integration contract
         run: python v11_reference_selftest.py
       - name: Module self tests
         run: |
           python bot_experience.py
           python bot_watchlist.py
+          python bot_live_screen.py
+          python bot_reference_menu.py
           python bot_smart_money.py
           python bot_gann.py
           python bot_harmonic.py
