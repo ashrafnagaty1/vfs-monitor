@@ -20,6 +20,8 @@ import bot_market
 import bot_personal_portfolio
 import bot_assistant
 import bot_reports
+import bot_reference_menu
+import bot_live_screen
 
 telegram_bot = bot_experience.apply(telegram_bot)
 telegram_bot = bot_watchlist.apply(telegram_bot)
@@ -34,6 +36,10 @@ telegram_bot = bot_market.apply(telegram_bot)
 telegram_bot = bot_personal_portfolio.apply(telegram_bot)
 telegram_bot = bot_assistant.apply(telegram_bot)
 telegram_bot = bot_reports.apply(telegram_bot)
+# Final compatibility layers are intentionally last so reference labels and
+# WebApp launch cannot be swallowed by an older wrapper.
+telegram_bot = bot_reference_menu.apply(telegram_bot)
+telegram_bot = bot_live_screen.apply(telegram_bot)
 
 CAIRO = ZoneInfo("Africa/Cairo")
 RUNNING = True
