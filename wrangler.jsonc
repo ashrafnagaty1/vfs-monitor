@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "vfs-monitor",
-  "main": "src/stock_panel_wrapper.js",
+  "main": "src/tradingview_core_wrapper.js",
   "compatibility_date": "2026-09-13",
   "workers_dev": true,
   "kv_namespaces": [
