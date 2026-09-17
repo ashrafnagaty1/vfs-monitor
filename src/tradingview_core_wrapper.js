@@ -1,6 +1,6 @@
 import app from "./stock_panel_wrapper.js";
 
-const VERSION = "tradingview-core-v4-isolated-frame-2026-09-17";
+const VERSION = "tradingview-core-v5-protected-frame-2026-09-17";
 const TV_SRC = "https://s3.tradingview.com/tv.js";
 
 function safeSymbol(v){
@@ -35,26 +35,24 @@ export default {
     const requested=safeSymbol(url.searchParams.get("s"));
     const sym=details.some(x=>safeSymbol(x?.symbol)===requested)?requested:safeSymbol(snap?.top?.[0]?.symbol||requested);
 
-    // Remove legacy TradingView loader/initializer from the parent dashboard.
     html=html.replace(/<script[^>]+src=["']https:\/\/s3\.tradingview\.com\/tv\.js["'][^>]*><\/script>/gi,'');
     html=html.replace(/function initTV\(\)[\s\S]*?window\.addEventListener\("DOMContentLoaded", initTV\);/g,'');
 
-    const css=`<style id="refo-tv-core-style">.center{display:flex!important;flex-direction:column!important;min-width:0!important;overflow:hidden!important;background:#05070a!important;padding:0!important}.analysis-toolbar,.live-tools,.indicator-tools,.indicator-deck,.real-indicator-deck,.analysis-box,.indicators,.chartbar{display:none!important}#refo_tv_frame{display:block!important;border:0!important;flex:1 1 auto!important;width:100%!important;height:100%!important;min-height:560px!important;background:#05070a!important}@media(max-width:900px){#refo_tv_frame{min-height:500px!important}}</style>`;
+    const css=`<style id="refo-tv-core-style">.center{display:flex!important;flex-direction:column!important;min-width:0!important;overflow:hidden!important;background:#05070a!important;padding:0!important;position:relative!important}.center>*:not(#refo_tv_frame){display:none!important}#refo_tv_frame{display:block!important;position:absolute!important;inset:0!important;border:0!important;width:100%!important;height:100%!important;min-height:560px!important;background:#05070a!important;z-index:50!important}@media(max-width:900px){#refo_tv_frame{min-height:500px!important}}</style>`;
     html=html.replace("</head>",css+"</head>");
 
-    // Isolation is intentional: the exact loader proven at /tv-test now owns a same-origin iframe,
-    // so legacy ReFo scripts cannot overwrite or remove TradingView's DOM.
+    const frame=`<iframe id="refo_tv_frame" title="TradingView EGX Chart" src="/tv-frame?s=${encodeURIComponent(sym)}&v=5" loading="eager"></iframe>`;
     const centerStart=html.indexOf('<section class="center"');
     const rightStart=centerStart!==-1?html.indexOf('<aside class="right"',centerStart):-1;
     if(centerStart!==-1&&rightStart!==-1){
       const centerOpenEnd=html.indexOf('>',centerStart);
-      if(centerOpenEnd!==-1){
-        const frame=`<iframe id="refo_tv_frame" title="TradingView EGX Chart" src="/tv-frame?s=${encodeURIComponent(sym)}" loading="eager" referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
-        html=html.slice(0,centerOpenEnd+1)+frame+'</section>\n\n    '+html.slice(rightStart);
-      }
+      if(centerOpenEnd!==-1) html=html.slice(0,centerOpenEnd+1)+frame+'</section>\n\n    '+html.slice(rightStart);
     }
 
-    html=html.replace("</body>",`<div style="display:none">${VERSION}</div></body>`);
+    // Run after every legacy wrapper script. If any of them rewrites the center, restore the proven frame.
+    const guard=`<script id="refo-tv-frame-guard">(()=>{const src=${JSON.stringify(`/tv-frame?s=${encodeURIComponent(sym)}&v=5`)};function mount(){const c=document.querySelector('section.center');if(!c)return;let f=document.getElementById('refo_tv_frame');if(!f){f=document.createElement('iframe');f.id='refo_tv_frame';f.title='TradingView EGX Chart';f.src=src;f.setAttribute('loading','eager');c.replaceChildren(f)}else if(f.parentElement!==c){c.replaceChildren(f)}}function start(){mount();const c=document.querySelector('section.center');if(!c)return;new MutationObserver(()=>{if(!document.getElementById('refo_tv_frame'))mount()}).observe(c,{childList:true});setTimeout(mount,100);setTimeout(mount,500);setTimeout(mount,1500)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start()})();</script>`;
+    html=html.replace("</body>",guard+`<div style="display:none">${VERSION}</div></body>`);
+
     const headers=new Headers(res.headers);
     headers.set("content-type","text/html; charset=UTF-8");
     headers.set("cache-control","no-store, no-cache, must-revalidate");
