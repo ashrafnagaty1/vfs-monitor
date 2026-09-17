@@ -1,1 +1,0 @@
-ReFo V11 runtime hardening branch marker.
