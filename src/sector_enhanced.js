@@ -1,6 +1,6 @@
 import base from "./index.js";
 
-const WORKER_VERSION = "market-terminal-v6-reference-density-2026";
+const WORKER_VERSION = "market-terminal-v7-reference-responsive-2026";
 const DASHBOARD_URL = "https://vfs-monitor.folkhero3.workers.dev/dashboard";
 
 const SECTORS = {
@@ -83,6 +83,15 @@ function dashboardHtml() {
 
     .ref-stock-tabs,.market-tabs{display:flex;gap:3px;margin:7px 0}.ref-stock-tabs button,.market-tabs>*{flex:1;background:#0d141c;border:1px solid #1d2a36;color:#8093a5;padding:5px 2px;font-size:8px;text-align:center}.ref-stock-tabs button.active,.market-tabs b{color:#fff;border-color:#35516a;background:#122131}.ref-stock-tabs button:disabled{opacity:.35}.market-search{padding:5px 8px;border-bottom:1px solid #18222c}.market-search input{width:100%;background:#070b10;border:1px solid #24313d;color:#dce8f2;padding:6px 8px;outline:none}.up { color: #00e676; }
     .down { color: #ff5252; }
+    .mobile-nav{display:none}
+    @media(max-width:760px){
+      body{overflow:auto;height:auto;min-height:100vh;padding-bottom:48px}
+      header{position:sticky;top:0;z-index:20;padding:6px 8px;align-items:flex-start}.brand{font-size:11px}.stats-bar{overflow-x:auto;max-width:68vw;gap:4px}.stat-pill{white-space:nowrap;padding:3px 5px;font-size:8px}
+      .terminal-body{display:flex;flex-direction:column;height:auto;direction:rtl}.center-panel{order:1;height:52vh;min-height:330px}.right-panel{order:2;height:44vh;border:0;border-top:1px solid #1a222c}.left-panel{order:3;border:0;border-top:1px solid #1a222c;padding:8px}
+      .stock-title h1{font-size:20px}.stock-title .cur-price{font-size:18px}.kpi-grid{grid-template-columns:repeat(3,1fr)}.kpi-card{padding:5px}.signal-box{margin-bottom:8px}
+      footer{display:none}.mobile-nav{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);bottom:0;left:0;right:0;height:46px;background:#080d13;border-top:1px solid #25313c;z-index:30;direction:rtl}.mobile-nav button{background:transparent;border:0;color:#8193a3;font:inherit;font-size:9px}.mobile-nav button.active{color:#4fa3ff;font-weight:800}
+      .watch-item,.watch-table-header{grid-template-columns:1.1fr .8fr .7fr .6fr}.market-tabs{margin:4px 8px}.panel-header{padding:6px 8px}
+    }
   </style>
 </head>
 <body>
@@ -140,6 +149,7 @@ function dashboardHtml() {
     </aside>
   </div>
 
+  <nav class="mobile-nav"><button class="active" data-mobile="market">السوق</button><button data-mobile="alerts">التنبيهات</button><button data-mobile="chart">الشارت</button><button data-mobile="ideas">التوصيات</button><button data-mobile="more">المزيد</button></nav>
   <footer id="ticker">
     <span>تحميل شريط الأسعار...</span>
   </footer>
@@ -264,6 +274,7 @@ function dashboardHtml() {
     window.addEventListener("DOMContentLoaded", function() {
       var q = new URLSearchParams(location.search).get("symbol") || new URLSearchParams(location.search).get("s"); if(q) CURRENT_SYM=String(q).toUpperCase().replace(/[^A-Z0-9_.-]/g,"") || "COMI";
       var search=document.getElementById("market-search"); if(search) search.addEventListener("input",function(){var q=this.value.trim().toUpperCase();document.querySelectorAll(".watch-item").forEach(function(row){row.style.display=!q||String(row.getAttribute("data-s")||"").includes(q)?"":"none"})});
+      document.querySelectorAll("[data-mobile]").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll("[data-mobile]").forEach(function(x){x.classList.remove("active")});b.classList.add("active");var k=b.getAttribute("data-mobile");var target=k==="chart"?document.querySelector(".center-panel"):k==="market"?document.querySelector(".right-panel"):k==="alerts"?document.querySelector(".left-panel"):null;if(target)target.scrollIntoView({behavior:"smooth",block:"start"});});});
       renderTradingView(CURRENT_SYM);
       loadData();
       setInterval(loadData, 25000);
@@ -315,7 +326,7 @@ export default {
             inline_keyboard: [[{ text: "🚀 فتح الشاشة اللحظية", web_app: { url: DASHBOARD_URL } }]]
           }
         });
-        return Response.json({ ok: true, feature: "market-terminal-v4.0" });
+        return Response.json({ ok: true, feature: "market-terminal-v7.0" });
       }
     }
 
