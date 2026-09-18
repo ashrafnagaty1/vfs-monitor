@@ -29,7 +29,10 @@ def main():
         "🎯 قناص EGX V2", "💼 المحافظ والتنبيهات", "👤 حسابي"
     ]:
         assert label in worker
-    assert "reference-clone-all-in-one" in worker
+    assert "reference-clone-completion-v2" in worker
+    for label in ["💳 اشتراك / تجديد","👤 اشتراكي","🔗 رابط الإحالة","📊 إحصائيات الإحالة","👥 ادع صديق","🎟️ أكواد الخصم","🔔 إعدادات الإشعارات","📊 شارت السهم","🎯 متابعة الخطة","🚨 تنبيه سعر"]:
+        assert label in worker
+    assert 'allowed_updates:["message","callback_query"]' in worker
     assert 'import legacyWorker from "../src/tradingview_core_wrapper.js"' in worker
     print("reference clone all-in-one integration self-test: PASS")
 
