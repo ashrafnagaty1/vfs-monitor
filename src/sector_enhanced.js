@@ -1,6 +1,6 @@
 import base from "./index.js";
 
-const WORKER_VERSION = "market-terminal-v12-integrity-2026";
+const WORKER_VERSION = "market-terminal-v13-mobile-pages-2026";
 const DASHBOARD_URL = "https://vfs-monitor.folkhero3.workers.dev/dashboard";
 
 const SECTORS = {
@@ -84,13 +84,13 @@ function dashboardHtml() {
 
     .ref-stock-tabs,.market-tabs{display:flex;gap:3px;margin:7px 0}.ref-stock-tabs button,.market-tabs>*{flex:1;background:#0d141c;border:1px solid #1d2a36;color:#8093a5;padding:5px 2px;font-size:8px;text-align:center}.ref-stock-tabs button.active,.market-tabs b{color:#fff;border-color:#35516a;background:#122131}.ref-stock-tabs button:disabled{opacity:.35}.left-context{background:#090f15;border:1px solid #17232d;color:#687d8f;padding:5px 7px;font-size:8px;margin-bottom:5px}.market-tabs>*{cursor:pointer}.market-tabs>.active{color:#fff;border-color:#35516a;background:#122131}.market-search{padding:5px 8px;border-bottom:1px solid #18222c}.market-search input{width:100%;background:#070b10;border:1px solid #24313d;color:#dce8f2;padding:6px 8px;outline:none}.up { color: #00e676; }
     .down { color: #ff5252; }
-    .stock-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:7px}.stock-actions button{border:1px solid #273645;background:#101923;color:#a8b8c6;padding:6px;font:inherit}.stock-actions .buy{color:#5bd98b}.stock-actions .sell{color:#ff6b6b}.stock-actions button:disabled{opacity:.4}.plan-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:6px 0}.plan-strip span{background:#0c131a;border:1px solid #1c2934;padding:5px;color:#708596;font-size:8px}.plan-strip b{display:block;color:#dce8f2;margin-top:2px}.panel-header em{font-style:normal;color:#607589;font-size:8px}.mobile-nav{display:none}
+    .stock-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:7px}.stock-actions button{border:1px solid #273645;background:#101923;color:#a8b8c6;padding:6px;font:inherit}.stock-actions .buy{color:#5bd98b}.stock-actions .sell{color:#ff6b6b}.stock-actions button:disabled{opacity:.4}.plan-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:6px 0}.plan-strip span{background:#0c131a;border:1px solid #1c2934;padding:5px;color:#708596;font-size:8px}.plan-strip b{display:block;color:#dce8f2;margin-top:2px}.panel-header em{font-style:normal;color:#607589;font-size:8px}.mobile-sheet{display:none}.mobile-sheet-head{display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px solid #21303d}.mobile-sheet-head button{background:transparent;border:0;color:#fff;font-size:22px}.mobile-sheet-body{padding:10px;line-height:1.8}.mobile-card{background:#0d151d;border:1px solid #20303d;padding:8px;margin-bottom:6px}.mobile-card b{color:#fff}.mobile-nav{display:none}
     @media(max-width:760px){
       body{overflow:auto;height:auto;min-height:100vh;padding-bottom:48px}
       header{position:sticky;top:0;z-index:20;padding:6px 8px;align-items:flex-start}.market-ribbon{height:29px}.chart-toolbar{position:sticky;top:38px;z-index:19;overflow-x:auto}.chart-toolbar span{display:none}.brand{font-size:11px}.stats-bar{overflow-x:auto;max-width:68vw;gap:4px}.stat-pill{white-space:nowrap;padding:3px 5px;font-size:8px}
       .terminal-body{display:flex;flex-direction:column;height:auto;direction:rtl}.center-panel{order:1;height:52vh;min-height:330px}.right-panel{order:2;height:44vh;border:0;border-top:1px solid #1a222c}.left-panel{order:3;border:0;border-top:1px solid #1a222c;padding:8px}
       .stock-title h1{font-size:20px}.stock-title .cur-price{font-size:18px}.kpi-grid{grid-template-columns:repeat(3,1fr)}.kpi-card{padding:5px}.signal-box{margin-bottom:8px}
-      footer{display:none}.mobile-nav{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);bottom:0;left:0;right:0;height:46px;background:#080d13;border-top:1px solid #25313c;z-index:30;direction:rtl}.mobile-nav button{background:transparent;border:0;color:#8193a3;font:inherit;font-size:9px}.mobile-nav button.active{color:#4fa3ff;font-weight:800}
+      footer{display:none}.mobile-sheet{display:block;position:fixed;inset:76px 0 46px 0;background:#080d13;z-index:25;overflow:auto}.mobile-sheet[hidden]{display:none}.mobile-nav{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);bottom:0;left:0;right:0;height:46px;background:#080d13;border-top:1px solid #25313c;z-index:30;direction:rtl}.mobile-nav button{background:transparent;border:0;color:#8193a3;font:inherit;font-size:9px}.mobile-nav button.active{color:#4fa3ff;font-weight:800}
       .watch-item,.watch-table-header{grid-template-columns:1.1fr .8fr .7fr .6fr}.market-tabs{margin:4px 8px}.panel-header{padding:6px 8px}
     }
   </style>
@@ -116,7 +116,7 @@ function dashboardHtml() {
     <aside class="left-panel">
       <div class="stock-actions"><button class="sell" disabled>بيع</button><button class="buy" disabled>شراء</button><button id="ai-btn">AI تحليل</button></div><div class="stock-title">
         <h1 id="det-sym">COMI</h1>
-        <div class="cur-price" id="det-price">0.00</div>
+        <div class="cur-price" id="det-price">—</div>
       </div>
       <div class="ref-stock-tabs"><button class="active" data-lefttab="overview">نظرة عامة</button><button data-lefttab="smart">تحليلات ذكية</button><button disabled>العمق</button><button data-lefttab="trades">الصفقات</button><button disabled>أخبار</button></div><div id="left-context" class="left-context">بيانات ReFo الفنية — منفصلة عن أسعار TradingView المعروضة داخل الشارت.</div><div class="kpi-grid">
         <div class="kpi-card"><small>الدخول (Trigger)</small><b id="det-trg">-</b></div>
@@ -155,6 +155,7 @@ function dashboardHtml() {
       </div>
     </aside>
   </div>
+  <section id="mobile-sheet" class="mobile-sheet" hidden><div class="mobile-sheet-head"><b id="mobile-sheet-title">ReFo</b><button id="mobile-sheet-close">×</button></div><div id="mobile-sheet-body"></div></section>
 
   <nav class="mobile-nav"><button class="active" data-mobile="market">السوق</button><button data-mobile="alerts">التنبيهات</button><button data-mobile="chart">الشارت</button><button data-mobile="ideas">التوصيات</button><button data-mobile="more">المزيد</button></nav>
   <footer id="ticker">
@@ -177,6 +178,8 @@ function dashboardHtml() {
     function toggleFav(s){var a=favorites(),i=a.indexOf(s);if(i>=0)a.splice(i,1);else a.push(s);localStorage.setItem(favKey(),JSON.stringify(a));return a.includes(s)}
     function fmt(v,d){if(v===null||v===undefined||v==="")return "—";var x=Number(v);return Number.isFinite(x)?x.toFixed(d==null?2:d):"—"}
     function present(v){return !(v===null||v===undefined||v==="")}
+    function showMobileSheet(kind){var sheet=document.getElementById("mobile-sheet"),title=document.getElementById("mobile-sheet-title"),body=document.getElementById("mobile-sheet-body");if(!sheet||!body)return;var alerts=RAW_DATA?.alerts||[],plans=RAW_DATA?.plans||[];if(kind==="alerts"){title.textContent="التنبيهات";body.innerHTML=alerts.length?alerts.slice().reverse().map(function(a){return '<div class="mobile-card"><b>'+String(a.symbol||"—")+'</b><br>'+String(a.message||a.type||"تنبيه")+'</div>'}).join(""):'<div class="mobile-card">لا توجد تنبيهات مسجلة في Snapshot الحالي.</div>';}else if(kind==="ideas"){title.textContent="التوصيات";var w=plans.filter(function(p){return p.status==="WATCH"});body.innerHTML=w.length?w.map(function(p){return '<div class="mobile-card"><b>'+String(p.symbol||"—")+'</b> · WATCH<br>Trigger '+fmt(p.trigger,2)+' · Stop '+fmt(p.dynamic_stop||p.initial_stop,2)+'<br>T1 '+fmt(p.target1,2)+' · T2 '+fmt(p.target2,2)+' · T3 '+fmt(p.target3,2)+'</div>'}).join(""):'<div class="mobile-card">لا توجد خطط WATCH موثقة حاليًا.</div>';}else{title.textContent="المزيد";body.innerHTML='<div class="mobile-card"><b>مصدر ReFo</b><br>'+String(RAW_DATA?.snapshot?.quote_source||"—")+' · '+String(RAW_DATA?.snapshot?.quote_mode||"—")+'</div><div class="mobile-card">عمق السوق وBid/Ask وFundamentals غير معروضة بدون مصدر موثوق.</div>';}sheet.hidden=false;}
+    function hideMobileSheet(){var s=document.getElementById("mobile-sheet");if(s)s.hidden=true}
     function applyMarketFilter(){document.querySelectorAll(".watch-item").forEach(function(row){var p=row.getAttribute("data-plan"),fav=row.getAttribute("data-fav")==="1",q=(document.getElementById("market-search")?.value||"").trim().toUpperCase(),match=!q||String(row.getAttribute("data-s")||"").includes(q);var tab=ACTIVE_MARKET_TAB,visible=tab==="all"||((tab==="watch"||tab==="ideas")&&p==="WATCH")||(tab==="fav"&&fav);row.style.display=match&&visible?"":"none";});}
 
     function renderTradingView(symbol) {
@@ -304,7 +307,8 @@ function dashboardHtml() {
       document.querySelectorAll("[data-mtab]").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll("[data-mtab]").forEach(function(x){x.classList.remove("active")});b.classList.add("active");var k=b.getAttribute("data-mtab");ACTIVE_MARKET_TAB=k;applyMarketFilter();var mode=document.getElementById("watch-mode");if(mode)mode.textContent=k==="all"?"ReFo":k==="watch"?"WATCH":k==="ideas"?"Plans":"مفضلة هذا الجهاز";});});
       document.querySelectorAll("[data-tf]").forEach(function(b){b.addEventListener("click",function(){CURRENT_INTERVAL=b.getAttribute("data-tf")||"D";document.querySelectorAll("[data-tf]").forEach(function(x){x.classList.remove("on")});b.classList.add("on");renderTradingView(CURRENT_SYM);});});
       var ai=document.getElementById("ai-btn"); if(ai) ai.addEventListener("click",function(){var box=document.querySelector(".signal-box");if(box)box.scrollIntoView({behavior:"smooth",block:"center"});});
-      document.querySelectorAll("[data-mobile]").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll("[data-mobile]").forEach(function(x){x.classList.remove("active")});b.classList.add("active");var k=b.getAttribute("data-mobile");var target=k==="chart"?document.querySelector(".center-panel"):k==="market"?document.querySelector(".right-panel"):k==="alerts"?document.querySelector(".left-panel"):null;if(target)target.scrollIntoView({behavior:"smooth",block:"start"});});});
+      document.querySelectorAll("[data-mobile]").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll("[data-mobile]").forEach(function(x){x.classList.remove("active")});b.classList.add("active");var k=b.getAttribute("data-mobile");hideMobileSheet();var target=k==="chart"?document.querySelector(".center-panel"):k==="market"?document.querySelector(".right-panel"):null;if(k==="alerts"||k==="ideas"||k==="more")showMobileSheet(k);else if(target)target.scrollIntoView({behavior:"smooth",block:"start"});});});
+      var closeSheet=document.getElementById("mobile-sheet-close");if(closeSheet)closeSheet.addEventListener("click",hideMobileSheet);
       renderTradingView(CURRENT_SYM);
       loadData();
       setInterval(loadData, 25000);
@@ -356,7 +360,7 @@ export default {
             inline_keyboard: [[{ text: "🚀 فتح الشاشة اللحظية", web_app: { url: DASHBOARD_URL } }]]
           }
         });
-        return Response.json({ ok: true, feature: "market-terminal-v12.0" });
+        return Response.json({ ok: true, feature: "market-terminal-v13.0" });
       }
     }
 
