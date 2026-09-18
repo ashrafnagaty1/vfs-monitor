@@ -1,6 +1,6 @@
 import base from "./index.js";
 
-const WORKER_VERSION = "market-terminal-v15-detail-2026";
+const WORKER_VERSION = "market-terminal-v16-completion-batch-2026";
 const DASHBOARD_URL = "https://vfs-monitor.folkhero3.workers.dev/dashboard";
 
 const SECTORS = {
@@ -88,7 +88,7 @@ function dashboardHtml() {
     @media(max-width:760px){
       body{overflow:auto;height:auto;min-height:100vh;padding-bottom:48px}
       header{position:sticky;top:0;z-index:20;padding:6px 8px;align-items:flex-start}.market-ribbon{height:29px}.chart-toolbar{position:sticky;top:38px;z-index:19;overflow-x:auto}.chart-toolbar span{display:none}.brand{font-size:11px}.stats-bar{overflow-x:auto;max-width:68vw;gap:4px}.stat-pill{white-space:nowrap;padding:3px 5px;font-size:8px}
-      .terminal-body{display:flex;flex-direction:column;height:auto;direction:rtl}.center-panel{order:1;height:52vh;min-height:330px}.right-panel{order:2;height:44vh;border:0;border-top:1px solid #1a222c}.left-panel{order:3;border:0;border-top:1px solid #1a222c;padding:8px}
+      .terminal-body{display:flex;flex-direction:column;height:auto;direction:rtl}.right-panel{order:1;height:48vh;border:0;border-top:1px solid #1a222c}.center-panel{order:2;height:52vh;min-height:330px}.left-panel{order:3;border:0;border-top:1px solid #1a222c;padding:8px}
       .stock-title h1{font-size:20px}.stock-title .cur-price{font-size:18px}.kpi-grid{grid-template-columns:repeat(3,1fr)}.kpi-card{padding:5px}.signal-box{margin-bottom:8px}
       footer{display:none}.mobile-sheet{display:block;position:fixed;inset:76px 0 46px 0;background:#080d13;z-index:25;overflow:auto}.mobile-sheet[hidden]{display:none}.mobile-nav{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);bottom:0;left:0;right:0;height:46px;background:#080d13;border-top:1px solid #25313c;z-index:30;direction:rtl}.mobile-nav button{background:transparent;border:0;color:#8193a3;font:inherit;font-size:9px}.mobile-nav button.active{color:#4fa3ff;font-weight:800}
       .watch-item,.watch-table-header{grid-template-columns:1.1fr .8fr .7fr .6fr}.market-tabs{margin:4px 8px}.panel-header{padding:6px 8px}
@@ -99,7 +99,7 @@ function dashboardHtml() {
   <header>
     <div class="brand">ReFo . EGX Smart Trader <span id="sess-status">DATA</span></div>
     <div class="stats-bar">
-      <div class="stat-pill">السوق: <b id="regime">—</b></div>
+      <div class="stat-pill">السوق: <b id="regime">—</b></div><div class="stat-pill">Session: <b id="market-session">—</b></div>
       <div class="stat-pill">Breadth: <b id="breadth">—</b></div>
       <div class="stat-pill">Avg Score: <b id="avgscore">—</b></div><div class="stat-pill">Source: <b id="quote-source">—</b></div><div class="stat-pill">Mode: <b id="quote-mode">—</b></div><div class="stat-pill">Updated: <b id="updated-at">—</b></div><div class="stat-pill">Age: <b id="data-age">—</b></div>
     </div>
@@ -115,7 +115,7 @@ function dashboardHtml() {
     <!-- Left Details -->
     <aside class="left-panel">
       <div class="stock-actions"><button class="sell" disabled>بيع</button><button class="buy" disabled>شراء</button><button id="ai-btn">AI تحليل</button></div><div class="stock-title">
-        <h1 id="det-sym">COMI</h1>
+        <div><h1 id="det-sym">COMI</h1><small id="det-sector">—</small></div>
         <div class="cur-price" id="det-price">—</div>
       </div>
       <div class="ref-stock-tabs"><button class="active" data-lefttab="overview">نظرة عامة</button><button data-lefttab="smart">تحليلات ذكية</button><button disabled>العمق</button><button data-lefttab="trades">الصفقات</button><button disabled>أخبار</button></div><div id="left-context" class="left-context">بيانات ReFo الفنية — منفصلة عن أسعار TradingView المعروضة داخل الشارت.</div><div class="kpi-grid">
@@ -182,7 +182,7 @@ function dashboardHtml() {
     function applyAge(at){var a=ageInfo(at),el=document.getElementById("data-age"),st=document.getElementById("sess-status");if(el){el.textContent=a.text;el.classList.toggle("stale",a.level===1);el.classList.toggle("very-stale",a.level===2)}if(st&&a.level>0&&st.textContent!=="LIVE")st.textContent=a.level===2?"STALE":"DELAYED"}
     function showMobileSheet(kind){var sheet=document.getElementById("mobile-sheet"),title=document.getElementById("mobile-sheet-title"),body=document.getElementById("mobile-sheet-body");if(!sheet||!body)return;var alerts=RAW_DATA?.alerts||[],plans=RAW_DATA?.plans||[];if(kind==="alerts"){title.textContent="التنبيهات";body.innerHTML=alerts.length?alerts.slice().reverse().map(function(a){return '<div class="mobile-card"><b>'+String(a.symbol||"—")+'</b><br>'+String(a.message||a.type||"تنبيه")+'</div>'}).join(""):'<div class="mobile-card">لا توجد تنبيهات مسجلة في Snapshot الحالي.</div>';}else if(kind==="ideas"){title.textContent="التوصيات";var w=plans.filter(function(p){return p.status==="WATCH"});body.innerHTML=w.length?w.map(function(p){return '<div class="mobile-card"><b>'+String(p.symbol||"—")+'</b> · WATCH<br>Trigger '+fmt(p.trigger,2)+' · Stop '+fmt(p.dynamic_stop||p.initial_stop,2)+'<br>T1 '+fmt(p.target1,2)+' · T2 '+fmt(p.target2,2)+' · T3 '+fmt(p.target3,2)+'</div>'}).join(""):'<div class="mobile-card">لا توجد خطط WATCH موثقة حاليًا.</div>';}else{title.textContent="المزيد";body.innerHTML='<div class="mobile-card"><b>مصدر ReFo</b><br>'+String(RAW_DATA?.snapshot?.quote_source||"—")+' · '+String(RAW_DATA?.snapshot?.quote_mode||"—")+'</div><div class="mobile-card">عمق السوق وBid/Ask وFundamentals غير معروضة بدون مصدر موثوق.</div>';}sheet.hidden=false;}
     function hideMobileSheet(){var s=document.getElementById("mobile-sheet");if(s)s.hidden=true}
-    function applyMarketFilter(){document.querySelectorAll(".watch-item").forEach(function(row){var p=row.getAttribute("data-plan"),fav=row.getAttribute("data-fav")==="1",q=(document.getElementById("market-search")?.value||"").trim().toUpperCase(),match=!q||String(row.getAttribute("data-s")||"").includes(q);var tab=ACTIVE_MARKET_TAB,visible=tab==="all"||((tab==="watch"||tab==="ideas")&&p==="WATCH")||(tab==="fav"&&fav);row.style.display=match&&visible?"":"none";});}
+    function applyMarketFilter(){document.querySelectorAll(".watch-item").forEach(function(row){var p=row.getAttribute("data-plan"),fav=row.getAttribute("data-fav")==="1",q=(document.getElementById("market-search")?.value||"").trim().toUpperCase(),match=!q||String(row.getAttribute("data-s")||"").includes(q);var tab=ACTIVE_MARKET_TAB,visible=tab==="all"||(tab==="watch"&&p==="WATCH")||(tab==="ideas"&&(p==="WATCH"||p==="ENTRY"))||(tab==="fav"&&fav);row.style.display=match&&visible?"":"none";});}
 
     function renderTradingView(symbol) {
       document.getElementById("tv_chart").innerHTML = "";
@@ -225,15 +225,16 @@ function dashboardHtml() {
       var p = plans.find(function(x){ return x.symbol === sym; }) || {};
 
       document.getElementById("det-sym").textContent = sym;
+      document.getElementById("det-sector").textContent = SECTORS[sym] || "قطاع غير مصنف";
       document.getElementById("det-price").textContent = fmt(t.price,2);
-      document.getElementById("det-trg").textContent = p.trigger ? Number(p.trigger).toFixed(2) : "-";
-      document.getElementById("det-stop").textContent = (p.dynamic_stop || p.initial_stop || t.stop) ? Number(p.dynamic_stop || p.initial_stop || t.stop).toFixed(2) : "-";
-      document.getElementById("det-t1").textContent = (p.target1 || t.target1) ? Number(p.target1 || t.target1).toFixed(2) : "-";
-      document.getElementById("det-t2").textContent = (p.target2 || t.target2) ? Number(p.target2 || t.target2).toFixed(2) : "-";
-      document.getElementById("det-tech").textContent = (t.rsi ? Number(t.rsi).toFixed(1) : "-") + " / " + (t.adx ? Number(t.adx).toFixed(1) : "-");
-      document.getElementById("det-vol").textContent = t.volume_ratio ? (Number(t.volume_ratio).toFixed(1) + "x") : "-";
-      document.getElementById("det-mfi").textContent = (t.mfi ? Number(t.mfi).toFixed(1) : "-") + " / " + (t.score ? Number(t.score).toFixed(0) : "-");
-      document.getElementById("det-ema").textContent = (t.ema20 ? Number(t.ema20).toFixed(2) : "-") + " / " + (t.ema50 ? Number(t.ema50).toFixed(2) : "-");
+      document.getElementById("det-trg").textContent = present(p.trigger) ? fmt(p.trigger,2) : "—";
+      document.getElementById("det-stop").textContent = present(p.dynamic_stop??p.initial_stop??t.stop) ? fmt(p.dynamic_stop??p.initial_stop??t.stop,2) : "—";
+      document.getElementById("det-t1").textContent = present(p.target1??t.target1) ? fmt(p.target1??t.target1,2) : "—";
+      document.getElementById("det-t2").textContent = present(p.target2??t.target2) ? fmt(p.target2??t.target2,2) : "—";
+      document.getElementById("det-tech").textContent = (present(t.rsi)?fmt(t.rsi,1):"—") + " / " + (present(t.adx)?fmt(t.adx,1):"—");
+      document.getElementById("det-vol").textContent = present(t.volume_ratio) ? (fmt(t.volume_ratio,1) + "x") : "—";
+      document.getElementById("det-mfi").textContent = (present(t.mfi)?fmt(t.mfi,1):"—") + " / " + (present(t.score)?fmt(t.score,0):"—");
+      document.getElementById("det-ema").textContent = (present(t.ema20)&&Number(t.ema20)!==0?fmt(t.ema20,2):"—") + " / " + (present(t.ema50)&&Number(t.ema50)!==0?fmt(t.ema50,2):"—");
       document.getElementById("det-t3").textContent = present(p.target3||t.target3) ? fmt(p.target3||t.target3,2) : "—";
       document.getElementById("det-ema200").textContent = present(t.ema200)&&Number(t.ema200)!==0 ? fmt(t.ema200,2) : "—";
       document.getElementById("det-mom").textContent = (present(t.momentum_5d)?fmt(t.momentum_5d,1)+"%":"—")+" / "+(present(t.momentum_20d)?fmt(t.momentum_20d,1)+"%":"—");
@@ -242,7 +243,7 @@ function dashboardHtml() {
       document.getElementById("det-golden").textContent = t.golden===true ? fmt(t.golden_low,2)+" – "+fmt(t.golden_high,2) : t.golden===false ? "لا" : "—";
       document.getElementById("det-breakout").textContent = t.breakout===true ? "نعم" : t.breakout===false ? "لا" : "—";
       document.getElementById("det-stage").textContent = p.status || p.stage || "—";
-      document.getElementById("det-signal").textContent = p.signal_id || "-";
+      document.getElementById("det-signal").textContent = p.signal_id || "—";
       var e=Number(p.entry_price||p.trigger),st=Number(p.dynamic_stop||p.initial_stop),t1=Number(p.target1),risk=e-st;
       document.getElementById("det-rr").textContent = Number.isFinite(e)&&Number.isFinite(st)&&Number.isFinite(t1)&&risk>0 ? ((t1-e)/risk).toFixed(2)+"R" : "-";
       document.getElementById("det-setup").textContent = (t.setups && t.setups.length) ? t.setups.join(" + ") : "—";
@@ -258,17 +259,18 @@ function dashboardHtml() {
         RAW_DATA = data;
 
         var snap = data.snapshot;
-        document.getElementById("regime").textContent = (snap.market_regime && snap.market_regime.name) || "-";
-        document.getElementById("quote-source").textContent = snap.quote_source || "-";
+        document.getElementById("regime").textContent = (snap.market_regime && snap.market_regime.name) || "—";
+        document.getElementById("market-session").textContent = snap.market_session?.status ? snap.market_session.status + (snap.market_session.heuristic?"*":"") : "—";
+        document.getElementById("quote-source").textContent = snap.quote_source || "—";
         document.getElementById("quote-mode").textContent = snap.quote_mode || "DELAYED_EVALUATION";
         document.getElementById("updated-at").textContent = snap.at ? String(snap.at).replace("T"," ").slice(0,19) : "—";
         applyAge(snap.at);
         document.getElementById("sess-status").textContent = snap.quote_mode === "LIVE" ? "LIVE" : "DELAYED";
         applyAge(snap.at);
         document.getElementById("breadth").textContent = (snap.market_regime && present(snap.market_regime.breadth) ? fmt(snap.market_regime.breadth,1) + "% عينة" : "—");
-        document.getElementById("avgscore").textContent = (snap.market_regime && snap.market_regime.avg_score ? Number(snap.market_regime.avg_score).toFixed(0) : "-");
+        document.getElementById("avgscore").textContent = (snap.market_regime && present(snap.market_regime.avg_score) ? fmt(snap.market_regime.avg_score,0) : "—");
 
-        var top = snap.top || [];
+        var top = (snap.details && snap.details.length) ? snap.details : (snap.top || []);
         document.getElementById("stock-count").textContent = top.length + " سهم";
         
         var container = document.getElementById("watchlist");
@@ -314,7 +316,7 @@ function dashboardHtml() {
       var q = new URLSearchParams(location.search).get("symbol") || new URLSearchParams(location.search).get("s"); if(q) CURRENT_SYM=String(q).toUpperCase().replace(/[^A-Z0-9_.-]/g,"") || "COMI";
       var search=document.getElementById("market-search"); if(search) search.addEventListener("input",applyMarketFilter);
       document.querySelectorAll("[data-lefttab]").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll("[data-lefttab]").forEach(function(x){x.classList.remove("active")});b.classList.add("active");var k=b.getAttribute("data-lefttab"),ctx=document.getElementById("left-context");if(k==="smart")ctx.textContent="التحليلات الذكية تعرض فقط Setups / Why / Score الناتجة فعليًا من ReFo.";else if(k==="trades")ctx.textContent="الصفقات مرتبطة بخطة lifecycle وSignal ID؛ WATCH المتأخر لا يتحول إلى ENTRY.";else ctx.textContent="بيانات ReFo الفنية — منفصلة عن أسعار TradingView المعروضة داخل الشارت.";});});
-      document.querySelectorAll("[data-mtab]").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll("[data-mtab]").forEach(function(x){x.classList.remove("active")});b.classList.add("active");var k=b.getAttribute("data-mtab");ACTIVE_MARKET_TAB=k;applyMarketFilter();var mode=document.getElementById("watch-mode");if(mode)mode.textContent=k==="all"?"ReFo":k==="watch"?"WATCH":k==="ideas"?"Plans":"مفضلة هذا الجهاز";});});
+      document.querySelectorAll("[data-mtab]").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll("[data-mtab]").forEach(function(x){x.classList.remove("active")});b.classList.add("active");var k=b.getAttribute("data-mtab");ACTIVE_MARKET_TAB=k;applyMarketFilter();var mode=document.getElementById("watch-mode");if(mode)mode.textContent=k==="all"?"ReFo":k==="watch"?"WATCH":k==="ideas"?"WATCH + ENTRY":"مفضلة هذا الجهاز";});});
       document.querySelectorAll("[data-tf]").forEach(function(b){b.addEventListener("click",function(){CURRENT_INTERVAL=b.getAttribute("data-tf")||"D";document.querySelectorAll("[data-tf]").forEach(function(x){x.classList.remove("on")});b.classList.add("on");renderTradingView(CURRENT_SYM);});});
       var ai=document.getElementById("ai-btn"); if(ai) ai.addEventListener("click",function(){var box=document.querySelector(".signal-box");if(box)box.scrollIntoView({behavior:"smooth",block:"center"});});
       document.querySelectorAll("[data-mobile]").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll("[data-mobile]").forEach(function(x){x.classList.remove("active")});b.classList.add("active");var k=b.getAttribute("data-mobile");hideMobileSheet();var target=k==="chart"?document.querySelector(".center-panel"):k==="market"?document.querySelector(".right-panel"):null;if(k==="alerts"||k==="ideas"||k==="more")showMobileSheet(k);else if(target)target.scrollIntoView({behavior:"smooth",block:"start"});});});
@@ -371,7 +373,7 @@ export default {
             inline_keyboard: [[{ text: "🚀 فتح الشاشة اللحظية", web_app: { url: DASHBOARD_URL } }]]
           }
         });
-        return Response.json({ ok: true, feature: "market-terminal-v15.0" });
+        return Response.json({ ok: true, feature: "market-terminal-v16.0" });
       }
     }
 
