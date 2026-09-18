@@ -1,6 +1,6 @@
 import base from "./index.js";
 
-const WORKER_VERSION = "market-terminal-v13-mobile-pages-2026";
+const WORKER_VERSION = "market-terminal-v14-staleness-2026";
 const DASHBOARD_URL = "https://vfs-monitor.folkhero3.workers.dev/dashboard";
 
 const SECTORS = {
@@ -44,7 +44,7 @@ function dashboardHtml() {
     .brand span { color: #00e676; font-size: 10px; background: #003314; padding: 2px 6px; border-radius: 4px; border: 1px solid #005a24; }
     .stats-bar { display: flex; gap: 8px; }
     .stat-pill { background: #111720; border: 1px solid #202b38; padding: 3px 8px; border-radius: 4px; font-size: 10px; color: #8fa2b5; }
-    .stat-pill b { color: #fff; margin-right: 4px; }
+    .stat-pill b { color: #fff; margin-right: 4px; }.stale{color:#ffb74d!important}.very-stale{color:#ff5252!important}
 
     .market-ribbon{height:25px;display:flex;align-items:center;gap:5px;padding:3px 8px;background:#080d13;border-bottom:1px solid #17212b;overflow-x:auto;white-space:nowrap;direction:ltr}.market-ribbon span{border:1px solid #1c2934;background:#0d141c;padding:2px 6px;color:#718697;font-size:8px}.market-ribbon b{color:#dce7ef;margin-left:3px}.market-ribbon em{font-style:normal;color:#526576;font-size:8px}.chart-toolbar{height:28px;display:flex;align-items:center;gap:3px;padding:3px 7px;background:#070b10;border-bottom:1px solid #17212b;direction:ltr}.chart-toolbar b{color:#fff;margin-right:6px}.chart-toolbar button{background:#0d141c;border:1px solid #1d2934;color:#718596;padding:3px 6px;font-size:8px}.chart-toolbar button.on{background:#17304a;color:#fff;border-color:#31597c}.chart-toolbar span{margin-left:auto;color:#5f7282;font-size:8px}
     /* Main Grid Layout */
@@ -101,7 +101,7 @@ function dashboardHtml() {
     <div class="stats-bar">
       <div class="stat-pill">السوق: <b id="regime">—</b></div>
       <div class="stat-pill">Breadth: <b id="breadth">—</b></div>
-      <div class="stat-pill">Avg Score: <b id="avgscore">—</b></div><div class="stat-pill">Source: <b id="quote-source">—</b></div><div class="stat-pill">Mode: <b id="quote-mode">—</b></div><div class="stat-pill">Updated: <b id="updated-at">—</b></div>
+      <div class="stat-pill">Avg Score: <b id="avgscore">—</b></div><div class="stat-pill">Source: <b id="quote-source">—</b></div><div class="stat-pill">Mode: <b id="quote-mode">—</b></div><div class="stat-pill">Updated: <b id="updated-at">—</b></div><div class="stat-pill">Age: <b id="data-age">—</b></div>
     </div>
   </header>
   <div class="market-ribbon">
@@ -178,6 +178,8 @@ function dashboardHtml() {
     function toggleFav(s){var a=favorites(),i=a.indexOf(s);if(i>=0)a.splice(i,1);else a.push(s);localStorage.setItem(favKey(),JSON.stringify(a));return a.includes(s)}
     function fmt(v,d){if(v===null||v===undefined||v==="")return "—";var x=Number(v);return Number.isFinite(x)?x.toFixed(d==null?2:d):"—"}
     function present(v){return !(v===null||v===undefined||v==="")}
+    function ageInfo(at){if(!at)return {text:"—",level:2};var ms=Date.now()-Date.parse(at);if(!Number.isFinite(ms))return {text:"—",level:2};var m=Math.max(0,Math.floor(ms/60000));return {text:m<60?m+"m":Math.floor(m/60)+"h "+(m%60)+"m",level:m>180?2:m>45?1:0}}
+    function applyAge(at){var a=ageInfo(at),el=document.getElementById("data-age"),st=document.getElementById("sess-status");if(el){el.textContent=a.text;el.classList.toggle("stale",a.level===1);el.classList.toggle("very-stale",a.level===2)}if(st&&a.level>0&&st.textContent!=="LIVE")st.textContent=a.level===2?"STALE":"DELAYED"}
     function showMobileSheet(kind){var sheet=document.getElementById("mobile-sheet"),title=document.getElementById("mobile-sheet-title"),body=document.getElementById("mobile-sheet-body");if(!sheet||!body)return;var alerts=RAW_DATA?.alerts||[],plans=RAW_DATA?.plans||[];if(kind==="alerts"){title.textContent="التنبيهات";body.innerHTML=alerts.length?alerts.slice().reverse().map(function(a){return '<div class="mobile-card"><b>'+String(a.symbol||"—")+'</b><br>'+String(a.message||a.type||"تنبيه")+'</div>'}).join(""):'<div class="mobile-card">لا توجد تنبيهات مسجلة في Snapshot الحالي.</div>';}else if(kind==="ideas"){title.textContent="التوصيات";var w=plans.filter(function(p){return p.status==="WATCH"});body.innerHTML=w.length?w.map(function(p){return '<div class="mobile-card"><b>'+String(p.symbol||"—")+'</b> · WATCH<br>Trigger '+fmt(p.trigger,2)+' · Stop '+fmt(p.dynamic_stop||p.initial_stop,2)+'<br>T1 '+fmt(p.target1,2)+' · T2 '+fmt(p.target2,2)+' · T3 '+fmt(p.target3,2)+'</div>'}).join(""):'<div class="mobile-card">لا توجد خطط WATCH موثقة حاليًا.</div>';}else{title.textContent="المزيد";body.innerHTML='<div class="mobile-card"><b>مصدر ReFo</b><br>'+String(RAW_DATA?.snapshot?.quote_source||"—")+' · '+String(RAW_DATA?.snapshot?.quote_mode||"—")+'</div><div class="mobile-card">عمق السوق وBid/Ask وFundamentals غير معروضة بدون مصدر موثوق.</div>';}sheet.hidden=false;}
     function hideMobileSheet(){var s=document.getElementById("mobile-sheet");if(s)s.hidden=true}
     function applyMarketFilter(){document.querySelectorAll(".watch-item").forEach(function(row){var p=row.getAttribute("data-plan"),fav=row.getAttribute("data-fav")==="1",q=(document.getElementById("market-search")?.value||"").trim().toUpperCase(),match=!q||String(row.getAttribute("data-s")||"").includes(q);var tab=ACTIVE_MARKET_TAB,visible=tab==="all"||((tab==="watch"||tab==="ideas")&&p==="WATCH")||(tab==="fav"&&fav);row.style.display=match&&visible?"":"none";});}
@@ -254,7 +256,9 @@ function dashboardHtml() {
         document.getElementById("quote-source").textContent = snap.quote_source || "-";
         document.getElementById("quote-mode").textContent = snap.quote_mode || "DELAYED_EVALUATION";
         document.getElementById("updated-at").textContent = snap.at ? String(snap.at).replace("T"," ").slice(0,19) : "—";
+        applyAge(snap.at);
         document.getElementById("sess-status").textContent = snap.quote_mode === "LIVE" ? "LIVE" : "DELAYED";
+        applyAge(snap.at);
         document.getElementById("breadth").textContent = (snap.market_regime && snap.market_regime.breadth ? Number(snap.market_regime.breadth).toFixed(1) + "%" : "-");
         document.getElementById("avgscore").textContent = (snap.market_regime && snap.market_regime.avg_score ? Number(snap.market_regime.avg_score).toFixed(0) : "-");
 
@@ -312,6 +316,7 @@ function dashboardHtml() {
       renderTradingView(CURRENT_SYM);
       loadData();
       setInterval(loadData, 25000);
+      setInterval(function(){if(RAW_DATA?.snapshot)applyAge(RAW_DATA.snapshot.at)},60000);
     });
   </script>
 </body>
@@ -360,7 +365,7 @@ export default {
             inline_keyboard: [[{ text: "🚀 فتح الشاشة اللحظية", web_app: { url: DASHBOARD_URL } }]]
           }
         });
-        return Response.json({ ok: true, feature: "market-terminal-v13.0" });
+        return Response.json({ ok: true, feature: "market-terminal-v14.0" });
       }
     }
 
