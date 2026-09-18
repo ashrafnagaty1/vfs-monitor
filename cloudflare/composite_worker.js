@@ -33,6 +33,18 @@ const ASSIST=kb([
 const PORT=kb([
  ["💼 محفظتي","⭐ قائمة المتابعة"],
  ["🚨 تنبيهاتي","📈 تقرير الأداء"],
+ ["📊 السوق","💵 التقارير المالية"],
+ ["🏠 القائمة الرئيسية"]
+]);
+const MARKET=kb([
+ ["📊 ملخص السوق","🏭 القطاعات"],
+ ["💧 السيولة","📈 مؤشرات EGX"],
+ ["🏠 القائمة الرئيسية"]
+]);
+const FIN=kb([
+ ["📄 تقرير سهم","⚖️ مقارنة سهمين"],
+ ["🏭 تحليل القطاع","🧮 القيمة العادلة"],
+ ["📉 أسهم تحت القيمة","📊 حالة البيانات"],
  ["🏠 القائمة الرئيسية"]
 ]);
 const ACCOUNT=kb([
@@ -88,6 +100,8 @@ function alertsText(s){const a=arr(s?.trade_alerts).slice(-15).reverse();let o="
 function watchText(s){const a=arr(snap(s).watchlist_next_session||s?.watchlist);let o="⭐ <b>قائمة المتابعة</b>\n━━━━━━━━━━━━━━\n";if(!a.length)return o+"لا توجد قائمة متابعة متاحة في Snapshot الحالي."+sourceNote(s);a.slice(0,20).forEach(x=>o+=`\n• <b>${esc(x.symbol||x)}</b>${x.trigger?` · Trigger ${num(x.trigger)}`:""}`);return o+sourceNote(s)}
 function assistantShortcut(s,t){const x=snap(s),r=x.market_regime||{},a=plans(s).filter(p=>p.status==="WATCH").sort((a,b)=>Number(b.score||0)-Number(a.score||0));if(t==="📊 ملخص السوق")return `📊 <b>ملخص السوق</b>\nالنظام: ${esc(r.name||"—")}\nBreadth العينة: ${num(r.breadth,1)}%\nعدد الأسهم المحللة: ${techs(s).length}`+sourceNote(s);if(t==="🎯 الأفضل اليوم")return a.length?oppText(s):"🎯 لا توجد فرص WATCH موثقة حاليًا."+sourceNote(s);if(t==="🔮 فرص الغد")return `🔮 <b>فرص الغد</b>\n${arr(x.watchlist_next_session).slice(0,8).map((p,i)=>`${i+1}) <b>${esc(p.symbol)}</b> · Trigger ${num(p.trigger)} · Score ${num(p.score,0)}`).join("\n")||"لا توجد قائمة جلسة تالية موثقة."}`+sourceNote(s);if(t==="🏭 القطاعات")return `🏭 <b>القطاعات</b>\nلا أعرض ترتيب قطاعات أو «الأقوى» بدون عينة قطاعية موثقة وكافية في Snapshot.`+sourceNote(s);if(t==="🎯 متابعة الفرص")return oppText(s);if(t==="🧮 حاسبة المخاطر")return "🧮 <b>حاسبة المخاطر</b>\nأرسل تحليل السهم أولًا؛ المخاطرة تُبنى على Trigger وStop الموثقين. لن أفترض رأس مال أو نسبة مخاطرة من عندي.";if(t==="💼 نظرة على المحفظة")return portfolioText(s);if(t==="📈 أعلى صاعد / خاسر")return "📈 <b>أعلى صاعد / خاسر</b>\nغير متاح بثقة من Snapshot الحالي لأنه ليس شاشة سوق كاملة Live.";if(t==="🤝 توافق التحليلات")return "🤝 <b>توافق التحليلات</b>\nيظهر فقط عند وجود نتائج فعلية من أكثر من محرك متقدم لنفس السهم.";if(t==="⚖️ تحليل قانوني")return "⚖️ <b>تحليل قانوني</b>\nهذه الوظيفة ليست مصدرًا قانونيًا أو إفصاحيًا موثقًا داخل Snapshot الحالي.";if(t==="🧯 إشارة فاشلة")return "🧯 <b>الإشارات الفاشلة</b>\nتُحسب فقط من الصفقات المنفذة/المغلقة المسجلة، وليس من WATCH المتأخر.";return assistantText(s)}
 function assistantText(s){const a=plans(s).filter(p=>p.status==="WATCH").sort((a,b)=>Number(b.score||0)-Number(a.score||0)).slice(0,5),r=snap(s).market_regime||{};let o=`🤖 <b>المساعد الذكي</b>\n━━━━━━━━━━━━━━\nالسوق: ${esc(r.name||"—")} · Breadth العينة: ${num(r.breadth,1)}%\n\n`;if(!a.length)o+="لا توجد خطط WATCH كافية للتحليل.";else a.forEach((p,i)=>o+=`${i+1}) <b>${esc(p.symbol)}</b> · Score ${num(p.score,0)} · RR ${num(p.rr_to_t1_now,2)} · بعد ${num(p.distance_to_trigger_pct,2)}%\n`);o+="\n💡 اسأل عن سهم عبر «تحليل COMI». التنفيذ يظل مشروطًا بجودة ومصدر البيانات.";return o+sourceNote(s)}
+function marketText(s,t){const x=snap(s),r=x.market_regime||{};if(t==="📊 السوق"||t==="📊 ملخص السوق")return `📊 <b>السوق</b>\n━━━━━━━━━━━━━━\nحالة العينة: ${esc(r.name||"—")}\nBreadth العينة: ${num(r.breadth,1)}%\nالأسهم المحللة: ${techs(s).length}\n\n<i>Breadth هنا خاص بعينة ReFo وليس مؤشر EGX رسميًا.</i>`+sourceNote(s);if(t==="🏭 القطاعات")return "🏭 <b>القطاعات</b>\nترتيب القطاعات يحتاج تصنيف قطاعي وعينة كافية موثقة. لن أسمّي قطاعًا «الأقوى» من بيانات ناقصة."+sourceNote(s);if(t==="💧 السيولة")return "💧 <b>السيولة</b>\nNet Flow والسيولة الداخلية/الخارجية غير متاحة من مصدر سوق موثوق في Snapshot الحالي."+sourceNote(s);return "📈 <b>مؤشرات EGX</b>\nEGX30 / EGX70 / EGX100 لا تُعرض هنا حتى يتوفر مصدر مؤشرات حقيقي ومثبت. شارت TradingView مستقل عن بيانات ReFo الخارجية."}
+function financialText(s,t){if(t==="💵 التقارير المالية")return "💵 <b>التقارير المالية والقيمة العادلة</b>\nاختر الأداة. أي وظيفة تحتاج Fundamentals ستظل مقفلة حتى يتوفر مصدر موثوق.";if(t==="📊 حالة البيانات")return dataStatus(s);const labels={"📄 تقرير سهم":"التقرير المالي لسهم","⚖️ مقارنة سهمين":"المقارنة المالية","🏭 تحليل القطاع":"التحليل المالي القطاعي","🧮 القيمة العادلة":"حاسبة القيمة العادلة","📉 أسهم تحت القيمة":"ماسح الأسهم تحت القيمة"};return `${t} <b>${labels[t]||""}</b>\n━━━━━━━━━━━━━━\n🔒 غير مفعّل حاليًا: لا يوجد Fundamentals موثوق داخل Snapshot (EPS / P-E / P-BV / قوائم مالية).\n\nلن يحسب ReFo قيمة عادلة أو مقارنة مالية بأرقام مفترضة.`}
 function dataStatus(s){const x=snap(s);return `📊 <b>حالة البيانات</b>\n━━━━━━━━━━━━━━\nMode: <b>${esc(x.quote_mode||"—")}</b>\nQuote source: ${esc(x.quote_source||"—")}\nHistory source: ${esc(x.history_source||"—")}\nUpdated: ${esc(x.at||"—")}\nUniverse: ${techs(s).length} سهم\n\nBid/Ask/Depth/Fundamentals لا تعرض إلا عند وجود مصدر حقيقي.`}
 async function delegate(req,e,ctx,u,mapped){const b=structuredClone(u);if(b?.message)b.message.text=mapped;const x=new URL(req.url);x.pathname="/telegram";x.search="";const r=await legacyWorker.fetch(new Request(x.toString(),{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(b)}),legacyEnv(e),ctx);return Response.json({ok:true,delegated:true,legacy_status:r.status})}
 async function register(req,e){if(!token(e))return new Response("Missing Telegram bot token",{status:503});const o=new URL(req.url).origin,p={url:`${o}/telegram/webhook`,allowed_updates:["message","callback_query"],drop_pending_updates:false};if(e.TELEGRAM_WEBHOOK_SECRET)p.secret_token=e.TELEGRAM_WEBHOOK_SECRET;const r=await fetch(api(e,"setWebhook"),{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(p)});return new Response(await r.text(),{status:r.status,headers:{"content-type":"application/json; charset=utf-8"}})}
@@ -103,16 +117,22 @@ async function webhook(req,e,ctx){if(!token(e))return new Response("Missing toke
  if(/^📊\s+[A-Z0-9]+$/.test(t)||/^تحليل\s+[A-Za-z0-9.]+$/i.test(t)){const sym=t.replace(/^📊\s+/,"").replace(/^تحليل\s+/i,"").toUpperCase();await sendInline(e,c,stockCard(s,sym),stockActions(sym));await send(e,c,"اختر سهمًا آخر أو ارجع للقائمة:",STOCK_PICK);return Response.json({ok:true})}
  if(t==="✍️ كتابة كود سهم"){await send(e,c,"✍️ اكتب مثلًا: <code>تحليل COMI</code>",STOCK_PICK);return Response.json({ok:true})}
  if(t==="💼 المحافظ والتنبيهات"){await send(e,c,"💼 <b>المحافظ والتنبيهات</b>\nاختر الأداة:",PORT);return Response.json({ok:true})}
+ if(t==="📊 السوق"){await send(e,c,marketText(s,t),MARKET);return Response.json({ok:true})}
+ if(["💧 السيولة","📈 مؤشرات EGX"].includes(t)){await send(e,c,marketText(s,t),MARKET);return Response.json({ok:true})}
+ if(t==="💵 التقارير المالية"){await send(e,c,financialText(s,t),FIN);return Response.json({ok:true})}
+ if(["📄 تقرير سهم","⚖️ مقارنة سهمين","🏭 تحليل القطاع","🧮 القيمة العادلة","📉 أسهم تحت القيمة"].includes(t)){await send(e,c,financialText(s,t),FIN);return Response.json({ok:true})}
  if(t==="💼 محفظتي"){await send(e,c,portfolioText(s),PORT);return Response.json({ok:true})}
  if(t==="🚨 تنبيهاتي"){await send(e,c,alertsText(s),PORT);return Response.json({ok:true})}
  if(t==="⭐ قائمة المتابعة"||t==="📋 قائمة المتابعة"){await send(e,c,watchText(s),PORT);return Response.json({ok:true})}
  if(t==="📈 تقرير الأداء")return delegate(req,e,ctx,u,"📈 تقرير الأداء");
  if(t==="🤖 المساعد الذكي"){await send(e,c,assistantText(s),ASSIST);return Response.json({ok:true})}
- if(["📊 ملخص السوق","🎯 الأفضل اليوم","🔮 فرص الغد","📈 أعلى صاعد / خاسر","🤝 توافق التحليلات","🏭 القطاعات","🎯 متابعة الفرص","⚖️ تحليل قانوني","🧯 إشارة فاشلة","🧮 حاسبة المخاطر","💼 نظرة على المحفظة"].includes(t)){await send(e,c,assistantShortcut(s,t),ASSIST);return Response.json({ok:true})}
+ if(t==="📊 ملخص السوق"){await send(e,c,marketText(s,t),ASSIST);return Response.json({ok:true})}
+ if(t==="🏭 القطاعات"){await send(e,c,marketText(s,t),ASSIST);return Response.json({ok:true})}
+ if(["🎯 الأفضل اليوم","🔮 فرص الغد","📈 أعلى صاعد / خاسر","🤝 توافق التحليلات","🎯 متابعة الفرص","⚖️ تحليل قانوني","🧯 إشارة فاشلة","🧮 حاسبة المخاطر","💼 نظرة على المحفظة"].includes(t)){await send(e,c,assistantShortcut(s,t),ASSIST);return Response.json({ok:true})}
  if(t==="👤 حسابي"){await send(e,c,accountText(s),ACCOUNT);return Response.json({ok:true})}
  if(["💳 اشتراك / تجديد","👤 اشتراكي","🔗 رابط الإحالة","📊 إحصائيات الإحالة","👥 ادع صديق","🎟️ أكواد الخصم","🔔 إعدادات الإشعارات","❓ المساعدة","❓ مساعدة"].includes(t)){await send(e,c,accountFeature(s,t),ACCOUNT);return Response.json({ok:true})}
  if(t==="📊 حالة البيانات"){await send(e,c,dataStatus(s),ACCOUNT);return Response.json({ok:true})}
  const aliases=new Map([["💳 اشترك الآن / ترقية","💳 اشتراك / ترقية"],["⚙️ الإعدادات","⚙️ الإعدادات"]]);
  return delegate(req,e,ctx,u,aliases.get(t)||t)
 }
-export default{async fetch(req,e,ctx){const u=new URL(req.url);if(req.method==="GET"&&u.pathname==="/telegram/health")return Response.json({ok:true,service:BRAND,mode:"reference-clone-completion-v3",legacy_routes:"preserved",tradingview_core:"delegated",menus:["main","trades","advanced","portfolio","account"]});if(req.method==="GET"&&u.pathname==="/telegram/status")return status(e);if((req.method==="GET"||req.method==="POST")&&u.pathname==="/telegram/register")return register(req,e);if(req.method==="POST"&&u.pathname==="/telegram/webhook")return webhook(req,e,ctx);return legacyWorker.fetch(req,legacyEnv(e),ctx)}};
+export default{async fetch(req,e,ctx){const u=new URL(req.url);if(req.method==="GET"&&u.pathname==="/telegram/health")return Response.json({ok:true,service:BRAND,mode:"reference-clone-completion-v4",legacy_routes:"preserved",tradingview_core:"delegated",menus:["main","trades","advanced","portfolio","account"]});if(req.method==="GET"&&u.pathname==="/telegram/status")return status(e);if((req.method==="GET"||req.method==="POST")&&u.pathname==="/telegram/register")return register(req,e);if(req.method==="POST"&&u.pathname==="/telegram/webhook")return webhook(req,e,ctx);return legacyWorker.fetch(req,legacyEnv(e),ctx)}};
