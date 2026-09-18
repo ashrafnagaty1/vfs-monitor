@@ -2,7 +2,7 @@ name: V11 Reference Final
 
 on:
   push:
-    branches: [main, refo-v11-reference-final, refo-v11-runtime-hardening, refo-render-webhook, refo-cloudflare-telegram-webhook]
+    branches: [main, refo-v11-reference-final, refo-v11-runtime-hardening, refo-render-webhook, refo-cloudflare-telegram-webhook, refo-reference-clone-all-in-one]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -24,7 +24,9 @@ jobs:
       - name: Cloudflare webhook contract
         run: python cloudflare_webhook_selftest.py
       - name: Worker JavaScript syntax
-        run: node --check cloudflare/telegram_webhook_worker.js
+        run: |
+          node --check cloudflare/telegram_webhook_worker.js
+          node --check cloudflare/composite_worker.js
       - name: Webhook import contract
         env:
           TOKEN: test-token
