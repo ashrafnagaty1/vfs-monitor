@@ -1,6 +1,6 @@
 import base from "./index.js";
 
-const WORKER_VERSION = "market-terminal-v7-reference-responsive-2026";
+const WORKER_VERSION = "market-terminal-v8-reference-interaction-2026";
 const DASHBOARD_URL = "https://vfs-monitor.folkhero3.workers.dev/dashboard";
 
 const SECTORS = {
@@ -83,7 +83,7 @@ function dashboardHtml() {
 
     .ref-stock-tabs,.market-tabs{display:flex;gap:3px;margin:7px 0}.ref-stock-tabs button,.market-tabs>*{flex:1;background:#0d141c;border:1px solid #1d2a36;color:#8093a5;padding:5px 2px;font-size:8px;text-align:center}.ref-stock-tabs button.active,.market-tabs b{color:#fff;border-color:#35516a;background:#122131}.ref-stock-tabs button:disabled{opacity:.35}.market-search{padding:5px 8px;border-bottom:1px solid #18222c}.market-search input{width:100%;background:#070b10;border:1px solid #24313d;color:#dce8f2;padding:6px 8px;outline:none}.up { color: #00e676; }
     .down { color: #ff5252; }
-    .mobile-nav{display:none}
+    .stock-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:7px}.stock-actions button{border:1px solid #273645;background:#101923;color:#a8b8c6;padding:6px;font:inherit}.stock-actions .buy{color:#5bd98b}.stock-actions .sell{color:#ff6b6b}.stock-actions button:disabled{opacity:.4}.plan-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:6px 0}.plan-strip span{background:#0c131a;border:1px solid #1c2934;padding:5px;color:#708596;font-size:8px}.plan-strip b{display:block;color:#dce8f2;margin-top:2px}.panel-header em{font-style:normal;color:#607589;font-size:8px}.mobile-nav{display:none}
     @media(max-width:760px){
       body{overflow:auto;height:auto;min-height:100vh;padding-bottom:48px}
       header{position:sticky;top:0;z-index:20;padding:6px 8px;align-items:flex-start}.brand{font-size:11px}.stats-bar{overflow-x:auto;max-width:68vw;gap:4px}.stat-pill{white-space:nowrap;padding:3px 5px;font-size:8px}
@@ -107,7 +107,7 @@ function dashboardHtml() {
   <div class="terminal-body">
     <!-- Left Details -->
     <aside class="left-panel">
-      <div class="stock-title">
+      <div class="stock-actions"><button class="sell" disabled>بيع</button><button class="buy" disabled>شراء</button><button id="ai-btn">AI تحليل</button></div><div class="stock-title">
         <h1 id="det-sym">COMI</h1>
         <div class="cur-price" id="det-price">0.00</div>
       </div>
@@ -119,7 +119,7 @@ function dashboardHtml() {
         <div class="kpi-card"><small>RSI / ADX</small><b id="det-tech">-</b></div>
         <div class="kpi-card"><small>Volume Ratio</small><b id="det-vol">-</b></div><div class="kpi-card"><small>MFI / Score</small><b id="det-mfi">-</b></div><div class="kpi-card"><small>EMA20 / EMA50</small><b id="det-ema">-</b></div><div class="kpi-card"><small>T3</small><b id="det-t3" class="up">-</b></div>
       </div>
-      <div class="signal-box">
+      <div class="plan-strip"><span>الحالة <b id="det-stage">—</b></span><span>RR T1 <b id="det-rr">—</b></span><span>Signal <b id="det-signal">—</b></span></div><div class="signal-box">
         <div><b>النمط الفني:</b> <span id="det-setup">—</span></div>
         <div style="margin-top:4px;"><b>الأسباب:</b> <span id="det-why">—</span></div>
         <div style="margin-top:4px;"><b>الدعم والمقاومة:</b> <span id="det-sr">—</span></div>
@@ -134,7 +134,7 @@ function dashboardHtml() {
     <!-- Right Watchlist -->
     <aside class="right-panel">
       <div class="panel-header">
-        <span>Market Watch</span>
+        <span>Market Watch <em id="watch-mode">ReFo</em></span>
         <small id="stock-count">0 سهم</small>
       </div>
       <div class="market-tabs"><b>السوق</b><span>مضاربة</span><span>التوصيات</span><span>المفضلة</span></div><div class="market-search"><input id="market-search" placeholder="بحث بالرمز..."></div><div class="watch-table-header">
@@ -213,9 +213,13 @@ function dashboardHtml() {
       document.getElementById("det-mfi").textContent = (t.mfi ? Number(t.mfi).toFixed(1) : "-") + " / " + (t.score ? Number(t.score).toFixed(0) : "-");
       document.getElementById("det-ema").textContent = (t.ema20 ? Number(t.ema20).toFixed(2) : "-") + " / " + (t.ema50 ? Number(t.ema50).toFixed(2) : "-");
       document.getElementById("det-t3").textContent = (p.target3 || t.target3) ? Number(p.target3 || t.target3).toFixed(2) : "-";
+      document.getElementById("det-stage").textContent = p.status || p.stage || "WATCH";
+      document.getElementById("det-signal").textContent = p.signal_id || "-";
+      var e=Number(p.entry_price||p.trigger),st=Number(p.dynamic_stop||p.initial_stop),t1=Number(p.target1),risk=e-st;
+      document.getElementById("det-rr").textContent = Number.isFinite(e)&&Number.isFinite(st)&&Number.isFinite(t1)&&risk>0 ? ((t1-e)/risk).toFixed(2)+"R" : "-";
       document.getElementById("det-setup").textContent = (t.setups && t.setups.length) ? t.setups.join(" + ") : "اتجاه عام";
       document.getElementById("det-why").textContent = (t.why && t.why.length) ? t.why.join(" • ") : "متابعة سيولة";
-      document.getElementById("det-sr").textContent = "S: " + (t.support_20 || "-") + " | R: " + (t.resistance_20 || "-");
+      document.getElementById("det-sr").textContent = "S20: " + (t.support_20 || "-") + " · S50: " + (t.support_50 || "-") + " | R20: " + (t.resistance_20 || "-") + " · R50: " + (t.resistance_50 || "-");
     }
 
     async function loadData() {
@@ -247,8 +251,10 @@ function dashboardHtml() {
           row.setAttribute("data-s", stock.symbol);
           row.onclick = function() { selectStock(stock.symbol); };
 
+          var plan=(data.plans||[]).find(function(p){return p.symbol===stock.symbol})||{};
+          var badge=plan.status==="ENTRY"?"ENTRY":plan.status==="WATCH"?"WATCH":"";
           row.innerHTML = 
-            '<div class="sym">' + stock.symbol + '<small>' + (stock.score || 0) + ' pts</small></div>' +
+            '<div class="sym">' + stock.symbol + '<small>' + (badge?badge+" · ":"") + (stock.score || 0) + ' pts</small></div>' +
             '<div class="val">' + Number(stock.price || 0).toFixed(2) + '</div>' +
             '<div class="val ' + (stock.volume_ratio >= 1.2 ? 'up' : '') + '">' + Number(stock.volume_ratio || 0).toFixed(1) + 'x</div>' +
             '<div class="val">' + Number(stock.score || 0).toFixed(0) + '</div>';
@@ -274,6 +280,7 @@ function dashboardHtml() {
     window.addEventListener("DOMContentLoaded", function() {
       var q = new URLSearchParams(location.search).get("symbol") || new URLSearchParams(location.search).get("s"); if(q) CURRENT_SYM=String(q).toUpperCase().replace(/[^A-Z0-9_.-]/g,"") || "COMI";
       var search=document.getElementById("market-search"); if(search) search.addEventListener("input",function(){var q=this.value.trim().toUpperCase();document.querySelectorAll(".watch-item").forEach(function(row){row.style.display=!q||String(row.getAttribute("data-s")||"").includes(q)?"":"none"})});
+      var ai=document.getElementById("ai-btn"); if(ai) ai.addEventListener("click",function(){var box=document.querySelector(".signal-box");if(box)box.scrollIntoView({behavior:"smooth",block:"center"});});
       document.querySelectorAll("[data-mobile]").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll("[data-mobile]").forEach(function(x){x.classList.remove("active")});b.classList.add("active");var k=b.getAttribute("data-mobile");var target=k==="chart"?document.querySelector(".center-panel"):k==="market"?document.querySelector(".right-panel"):k==="alerts"?document.querySelector(".left-panel"):null;if(target)target.scrollIntoView({behavior:"smooth",block:"start"});});});
       renderTradingView(CURRENT_SYM);
       loadData();
