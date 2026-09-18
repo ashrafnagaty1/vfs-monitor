@@ -1,6 +1,6 @@
 import base from "./index.js";
 
-const WORKER_VERSION = "market-terminal-v4.0-pro-tv-2026";
+const WORKER_VERSION = "market-terminal-v6-reference-density-2026";
 const DASHBOARD_URL = "https://vfs-monitor.folkhero3.workers.dev/dashboard";
 
 const SECTORS = {
@@ -31,7 +31,7 @@ function dashboardHtml() {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#06090e">
-  <title>EGX Pro Terminal</title>
+  <title>ReFo . EGX Smart Trader</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
   <style>
@@ -81,17 +81,17 @@ function dashboardHtml() {
     /* Bottom Ticker */
     footer { height: 28px; background: #070a0e; border-top: 1px solid #19212a; display: flex; align-items: center; padding: 0 10px; overflow: hidden; white-space: nowrap; font-family: monospace; font-size: 10px; gap: 16px; }
 
-    .up { color: #00e676; }
+    .ref-stock-tabs,.market-tabs{display:flex;gap:3px;margin:7px 0}.ref-stock-tabs button,.market-tabs>*{flex:1;background:#0d141c;border:1px solid #1d2a36;color:#8093a5;padding:5px 2px;font-size:8px;text-align:center}.ref-stock-tabs button.active,.market-tabs b{color:#fff;border-color:#35516a;background:#122131}.ref-stock-tabs button:disabled{opacity:.35}.market-search{padding:5px 8px;border-bottom:1px solid #18222c}.market-search input{width:100%;background:#070b10;border:1px solid #24313d;color:#dce8f2;padding:6px 8px;outline:none}.up { color: #00e676; }
     .down { color: #ff5252; }
   </style>
 </head>
 <body>
   <header>
-    <div class="brand">EGX SMART TERMINAL <span id="sess-status">متصل</span></div>
+    <div class="brand">ReFo . EGX Smart Trader <span id="sess-status">DATA</span></div>
     <div class="stats-bar">
       <div class="stat-pill">السوق: <b id="regime">—</b></div>
       <div class="stat-pill">Breadth: <b id="breadth">—</b></div>
-      <div class="stat-pill">Avg Score: <b id="avgscore">—</b></div>
+      <div class="stat-pill">Avg Score: <b id="avgscore">—</b></div><div class="stat-pill">Source: <b id="quote-source">—</b></div><div class="stat-pill">Mode: <b id="quote-mode">—</b></div>
     </div>
   </header>
 
@@ -102,13 +102,13 @@ function dashboardHtml() {
         <h1 id="det-sym">COMI</h1>
         <div class="cur-price" id="det-price">0.00</div>
       </div>
-      <div class="kpi-grid">
+      <div class="ref-stock-tabs"><button class="active">نظرة عامة</button><button>تحليلات ذكية</button><button disabled>العمق</button><button>الصفقات</button><button disabled>أخبار</button></div><div class="kpi-grid">
         <div class="kpi-card"><small>الدخول (Trigger)</small><b id="det-trg">-</b></div>
         <div class="kpi-card"><small>وقف الخسارة (Stop)</small><b id="det-stop" class="down">-</b></div>
         <div class="kpi-card"><small>الهدف الأول (T1)</small><b id="det-t1" class="up">-</b></div>
         <div class="kpi-card"><small>الهدف الثاني (T2)</small><b id="det-t2" class="up">-</b></div>
         <div class="kpi-card"><small>RSI / ADX</small><b id="det-tech">-</b></div>
-        <div class="kpi-card"><small>حجم السيولة</small><b id="det-vol">-</b></div>
+        <div class="kpi-card"><small>Volume Ratio</small><b id="det-vol">-</b></div><div class="kpi-card"><small>MFI / Score</small><b id="det-mfi">-</b></div><div class="kpi-card"><small>EMA20 / EMA50</small><b id="det-ema">-</b></div><div class="kpi-card"><small>T3</small><b id="det-t3" class="up">-</b></div>
       </div>
       <div class="signal-box">
         <div><b>النمط الفني:</b> <span id="det-setup">—</span></div>
@@ -125,10 +125,10 @@ function dashboardHtml() {
     <!-- Right Watchlist -->
     <aside class="right-panel">
       <div class="panel-header">
-        <span>قائمة الأسهم المتابعة</span>
+        <span>Market Watch</span>
         <small id="stock-count">0 سهم</small>
       </div>
-      <div class="watch-table-header">
+      <div class="market-tabs"><b>السوق</b><span>مضاربة</span><span>التوصيات</span><span>المفضلة</span></div><div class="market-search"><input id="market-search" placeholder="بحث بالرمز..."></div><div class="watch-table-header">
         <span>السهم</span>
         <span>السعر</span>
         <span>السيولة</span>
@@ -200,6 +200,9 @@ function dashboardHtml() {
       document.getElementById("det-t2").textContent = (p.target2 || t.target2) ? Number(p.target2 || t.target2).toFixed(2) : "-";
       document.getElementById("det-tech").textContent = (t.rsi ? Number(t.rsi).toFixed(1) : "-") + " / " + (t.adx ? Number(t.adx).toFixed(1) : "-");
       document.getElementById("det-vol").textContent = t.volume_ratio ? (Number(t.volume_ratio).toFixed(1) + "x") : "-";
+      document.getElementById("det-mfi").textContent = (t.mfi ? Number(t.mfi).toFixed(1) : "-") + " / " + (t.score ? Number(t.score).toFixed(0) : "-");
+      document.getElementById("det-ema").textContent = (t.ema20 ? Number(t.ema20).toFixed(2) : "-") + " / " + (t.ema50 ? Number(t.ema50).toFixed(2) : "-");
+      document.getElementById("det-t3").textContent = (p.target3 || t.target3) ? Number(p.target3 || t.target3).toFixed(2) : "-";
       document.getElementById("det-setup").textContent = (t.setups && t.setups.length) ? t.setups.join(" + ") : "اتجاه عام";
       document.getElementById("det-why").textContent = (t.why && t.why.length) ? t.why.join(" • ") : "متابعة سيولة";
       document.getElementById("det-sr").textContent = "S: " + (t.support_20 || "-") + " | R: " + (t.resistance_20 || "-");
@@ -214,6 +217,9 @@ function dashboardHtml() {
 
         var snap = data.snapshot;
         document.getElementById("regime").textContent = (snap.market_regime && snap.market_regime.name) || "-";
+        document.getElementById("quote-source").textContent = snap.quote_source || "-";
+        document.getElementById("quote-mode").textContent = snap.quote_mode || "DELAYED_EVALUATION";
+        document.getElementById("sess-status").textContent = snap.quote_mode === "LIVE" ? "LIVE" : "DELAYED";
         document.getElementById("breadth").textContent = (snap.market_regime && snap.market_regime.breadth ? Number(snap.market_regime.breadth).toFixed(1) + "%" : "-");
         document.getElementById("avgscore").textContent = (snap.market_regime && snap.market_regime.avg_score ? Number(snap.market_regime.avg_score).toFixed(0) : "-");
 
@@ -256,6 +262,8 @@ function dashboardHtml() {
     }
 
     window.addEventListener("DOMContentLoaded", function() {
+      var q = new URLSearchParams(location.search).get("symbol") || new URLSearchParams(location.search).get("s"); if(q) CURRENT_SYM=String(q).toUpperCase().replace(/[^A-Z0-9_.-]/g,"") || "COMI";
+      var search=document.getElementById("market-search"); if(search) search.addEventListener("input",function(){var q=this.value.trim().toUpperCase();document.querySelectorAll(".watch-item").forEach(function(row){row.style.display=!q||String(row.getAttribute("data-s")||"").includes(q)?"":"none"})});
       renderTradingView(CURRENT_SYM);
       loadData();
       setInterval(loadData, 25000);
