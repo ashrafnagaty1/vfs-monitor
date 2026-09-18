@@ -1,6 +1,6 @@
 import base from "./index.js";
 
-const WORKER_VERSION = "market-terminal-v8-reference-interaction-2026";
+const WORKER_VERSION = "market-terminal-v9-reference-topbar-2026";
 const DASHBOARD_URL = "https://vfs-monitor.folkhero3.workers.dev/dashboard";
 
 const SECTORS = {
@@ -46,8 +46,9 @@ function dashboardHtml() {
     .stat-pill { background: #111720; border: 1px solid #202b38; padding: 3px 8px; border-radius: 4px; font-size: 10px; color: #8fa2b5; }
     .stat-pill b { color: #fff; margin-right: 4px; }
 
+    .market-ribbon{height:25px;display:flex;align-items:center;gap:5px;padding:3px 8px;background:#080d13;border-bottom:1px solid #17212b;overflow-x:auto;white-space:nowrap;direction:ltr}.market-ribbon span{border:1px solid #1c2934;background:#0d141c;padding:2px 6px;color:#718697;font-size:8px}.market-ribbon b{color:#dce7ef;margin-left:3px}.market-ribbon em{font-style:normal;color:#526576;font-size:8px}.chart-toolbar{height:28px;display:flex;align-items:center;gap:3px;padding:3px 7px;background:#070b10;border-bottom:1px solid #17212b;direction:ltr}.chart-toolbar b{color:#fff;margin-right:6px}.chart-toolbar button{background:#0d141c;border:1px solid #1d2934;color:#718596;padding:3px 6px;font-size:8px}.chart-toolbar button.on{background:#17304a;color:#fff;border-color:#31597c}.chart-toolbar span{margin-left:auto;color:#5f7282;font-size:8px}
     /* Main Grid Layout */
-    .terminal-body { display: grid; grid-template-columns: 280px 1fr 300px; flex: 1; height: calc(100vh - 66px); direction: ltr; }
+    .terminal-body { display: grid; grid-template-columns: 280px 1fr 300px; flex: 1; height: calc(100vh - 119px); direction: ltr; }
     
     /* Left: Technical Analysis & Signals */
     .left-panel { background: #080c11; border-right: 1px solid #1a222c; direction: rtl; padding: 10px; overflow-y: auto; }
@@ -86,7 +87,7 @@ function dashboardHtml() {
     .stock-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:7px}.stock-actions button{border:1px solid #273645;background:#101923;color:#a8b8c6;padding:6px;font:inherit}.stock-actions .buy{color:#5bd98b}.stock-actions .sell{color:#ff6b6b}.stock-actions button:disabled{opacity:.4}.plan-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:6px 0}.plan-strip span{background:#0c131a;border:1px solid #1c2934;padding:5px;color:#708596;font-size:8px}.plan-strip b{display:block;color:#dce8f2;margin-top:2px}.panel-header em{font-style:normal;color:#607589;font-size:8px}.mobile-nav{display:none}
     @media(max-width:760px){
       body{overflow:auto;height:auto;min-height:100vh;padding-bottom:48px}
-      header{position:sticky;top:0;z-index:20;padding:6px 8px;align-items:flex-start}.brand{font-size:11px}.stats-bar{overflow-x:auto;max-width:68vw;gap:4px}.stat-pill{white-space:nowrap;padding:3px 5px;font-size:8px}
+      header{position:sticky;top:0;z-index:20;padding:6px 8px;align-items:flex-start}.market-ribbon{height:29px}.chart-toolbar{position:sticky;top:38px;z-index:19;overflow-x:auto}.chart-toolbar span{display:none}.brand{font-size:11px}.stats-bar{overflow-x:auto;max-width:68vw;gap:4px}.stat-pill{white-space:nowrap;padding:3px 5px;font-size:8px}
       .terminal-body{display:flex;flex-direction:column;height:auto;direction:rtl}.center-panel{order:1;height:52vh;min-height:330px}.right-panel{order:2;height:44vh;border:0;border-top:1px solid #1a222c}.left-panel{order:3;border:0;border-top:1px solid #1a222c;padding:8px}
       .stock-title h1{font-size:20px}.stock-title .cur-price{font-size:18px}.kpi-grid{grid-template-columns:repeat(3,1fr)}.kpi-card{padding:5px}.signal-box{margin-bottom:8px}
       footer{display:none}.mobile-nav{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);bottom:0;left:0;right:0;height:46px;background:#080d13;border-top:1px solid #25313c;z-index:30;direction:rtl}.mobile-nav button{background:transparent;border:0;color:#8193a3;font:inherit;font-size:9px}.mobile-nav button.active{color:#4fa3ff;font-weight:800}
@@ -103,6 +104,12 @@ function dashboardHtml() {
       <div class="stat-pill">Avg Score: <b id="avgscore">—</b></div><div class="stat-pill">Source: <b id="quote-source">—</b></div><div class="stat-pill">Mode: <b id="quote-mode">—</b></div>
     </div>
   </header>
+  <div class="market-ribbon">
+    <span>EGX30 <b>—</b></span><span>EGX70 <b>—</b></span><span>EGX100 <b>—</b></span>
+    <span>قيمة التداول <b>—</b></span><span>حجم التداول <b>—</b></span><span>الرابحون <b>—</b></span><span>الخاسرون <b>—</b></span>
+    <em>المؤشرات واتساع السوق الرسمي يحتاجان مصدر سوق موثوق</em>
+  </div>
+  <div class="chart-toolbar"><b id="chart-symbol">COMI</b><button data-tf="1">1m</button><button data-tf="15">15m</button><button data-tf="30">30m</button><button data-tf="60">1h</button><button data-tf="240">4h</button><button class="on" data-tf="D">1D</button><button data-tf="W">1W</button><button data-tf="M">1M</button><span>TradingView</span></div>
 
   <div class="terminal-body">
     <!-- Left Details -->
@@ -162,13 +169,14 @@ function dashboardHtml() {
 
     var CURRENT_SYM = "COMI";
     var RAW_DATA = null;
+    var CURRENT_INTERVAL = "D";
 
     function renderTradingView(symbol) {
       document.getElementById("tv_chart").innerHTML = "";
       new TradingView.widget({
         "autosize": true,
         "symbol": "EGX:" + symbol,
-        "interval": "D",
+        "interval": CURRENT_INTERVAL,
         "timezone": "Africa/Cairo",
         "theme": "dark",
         "style": "1",
@@ -186,6 +194,7 @@ function dashboardHtml() {
 
     function selectStock(sym) {
       CURRENT_SYM = sym;
+      var cs=document.getElementById("chart-symbol");if(cs)cs.textContent=sym;
       renderTradingView(sym);
       updateDetails(sym);
       
@@ -280,6 +289,7 @@ function dashboardHtml() {
     window.addEventListener("DOMContentLoaded", function() {
       var q = new URLSearchParams(location.search).get("symbol") || new URLSearchParams(location.search).get("s"); if(q) CURRENT_SYM=String(q).toUpperCase().replace(/[^A-Z0-9_.-]/g,"") || "COMI";
       var search=document.getElementById("market-search"); if(search) search.addEventListener("input",function(){var q=this.value.trim().toUpperCase();document.querySelectorAll(".watch-item").forEach(function(row){row.style.display=!q||String(row.getAttribute("data-s")||"").includes(q)?"":"none"})});
+      document.querySelectorAll("[data-tf]").forEach(function(b){b.addEventListener("click",function(){CURRENT_INTERVAL=b.getAttribute("data-tf")||"D";document.querySelectorAll("[data-tf]").forEach(function(x){x.classList.remove("on")});b.classList.add("on");renderTradingView(CURRENT_SYM);});});
       var ai=document.getElementById("ai-btn"); if(ai) ai.addEventListener("click",function(){var box=document.querySelector(".signal-box");if(box)box.scrollIntoView({behavior:"smooth",block:"center"});});
       document.querySelectorAll("[data-mobile]").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll("[data-mobile]").forEach(function(x){x.classList.remove("active")});b.classList.add("active");var k=b.getAttribute("data-mobile");var target=k==="chart"?document.querySelector(".center-panel"):k==="market"?document.querySelector(".right-panel"):k==="alerts"?document.querySelector(".left-panel"):null;if(target)target.scrollIntoView({behavior:"smooth",block:"start"});});});
       renderTradingView(CURRENT_SYM);
@@ -333,7 +343,7 @@ export default {
             inline_keyboard: [[{ text: "🚀 فتح الشاشة اللحظية", web_app: { url: DASHBOARD_URL } }]]
           }
         });
-        return Response.json({ ok: true, feature: "market-terminal-v7.0" });
+        return Response.json({ ok: true, feature: "market-terminal-v9.0" });
       }
     }
 
