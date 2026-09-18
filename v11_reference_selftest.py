@@ -29,7 +29,10 @@ def main():
         "🎯 قناص EGX V2", "💼 المحافظ والتنبيهات", "👤 حسابي"
     ]:
         assert label in worker
-    assert "reference-clone-completion-v4" in worker
+    assert "reference-clone-advanced-v5" in worker
+    for label in ["🔮 تحليل زمني محسن","🌀 فحص الفركتال","🦋 فحص Harmonic","📐 تحليل Gann","🌊 تحليل Elliott","💰 تحليل SMC","📖 دليل الهارمونيك","📖 دليل Smart Money"]:
+        assert label in worker
+    assert "ADV_TOOLS" in worker
     for label in ["📊 السوق","💵 التقارير المالية","💧 السيولة","📈 مؤشرات EGX","📄 تقرير سهم","⚖️ مقارنة سهمين","🏭 تحليل القطاع","🧮 القيمة العادلة","📉 أسهم تحت القيمة"]:
         assert label in worker
     assert "Fundamentals" in worker
