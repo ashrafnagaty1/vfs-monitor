@@ -1,6 +1,6 @@
 import base from "./index.js";
 
-const WORKER_VERSION = "market-terminal-v14-staleness-2026";
+const WORKER_VERSION = "market-terminal-v15-detail-2026";
 const DASHBOARD_URL = "https://vfs-monitor.folkhero3.workers.dev/dashboard";
 
 const SECTORS = {
@@ -124,12 +124,12 @@ function dashboardHtml() {
         <div class="kpi-card"><small>الهدف الأول (T1)</small><b id="det-t1" class="up">-</b></div>
         <div class="kpi-card"><small>الهدف الثاني (T2)</small><b id="det-t2" class="up">-</b></div>
         <div class="kpi-card"><small>RSI / ADX</small><b id="det-tech">-</b></div>
-        <div class="kpi-card"><small>Volume Ratio</small><b id="det-vol">-</b></div><div class="kpi-card"><small>MFI / Score</small><b id="det-mfi">-</b></div><div class="kpi-card"><small>EMA20 / EMA50</small><b id="det-ema">-</b></div><div class="kpi-card"><small>T3</small><b id="det-t3" class="up">-</b></div>
+        <div class="kpi-card"><small>Volume Ratio</small><b id="det-vol">-</b></div><div class="kpi-card"><small>MFI / Score</small><b id="det-mfi">-</b></div><div class="kpi-card"><small>EMA20 / EMA50</small><b id="det-ema">-</b></div><div class="kpi-card"><small>T3</small><b id="det-t3" class="up">-</b></div><div class="kpi-card"><small>EMA200</small><b id="det-ema200">—</b></div><div class="kpi-card"><small>Momentum 5D / 20D</small><b id="det-mom">—</b></div><div class="kpi-card"><small>Volatility</small><b id="det-vlt">—</b></div><div class="kpi-card"><small>Liquidity Score</small><b id="det-liq">—</b></div>
       </div>
       <div class="plan-strip"><span>الحالة <b id="det-stage">—</b></span><span>RR T1 <b id="det-rr">—</b></span><span>Signal <b id="det-signal">—</b></span></div><div class="signal-box">
         <div><b>النمط الفني:</b> <span id="det-setup">—</span></div>
         <div style="margin-top:4px;"><b>الأسباب:</b> <span id="det-why">—</span></div>
-        <div style="margin-top:4px;"><b>الدعم والمقاومة:</b> <span id="det-sr">—</span></div>
+        <div style="margin-top:4px;"><b>الدعم والمقاومة:</b> <span id="det-sr">—</span></div><div style="margin-top:4px;"><b>Golden Zone:</b> <span id="det-golden">—</span></div><div style="margin-top:4px;"><b>Breakout:</b> <span id="det-breakout">—</span></div>
       </div>
     </aside>
 
@@ -234,14 +234,20 @@ function dashboardHtml() {
       document.getElementById("det-vol").textContent = t.volume_ratio ? (Number(t.volume_ratio).toFixed(1) + "x") : "-";
       document.getElementById("det-mfi").textContent = (t.mfi ? Number(t.mfi).toFixed(1) : "-") + " / " + (t.score ? Number(t.score).toFixed(0) : "-");
       document.getElementById("det-ema").textContent = (t.ema20 ? Number(t.ema20).toFixed(2) : "-") + " / " + (t.ema50 ? Number(t.ema50).toFixed(2) : "-");
-      document.getElementById("det-t3").textContent = (p.target3 || t.target3) ? Number(p.target3 || t.target3).toFixed(2) : "-";
+      document.getElementById("det-t3").textContent = present(p.target3||t.target3) ? fmt(p.target3||t.target3,2) : "—";
+      document.getElementById("det-ema200").textContent = present(t.ema200)&&Number(t.ema200)!==0 ? fmt(t.ema200,2) : "—";
+      document.getElementById("det-mom").textContent = (present(t.momentum_5d)?fmt(t.momentum_5d,1)+"%":"—")+" / "+(present(t.momentum_20d)?fmt(t.momentum_20d,1)+"%":"—");
+      document.getElementById("det-vlt").textContent = present(t.volatility_pct)?fmt(t.volatility_pct,1)+"%":"—";
+      document.getElementById("det-liq").textContent = present(t.liquidity_score)?fmt(t.liquidity_score,1):"—";
+      document.getElementById("det-golden").textContent = t.golden===true ? fmt(t.golden_low,2)+" – "+fmt(t.golden_high,2) : t.golden===false ? "لا" : "—";
+      document.getElementById("det-breakout").textContent = t.breakout===true ? "نعم" : t.breakout===false ? "لا" : "—";
       document.getElementById("det-stage").textContent = p.status || p.stage || "—";
       document.getElementById("det-signal").textContent = p.signal_id || "-";
       var e=Number(p.entry_price||p.trigger),st=Number(p.dynamic_stop||p.initial_stop),t1=Number(p.target1),risk=e-st;
       document.getElementById("det-rr").textContent = Number.isFinite(e)&&Number.isFinite(st)&&Number.isFinite(t1)&&risk>0 ? ((t1-e)/risk).toFixed(2)+"R" : "-";
       document.getElementById("det-setup").textContent = (t.setups && t.setups.length) ? t.setups.join(" + ") : "—";
       document.getElementById("det-why").textContent = (t.why && t.why.length) ? t.why.join(" • ") : "—";
-      document.getElementById("det-sr").textContent = "S20: " + (t.support_20 || "-") + " · S50: " + (t.support_50 || "-") + " | R20: " + (t.resistance_20 || "-") + " · R50: " + (t.resistance_50 || "-");
+      document.getElementById("det-sr").textContent = "S20: " + fmt(t.support_20,2) + " · S50: " + fmt(t.support_50,2) + " | R20: " + fmt(t.resistance_20,2) + " · R50: " + fmt(t.resistance_50,2);
     }
 
     async function loadData() {
@@ -259,7 +265,7 @@ function dashboardHtml() {
         applyAge(snap.at);
         document.getElementById("sess-status").textContent = snap.quote_mode === "LIVE" ? "LIVE" : "DELAYED";
         applyAge(snap.at);
-        document.getElementById("breadth").textContent = (snap.market_regime && snap.market_regime.breadth ? Number(snap.market_regime.breadth).toFixed(1) + "%" : "-");
+        document.getElementById("breadth").textContent = (snap.market_regime && present(snap.market_regime.breadth) ? fmt(snap.market_regime.breadth,1) + "% عينة" : "—");
         document.getElementById("avgscore").textContent = (snap.market_regime && snap.market_regime.avg_score ? Number(snap.market_regime.avg_score).toFixed(0) : "-");
 
         var top = snap.top || [];
@@ -280,7 +286,7 @@ function dashboardHtml() {
           row.setAttribute("data-fav", isFav(stock.symbol) ? "1" : "0");
           row.onclick = function() { selectStock(stock.symbol); };
           row.innerHTML = 
-            '<div class="sym">' + stock.symbol + '<span class="fav-star '+(isFav(stock.symbol)?"on":"")+'" title="مفضلة">★</span><small>' + (badge?badge+" · ":"") + (stock.score || 0) + ' pts</small></div>' +
+            '<div class="sym">' + stock.symbol + '<span class="fav-star '+(isFav(stock.symbol)?"on":"")+'" title="مفضلة">★</span><small>' + (badge?badge+" · ":"") + (present(stock.score)?fmt(stock.score,0)+" pts":"—") + '</small></div>' +
             '<div class="val">' + fmt(stock.price,2) + '</div>' +
             '<div class="val ' + (Number(stock.volume_ratio) >= 1.2 ? 'up' : '') + '">' + (present(stock.volume_ratio)?fmt(stock.volume_ratio,1)+'x':'—') + '</div>' +
             '<div class="val">' + fmt(stock.score,0) + '</div>';
@@ -365,7 +371,7 @@ export default {
             inline_keyboard: [[{ text: "🚀 فتح الشاشة اللحظية", web_app: { url: DASHBOARD_URL } }]]
           }
         });
-        return Response.json({ ok: true, feature: "market-terminal-v14.0" });
+        return Response.json({ ok: true, feature: "market-terminal-v15.0" });
       }
     }
 
