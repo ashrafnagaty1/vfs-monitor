@@ -20,7 +20,18 @@ def main():
     assert bot_reference_menu.ALIASES["📈 تحليل الأسهم"] == "🔍 تحليل سهم"
     assert bot_reference_menu.ALIASES["📈 أسهم المضاربة اليومية"] == "🎯 فرص اليوم"
     assert bot_reference_menu.ALIASES["♟️ التحليل المتقدم"] == "🧠 التحليل المتقدم"
-    print("reference clone phase1 integration self-test: PASS")
+    worker = open("cloudflare/composite_worker.js", encoding="utf-8").read()
+    for label in [
+        "🖥️ الشاشة اللحظية", "🤖 المساعد الذكي", "📈 أسهم المضاربة اليومية",
+        "📊 الصفقات", "📈 تحليل الأسهم", "♟️ التحليل المتقدم",
+        "🔮 التوقع الزمني", "🌀 التوقع الفركتالي", "📐 تحليل جان",
+        "🦋 أنماط الهارمونيك", "🌊 موجات إليوت", "💰 Smart Money",
+        "🎯 قناص EGX V2", "💼 المحافظ والتنبيهات", "👤 حسابي"
+    ]:
+        assert label in worker
+    assert "reference-clone-all-in-one" in worker
+    assert 'import legacyWorker from "../src/tradingview_core_wrapper.js"' in worker
+    print("reference clone all-in-one integration self-test: PASS")
 
 
 if __name__ == "__main__":
