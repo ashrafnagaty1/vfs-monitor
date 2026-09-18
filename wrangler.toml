@@ -1,0 +1,6 @@
+name = "vfs-monitor"
+main = "cloudflare/telegram_webhook_worker.js"
+compatibility_date = "2026-09-18"
+
+[vars]
+REFO_WEBAPP_URL = "https://refogx-pro.folkhero3.workers.dev/"
