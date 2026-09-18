@@ -2,7 +2,7 @@ name: V11 Reference Final
 
 on:
   push:
-    branches: [main, refo-v11-reference-final, refo-v11-runtime-hardening, refo-render-webhook]
+    branches: [main, refo-v11-reference-final, refo-v11-runtime-hardening, refo-render-webhook, refo-cloudflare-telegram-webhook]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -18,9 +18,13 @@ jobs:
       - name: Install runtime dependencies
         run: pip install -r requirements.txt
       - name: Syntax compile
-        run: python -m py_compile telegram_bot.py bot_experience.py bot_watchlist.py bot_alerts.py bot_smart_money.py bot_gann.py bot_harmonic.py bot_elliott.py bot_temporal.py bot_opportunities.py bot_market.py bot_personal_portfolio.py bot_assistant.py bot_reports.py bot_reference_menu.py bot_live_screen.py always_on_bot.py webhook_server.py pro_engine_v2.py v11_reference_selftest.py
+        run: python -m py_compile telegram_bot.py bot_experience.py bot_watchlist.py bot_alerts.py bot_smart_money.py bot_gann.py bot_harmonic.py bot_elliott.py bot_temporal.py bot_opportunities.py bot_market.py bot_personal_portfolio.py bot_assistant.py bot_reports.py bot_reference_menu.py bot_live_screen.py always_on_bot.py webhook_server.py pro_engine_v2.py v11_reference_selftest.py cloudflare_webhook_selftest.py
       - name: V11 integration contract
         run: python v11_reference_selftest.py
+      - name: Cloudflare webhook contract
+        run: python cloudflare_webhook_selftest.py
+      - name: Worker JavaScript syntax
+        run: node --check cloudflare/telegram_webhook_worker.js
       - name: Webhook import contract
         env:
           TOKEN: test-token
