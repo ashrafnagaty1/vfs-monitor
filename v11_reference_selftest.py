@@ -29,7 +29,10 @@ def main():
         "🎯 قناص EGX V2", "💼 المحافظ والتنبيهات", "👤 حسابي"
     ]:
         assert label in worker
-    assert "reference-clone-completion-v2" in worker
+    assert "reference-clone-completion-v3" in worker
+    for label in ["📊 ملخص السوق","🎯 الأفضل اليوم","🔮 فرص الغد","📈 أعلى صاعد / خاسر","🤝 توافق التحليلات","🏭 القطاعات","🎯 متابعة الفرص","🧮 حاسبة المخاطر","💼 نظرة على المحفظة"]:
+        assert label in worker
+    assert "eventOf(x,stage)" in worker
     for label in ["💳 اشتراك / تجديد","👤 اشتراكي","🔗 رابط الإحالة","📊 إحصائيات الإحالة","👥 ادع صديق","🎟️ أكواد الخصم","🔔 إعدادات الإشعارات","📊 شارت السهم","🎯 متابعة الخطة","🚨 تنبيه سعر"]:
         assert label in worker
     assert 'allowed_updates:["message","callback_query"]' in worker
