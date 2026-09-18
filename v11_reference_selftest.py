@@ -52,7 +52,10 @@ def main():
     assert 'Number(stock.price || 0)' not in sector
     assert ' : "اتجاه عام"' not in sector
     assert ' : "متابعة سيولة"' not in sector
-    assert "reference-clone-completion-v16" in worker
+    assert "reference-clone-completion-v18" in worker
+    assert '/ops/health' in worker
+    assert '"ops-health-v18"' in worker
+    assert 'stateReadable' in worker
     assert "setMyCommands" in worker
     assert "function stockActions(e,sym)" in worker
     assert "e.REFO_WEBAPP_URL||DEFAULT_WEBAPP" in worker
