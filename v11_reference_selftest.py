@@ -43,6 +43,21 @@ def main():
         assert label in worker
     assert 'allowed_updates:["message","callback_query"]' in worker
     assert 'import legacyWorker from "../src/tradingview_core_wrapper.js"' in worker
+    sector = open("src/sector_enhanced.js", encoding="utf-8").read()
+    assert "market-terminal-v16-completion-batch-2026" in sector
+    for label in ["market-session","det-sector","det-ema200","det-mom","det-vlt","det-liq","det-golden","det-breakout","refo_favorites_v1","mobile-sheet","data-age","% عينة","WATCH + ENTRY"]:
+        assert label in sector
+    assert "var top = (snap.details && snap.details.length)" in sector
+    assert ".right-panel{order:1" in sector
+    assert "(stock.score || 0)" not in sector
+    assert 'Number(stock.price || 0)' not in sector
+    assert ' : "اتجاه عام"' not in sector
+    assert ' : "متابعة سيولة"' not in sector
+    assert "reference-clone-completion-v16" in worker
+    assert "setMyCommands" in worker
+    assert "function stockActions(e,sym)" in worker
+    assert "e.REFO_WEBAPP_URL||DEFAULT_WEBAPP" in worker
+    assert "durationDays" in worker
     print("reference clone all-in-one integration self-test: PASS")
 
 
