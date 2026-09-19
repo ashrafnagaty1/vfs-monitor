@@ -8,7 +8,7 @@ import os
 
 import bot_reference_menu
 
-WEBAPP_URL = os.environ.get("REFO_WEBAPP_URL", "https://vfs-monitor.folkhero3.workers.dev/dashboard")
+WEBAPP_URL = os.environ.get("REFO_WEBAPP_URL", "https://refogx-pro.folkhero3.workers.dev/")
 LIVE_LABELS = {"🖥️ الشاشة اللحظية", "📊 الشاشة اللحظية"}
 
 
