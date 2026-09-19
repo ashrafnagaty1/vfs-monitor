@@ -1,6 +1,6 @@
 import base from "./index.js";
 
-const WORKER_VERSION = "market-terminal-v16-completion-batch-2026";
+const WORKER_VERSION = "market-terminal-v19-production-clarity-2026";
 const DASHBOARD_URL = "https://vfs-monitor.folkhero3.workers.dev/dashboard";
 
 const SECTORS = {
@@ -82,7 +82,7 @@ function dashboardHtml() {
     /* Bottom Ticker */
     footer { height: 28px; background: #070a0e; border-top: 1px solid #19212a; display: flex; align-items: center; padding: 0 10px; overflow: hidden; white-space: nowrap; font-family: monospace; font-size: 10px; gap: 16px; }
 
-    .ref-stock-tabs,.market-tabs{display:flex;gap:3px;margin:7px 0}.ref-stock-tabs button,.market-tabs>*{flex:1;background:#0d141c;border:1px solid #1d2a36;color:#8093a5;padding:5px 2px;font-size:8px;text-align:center}.ref-stock-tabs button.active,.market-tabs b{color:#fff;border-color:#35516a;background:#122131}.ref-stock-tabs button:disabled{opacity:.35}.left-context{background:#090f15;border:1px solid #17232d;color:#687d8f;padding:5px 7px;font-size:8px;margin-bottom:5px}.market-tabs>*{cursor:pointer}.market-tabs>.active{color:#fff;border-color:#35516a;background:#122131}.market-search{padding:5px 8px;border-bottom:1px solid #18222c}.market-search input{width:100%;background:#070b10;border:1px solid #24313d;color:#dce8f2;padding:6px 8px;outline:none}.up { color: #00e676; }
+    .ref-stock-tabs,.market-tabs{display:flex;gap:3px;margin:7px 0}.ref-stock-tabs button,.market-tabs>*{flex:1;background:#0d141c;border:1px solid #1d2a36;color:#8093a5;padding:5px 2px;font-size:8px;text-align:center}.ref-stock-tabs button.active,.market-tabs b{color:#fff;border-color:#35516a;background:#122131}.ref-stock-tabs button:disabled{opacity:.35}.left-context{background:#090f15;border:1px solid #17232d;color:#8aa0b2;padding:6px 7px;font-size:9px;margin-bottom:5px;line-height:1.45}.source-separation{border-color:#614a1b;background:#171307;color:#f0c86a}.source-separation b{color:#ffd76a}.market-tabs>*{cursor:pointer}.market-tabs>.active{color:#fff;border-color:#35516a;background:#122131}.market-search{padding:5px 8px;border-bottom:1px solid #18222c}.market-search input{width:100%;background:#070b10;border:1px solid #24313d;color:#dce8f2;padding:6px 8px;outline:none}.up { color: #00e676; }
     .down { color: #ff5252; }
     .stock-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:7px}.stock-actions button{border:1px solid #273645;background:#101923;color:#a8b8c6;padding:6px;font:inherit}.stock-actions .buy{color:#5bd98b}.stock-actions .sell{color:#ff6b6b}.stock-actions button:disabled{opacity:.4}.plan-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:6px 0}.plan-strip span{background:#0c131a;border:1px solid #1c2934;padding:5px;color:#708596;font-size:8px}.plan-strip b{display:block;color:#dce8f2;margin-top:2px}.panel-header em{font-style:normal;color:#607589;font-size:8px}.mobile-sheet{display:none}.mobile-sheet-head{display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px solid #21303d}.mobile-sheet-head button{background:transparent;border:0;color:#fff;font-size:22px}.mobile-sheet-body{padding:10px;line-height:1.8}.mobile-card{background:#0d151d;border:1px solid #20303d;padding:8px;margin-bottom:6px}.mobile-card b{color:#fff}.mobile-nav{display:none}
     @media(max-width:760px){
@@ -118,7 +118,7 @@ function dashboardHtml() {
         <div><h1 id="det-sym">COMI</h1><small id="det-sector">—</small></div>
         <div class="cur-price" id="det-price">—</div>
       </div>
-      <div class="ref-stock-tabs"><button class="active" data-lefttab="overview">نظرة عامة</button><button data-lefttab="smart">تحليلات ذكية</button><button disabled>العمق</button><button data-lefttab="trades">الصفقات</button><button disabled>أخبار</button></div><div id="left-context" class="left-context">بيانات ReFo الفنية — منفصلة عن أسعار TradingView المعروضة داخل الشارت.</div><div class="kpi-grid">
+      <div class="ref-stock-tabs"><button class="active" data-lefttab="overview">نظرة عامة</button><button data-lefttab="smart">تحليلات ذكية</button><button disabled>العمق</button><button data-lefttab="trades">الصفقات</button><button disabled>أخبار</button></div><div id="source-separation" class="left-context source-separation"><b>مصدران منفصلان:</b> الشارت من TradingView · لوحة ReFo من <span id="panel-source">—</span>. اختلاف السعر ممكن عند DELAYED_EVALUATION.</div><div id="left-context" class="left-context">بيانات ReFo الفنية — منفصلة عن أسعار TradingView المعروضة داخل الشارت.</div><div class="kpi-grid">
         <div class="kpi-card"><small>الدخول (Trigger)</small><b id="det-trg">-</b></div>
         <div class="kpi-card"><small>وقف الخسارة (Stop)</small><b id="det-stop" class="down">-</b></div>
         <div class="kpi-card"><small>الهدف الأول (T1)</small><b id="det-t1" class="up">-</b></div>
@@ -261,7 +261,7 @@ function dashboardHtml() {
         var snap = data.snapshot;
         document.getElementById("regime").textContent = (snap.market_regime && snap.market_regime.name) || "—";
         document.getElementById("market-session").textContent = snap.market_session?.status ? snap.market_session.status + (snap.market_session.heuristic?"*":"") : "—";
-        document.getElementById("quote-source").textContent = snap.quote_source || "—";
+        document.getElementById("quote-source").textContent = snap.quote_source || "—"; var ps=document.getElementById("panel-source");if(ps)ps.textContent=(snap.quote_source||"ReFo")+" / "+(snap.quote_mode||"UNKNOWN");
         document.getElementById("quote-mode").textContent = snap.quote_mode || "DELAYED_EVALUATION";
         document.getElementById("updated-at").textContent = snap.at ? String(snap.at).replace("T"," ").slice(0,19) : "—";
         applyAge(snap.at);
@@ -373,7 +373,7 @@ export default {
             inline_keyboard: [[{ text: "🚀 فتح الشاشة اللحظية", web_app: { url: DASHBOARD_URL } }]]
           }
         });
-        return Response.json({ ok: true, feature: "market-terminal-v16.0" });
+        return Response.json({ ok: true, feature: "market-terminal-v19.0" });
       }
     }
 
