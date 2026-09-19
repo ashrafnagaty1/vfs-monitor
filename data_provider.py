@@ -32,6 +32,8 @@ class EGXDataProvider:
         self.live_token = (os.environ.get("EGX_LIVE_TOKEN") or "").strip()
         self.auth_header = (os.environ.get("EGX_LIVE_AUTH_HEADER") or "Authorization").strip()
         self.auth_prefix = (os.environ.get("EGX_LIVE_AUTH_PREFIX") or "Bearer").strip()
+        self.egyx_eod_enabled = (os.environ.get("EGYX_EOD_ENABLED") or "").strip().lower() in {"1", "true", "yes", "on"}
+        self.egyx_base_url = (os.environ.get("EGYX_BASE_URL") or "https://egyx.oratech.dev").rstrip("/")
 
     @property
     def has_live_quote(self):
@@ -116,6 +118,55 @@ class EGXDataProvider:
             raise DataProviderError("DEMO_RATE_LIMIT")
         r.raise_for_status()
         return self._normalize_quote(symbol, r.json(), self.quote_source_name, False)
+
+    def egyx_eod(self, symbol):
+        """Optional EGYX EOD enrichment.
+
+        This is never treated as live market data. It is opt-in because a public
+        endpoint does not by itself establish redistribution/licensing rights.
+        """
+        if not self.egyx_eod_enabled:
+            return None
+        symbol = symbol.upper().replace(".CA", "")
+        r = self.session.get(
+            f"{self.egyx_base_url}/api/analyze",
+            params={"ticker": symbol},
+            timeout=self.timeout,
+        )
+        r.raise_for_status()
+        data = r.json()
+        bars = data.get("bars") if isinstance(data, dict) else None
+        if not isinstance(bars, list) or not bars:
+            raise DataProviderError("EGYX_EOD_NO_BARS")
+        last = bars[-1] if isinstance(bars[-1], dict) else {}
+        return {
+            "provider": "EGYX / OraTech",
+            "mode": "EOD",
+            "is_live": False,
+            "as_of": data.get("asOf"),
+            "ticker": data.get("ticker") or f"{symbol}.CA",
+            "name": data.get("name"),
+            "sector": data.get("sector"),
+            "open": self._first(last, "open"),
+            "high": self._first(last, "high"),
+            "low": self._first(last, "low"),
+            "close": self._first(last, "close"),
+            "volume": self._first(last, "volume"),
+            "rsi14": self._first(last, "rsi14"),
+            "atr14": self._first(last, "atr14"),
+            "macd": self._first(last, "macd"),
+            "macd_signal": self._first(last, "macdSignal"),
+            "macd_hist": self._first(last, "macdHist"),
+            "obv": self._first(last, "obv"),
+            "cmf20": self._first(last, "cmf20"),
+            "stoch_k": self._first(last, "stochK"),
+            "stoch_d": self._first(last, "stochD"),
+            "ma20": self._first(last, "ma20"),
+            "ma50": self._first(last, "ma50"),
+            "ma200": self._first(last, "ma200"),
+            "ema20": self._first(last, "ema20"),
+            "license_status": "UNVERIFIED_REUSE_PERMISSION",
+        }
 
     def history(self, symbol, period="6mo", interval="1d"):
         symbol = symbol.upper().replace(".CA", "")
