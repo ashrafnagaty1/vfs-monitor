@@ -11,6 +11,6 @@
     }
   ],
   "vars": {
-    "REFO_WEBAPP_URL": "https://vfs-monitor.folkhero3.workers.dev/dashboard"
+    "REFO_WEBAPP_URL": "https://refogx-pro.folkhero3.workers.dev/"
   }
 }
