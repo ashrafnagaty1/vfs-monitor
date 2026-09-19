@@ -1,6 +1,9 @@
 import os
 import time
+from datetime import datetime, timezone
 import requests
+
+from refo_bars_provider import provider as refo_bars_provider
 
 
 class DataProviderError(RuntimeError):
@@ -34,6 +37,7 @@ class EGXDataProvider:
         self.auth_prefix = (os.environ.get("EGX_LIVE_AUTH_PREFIX") or "Bearer").strip()
         self.egyx_eod_enabled = (os.environ.get("EGYX_EOD_ENABLED") or "").strip().lower() in {"1", "true", "yes", "on"}
         self.egyx_base_url = (os.environ.get("EGYX_BASE_URL") or "https://egyx.oratech.dev").rstrip("/")
+        self.refo_bars = refo_bars_provider
 
     @property
     def has_live_quote(self):
@@ -45,7 +49,7 @@ class EGXDataProvider:
 
     @property
     def history_source_name(self):
-        return "Yahoo Finance EGX .CA daily candles"
+        return self.refo_bars.source_name if self.refo_bars.configured else "Yahoo Finance EGX .CA daily candles"
 
     def _live_headers(self):
         headers = {}
@@ -170,6 +174,21 @@ class EGXDataProvider:
 
     def history(self, symbol, period="6mo", interval="1d"):
         symbol = symbol.upper().replace(".CA", "")
+        if self.refo_bars.configured and interval == "1d":
+            # Private share is verified as daily OHLCV only. Keep it non-live.
+            limits = {"1mo": 35, "3mo": 90, "6mo": 180, "1y": 370, "2y": 740, "5y": 1850}
+            result = self.refo_bars.history(symbol, limit=limits.get(period))
+            rows = []
+            for bar in result["bars"]:
+                dt = datetime.strptime(bar["date"], "%Y-%m-%d").replace(tzinfo=timezone.utc)
+                rows.append({
+                    "ts": int(dt.timestamp()),
+                    "open": bar["open"], "high": bar["high"], "low": bar["low"],
+                    "close": bar["close"], "volume": bar["volume"],
+                })
+            if len(rows) < 35:
+                raise DataProviderError("SHORT_HISTORY")
+            return rows
         url = f"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}.CA"
         r = self.session.get(
             url,
