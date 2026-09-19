@@ -1,6 +1,6 @@
 import base from "./index.js";
 
-const WORKER_VERSION = "market-terminal-v19-production-clarity-2026";
+const WORKER_VERSION = "market-terminal-v20-chart-stability-2026";
 const DASHBOARD_URL = "https://vfs-monitor.folkhero3.workers.dev/dashboard";
 
 const SECTORS = {
@@ -172,6 +172,7 @@ function dashboardHtml() {
     var RAW_DATA = null;
     var CURRENT_INTERVAL = "D";
     var ACTIVE_MARKET_TAB = "all";
+    var LAST_TV_KEY = "";
     function favKey(){return "refo_favorites_v1"}
     function favorites(){try{return JSON.parse(localStorage.getItem(favKey())||"[]")}catch(_){return []}}
     function isFav(s){return favorites().includes(s)}
@@ -185,8 +186,12 @@ function dashboardHtml() {
     function applyMarketFilter(){document.querySelectorAll(".watch-item").forEach(function(row){var p=row.getAttribute("data-plan"),fav=row.getAttribute("data-fav")==="1",q=(document.getElementById("market-search")?.value||"").trim().toUpperCase(),match=!q||String(row.getAttribute("data-s")||"").includes(q);var tab=ACTIVE_MARKET_TAB,visible=tab==="all"||(tab==="watch"&&p==="WATCH")||(tab==="ideas"&&(p==="WATCH"||p==="ENTRY"))||(tab==="fav"&&fav);row.style.display=match&&visible?"":"none";});}
 
     function renderTradingView(symbol) {
-      document.getElementById("tv_chart").innerHTML = "";
-      new TradingView.widget({
+      var key=String(symbol||"COMI")+"|"+String(CURRENT_INTERVAL||"D");
+      if(key===LAST_TV_KEY)return;
+      var host=document.getElementById("tv_chart");if(!host)return;
+      if(!window.TradingView||typeof window.TradingView.widget!=="function"){host.innerHTML='<div style="padding:18px;color:#ffb74d">TradingView غير متاح حاليًا؛ لوحة ReFo ستظل تعمل.</div>';LAST_TV_KEY="";return;}
+      host.innerHTML = "";
+      try { new TradingView.widget({
         "autosize": true,
         "symbol": "EGX:" + symbol,
         "interval": CURRENT_INTERVAL,
@@ -202,11 +207,14 @@ function dashboardHtml() {
           "MASimple@tv-basicstudies",
           "Volume@tv-basicstudies"
         ]
-      });
+      }); LAST_TV_KEY=key; } catch(e) { LAST_TV_KEY=""; host.innerHTML='<div style="padding:18px;color:#ffb74d">تعذر تحميل TradingView لهذا السهم. جرّب مرة أخرى.</div>'; console.error("TradingView widget error",e); }
     }
 
     function selectStock(sym) {
+      sym=String(sym||"").toUpperCase().replace(/[^A-Z0-9_.-]/g,""); if(!sym)return;
+      if(sym===CURRENT_SYM){updateDetails(sym);return;}
       CURRENT_SYM = sym;
+      try{history.replaceState(null,"",location.pathname+"?symbol="+encodeURIComponent(sym));}catch(_){}
       var cs=document.getElementById("chart-symbol");if(cs)cs.textContent=sym;
       renderTradingView(sym);
       updateDetails(sym);
