@@ -53,7 +53,9 @@ def main():
     assert 'typeof window.TradingView.widget!=="function"' in sector
     assert 'history.replaceState' in sector
     assert "panel-source" in sector
-    for label in ["det-oh","det-lc","det-eodvol","det-eodsrc","EGYX EOD"]:\n        assert label in sector\n    assert "اختلاف السعر ممكن عند DELAYED_EVALUATION" in sector
+    for label in ["det-oh","det-lc","det-eodvol","det-eodsrc","EGYX EOD"]:
+        assert label in sector
+    assert "اختلاف السعر ممكن عند DELAYED_EVALUATION" in sector
     assert ".right-panel{order:1" in sector
     assert "(stock.score || 0)" not in sector
     assert 'Number(stock.price || 0)' not in sector
