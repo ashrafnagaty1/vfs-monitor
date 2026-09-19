@@ -43,7 +43,7 @@ def main():
     assert 'allowed_updates:["message","callback_query"]' in worker
     assert 'import legacyWorker from "../src/tradingview_core_wrapper.js"' in worker
     sector = open("src/sector_enhanced.js", encoding="utf-8").read()
-    assert "market-terminal-v21-final-consolidation-2026" in sector
+    assert "market-terminal-v23-egyx-eod-ui-2026" in sector
     for label in ["market-session","det-sector","det-ema200","det-mom","det-vlt","det-liq","det-golden","det-breakout","refo_favorites_v1","mobile-sheet","data-age","% عينة","WATCH + ENTRY"]:
         assert label in sector
     assert "var top = (snap.details && snap.details.length)" in sector
@@ -53,7 +53,7 @@ def main():
     assert 'typeof window.TradingView.widget!=="function"' in sector
     assert 'history.replaceState' in sector
     assert "panel-source" in sector
-    assert "اختلاف السعر ممكن عند DELAYED_EVALUATION" in sector
+    for label in ["det-oh","det-lc","det-eodvol","det-eodsrc","EGYX EOD"]:\n        assert label in sector\n    assert "اختلاف السعر ممكن عند DELAYED_EVALUATION" in sector
     assert ".right-panel{order:1" in sector
     assert "(stock.score || 0)" not in sector
     assert 'Number(stock.price || 0)' not in sector
