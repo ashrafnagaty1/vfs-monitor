@@ -71,6 +71,15 @@ def main():
     assert "applyMarketFilter();" in sector
     assert "e.REFO_WEBAPP_URL||DEFAULT_WEBAPP" in worker
     assert "durationDays" in worker
+    provider_src = open("data_provider.py", encoding="utf-8").read()
+    engine_v2 = open("pro_engine_v2.py", encoding="utf-8").read()
+    assert "EGYX_EOD_ENABLED" in provider_src
+    assert "UNVERIFIED_REUSE_PERMISSION" in provider_src
+    assert '"mode": "EOD"' in provider_src
+    assert '"is_live": False' in provider_src
+    assert '"eod_enrichment"' in engine_v2
+    assert '"canonical_live_price": False' in engine_v2
+    assert "never Bid/Ask, depth, intraday, or ENTRY confirmation" in engine_v2
     print("reference clone all-in-one integration self-test: PASS")
 
 

@@ -82,7 +82,7 @@ def enrich_with_egxpilot(state, items):
     return cache
 
 
-def compact_detail(x, egxpilot_cache=None):
+def compact_detail(x, egxpilot_cache=None, egyx_eod=None):
     symbol = x["symbol"]
     return {
         "symbol": symbol,
@@ -118,6 +118,7 @@ def compact_detail(x, egxpilot_cache=None):
         "quote_live": bool(x.get("quote_live")),
         "chart": list(x.get("chart") or []),
         "egxpilot": _egxpilot_compact((egxpilot_cache or {}).get(symbol)) if symbol in (egxpilot_cache or {}) else None,
+        "eod": egyx_eod,
     }
 
 
@@ -158,12 +159,36 @@ def main():
         scheduled_reports(state, items)
     regime = market_regime(items)
     egxpilot_cache = enrich_with_egxpilot(state, items)
+    egyx_by_symbol = {}
+    if provider.egyx_eod_enabled:
+        for x in items:
+            symbol = x.get("symbol")
+            if not symbol:
+                continue
+            try:
+                egyx_by_symbol[symbol] = provider.egyx_eod(symbol)
+            except Exception as exc:
+                egyx_by_symbol[symbol] = {
+                    "provider": "EGYX / OraTech",
+                    "mode": "EOD",
+                    "is_live": False,
+                    "error": type(exc).__name__,
+                    "license_status": "UNVERIFIED_REUSE_PERMISSION",
+                }
     state["pro_engine_snapshot"] = {
         "at": now.isoformat(),
         "count": len(items),
         "quote_mode": "LIVE" if provider.has_live_quote else "DELAYED_EVALUATION",
         "quote_source": provider.quote_source_name,
         "history_source": provider.history_source_name,
+        "eod_enrichment": {
+            "enabled": provider.egyx_eod_enabled,
+            "provider": "EGYX / OraTech" if provider.egyx_eod_enabled else None,
+            "mode": "EOD" if provider.egyx_eod_enabled else None,
+            "canonical_live_price": False,
+            "license_status": "UNVERIFIED_REUSE_PERMISSION" if provider.egyx_eod_enabled else None,
+            "note": "Optional EOD enrichment only; never Bid/Ask, depth, intraday, or ENTRY confirmation.",
+        },
         "market_session": session,
         "market_regime": regime,
         "watchlist_next_session": build_watchlist(items),
@@ -173,8 +198,8 @@ def main():
             "canonical_price": False,
             "symbols": {s: _egxpilot_compact(egxpilot_cache.get(s)) for s in state["egxpilot"]["selected_symbols"]},
         },
-        "top": [compact_detail(x, egxpilot_cache) for x in items[:12]],
-        "details": [compact_detail(x, egxpilot_cache) for x in items],
+        "top": [compact_detail(x, egxpilot_cache, egyx_by_symbol.get(x.get("symbol"))) for x in items[:12]],
+        "details": [compact_detail(x, egxpilot_cache, egyx_by_symbol.get(x.get("symbol"))) for x in items],
     }
     save_state(state)
 
