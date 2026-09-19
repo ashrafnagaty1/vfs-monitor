@@ -1,6 +1,6 @@
 import base from "./index.js";
 
-const WORKER_VERSION = "market-terminal-v20-chart-stability-2026";
+const WORKER_VERSION = "market-terminal-v21-final-consolidation-2026";
 const DASHBOARD_URL = "https://vfs-monitor.folkhero3.workers.dev/dashboard";
 
 const SECTORS = {
@@ -74,10 +74,10 @@ function dashboardHtml() {
     .watch-table-header { display: grid; grid-template-columns: 1.2fr 0.9fr 0.7fr 0.7fr; padding: 6px 8px; background: #0d131a; border-bottom: 1px solid #1a222c; color: #6a7c8d; font-weight: bold; font-size: 9px; }
     .watch-list { flex: 1; overflow-y: auto; }
     .watch-item { display: grid; grid-template-columns: 1.2fr 0.9fr 0.7fr 0.7fr; padding: 8px; border-bottom: 1px solid #121820; align-items: center; cursor: pointer; text-decoration: none; color: inherit; }
-    .watch-item:hover, .watch-item.active { background: #131c26; }
+    .watch-item:hover, .watch-item.active { background: #131c26; box-shadow: inset 3px 0 #2d8cff; }
     .watch-item .sym { font-weight: 800; color: #fff; }
     .watch-item .sym small { display: block; font-size: 8px; color: #627586; font-weight: normal; }
-    .watch-item .val { font-family: monospace; }.fav-star{float:left;color:#66798a;font-size:12px;padding:0 3px}.fav-star.on{color:#ffd54f}
+    .watch-item .val { font-family: monospace; }.watch-empty{padding:18px 10px;text-align:center;color:#718596;border-bottom:1px solid #18212a}.fav-star{float:left;color:#66798a;font-size:12px;padding:0 3px}.fav-star.on{color:#ffd54f}
     
     /* Bottom Ticker */
     footer { height: 28px; background: #070a0e; border-top: 1px solid #19212a; display: flex; align-items: center; padding: 0 10px; overflow: hidden; white-space: nowrap; font-family: monospace; font-size: 10px; gap: 16px; }
@@ -307,8 +307,11 @@ function dashboardHtml() {
           tickerHtml += '<span><b>' + stock.symbol + '</b>: ' + fmt(stock.price,2) + '</span>';
         });
 
-        document.getElementById("ticker").innerHTML = tickerHtml;
+        document.getElementById("ticker").innerHTML = tickerHtml || "<span>لا توجد أسعار موثوقة في Snapshot الحالي.</span>";
+        if(!top.length)container.innerHTML='<div class="watch-empty">لا توجد أسهم موثوقة متاحة حاليًا.</div>';
+        applyMarketFilter();
 
+        if (top.length && !top.some(function(x){return x.symbol===CURRENT_SYM})) { CURRENT_SYM=top[0].symbol; var cs=document.getElementById("chart-symbol");if(cs)cs.textContent=CURRENT_SYM; renderTradingView(CURRENT_SYM); }
         if (!CURRENT_SYM && top.length > 0) {
           selectStock(top[0].symbol);
         } else {
