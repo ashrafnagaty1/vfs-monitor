@@ -11,6 +11,8 @@
     }
   ],
   "vars": {
+    "REFO_BARS_ENABLED": "true",
+    "REFO_BARS_URL": "https://89.117.52.92:36955/down/RoheyrwIvqjM",
     "REFO_WEBAPP_URL": "https://refogx-pro.folkhero3.workers.dev/"
   }
 }
