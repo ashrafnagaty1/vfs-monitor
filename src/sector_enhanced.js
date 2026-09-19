@@ -1,6 +1,6 @@
 import base from "./index.js";
 
-const WORKER_VERSION = "market-terminal-v21-final-consolidation-2026";
+const WORKER_VERSION = "market-terminal-v23-egyx-eod-ui-2026";
 const DASHBOARD_URL = "https://vfs-monitor.folkhero3.workers.dev/dashboard";
 
 const SECTORS = {
@@ -119,7 +119,7 @@ function dashboardHtml() {
         <div class="cur-price" id="det-price">—</div>
       </div>
       <div class="ref-stock-tabs"><button class="active" data-lefttab="overview">نظرة عامة</button><button data-lefttab="smart">تحليلات ذكية</button><button disabled>العمق</button><button data-lefttab="trades">الصفقات</button><button disabled>أخبار</button></div><div id="source-separation" class="left-context source-separation"><b>مصدران منفصلان:</b> الشارت من TradingView · لوحة ReFo من <span id="panel-source">—</span>. اختلاف السعر ممكن عند DELAYED_EVALUATION.</div><div id="left-context" class="left-context">بيانات ReFo الفنية — منفصلة عن أسعار TradingView المعروضة داخل الشارت.</div><div class="kpi-grid">
-        <div class="kpi-card"><small>الدخول (Trigger)</small><b id="det-trg">-</b></div>
+        <div class="kpi-card"><small>Open / High</small><b id="det-oh">—</b></div><div class="kpi-card"><small>Low / EOD Close</small><b id="det-lc">—</b></div><div class="kpi-card"><small>EOD Volume</small><b id="det-eodvol">—</b></div><div class="kpi-card"><small>EOD Source</small><b id="det-eodsrc">—</b></div><div class="kpi-card"><small>الدخول (Trigger)</small><b id="det-trg">-</b></div>
         <div class="kpi-card"><small>وقف الخسارة (Stop)</small><b id="det-stop" class="down">-</b></div>
         <div class="kpi-card"><small>الهدف الأول (T1)</small><b id="det-t1" class="up">-</b></div>
         <div class="kpi-card"><small>الهدف الثاني (T2)</small><b id="det-t2" class="up">-</b></div>
@@ -233,8 +233,13 @@ function dashboardHtml() {
       var p = plans.find(function(x){ return x.symbol === sym; }) || {};
 
       document.getElementById("det-sym").textContent = sym;
-      document.getElementById("det-sector").textContent = SECTORS[sym] || "قطاع غير مصنف";
+      var eod=t.eod&&t.eod.mode==="EOD"&&!t.eod.error?t.eod:null;
+      document.getElementById("det-sector").textContent = (eod&&eod.sector) || SECTORS[sym] || "قطاع غير مصنف";
       document.getElementById("det-price").textContent = fmt(t.price,2);
+      document.getElementById("det-oh").textContent = eod ? fmt(eod.open,2)+" / "+fmt(eod.high,2) : "—";
+      document.getElementById("det-lc").textContent = eod ? fmt(eod.low,2)+" / "+fmt(eod.close,2) : "—";
+      document.getElementById("det-eodvol").textContent = eod&&present(eod.volume) ? Number(eod.volume).toLocaleString("en-US") : "—";
+      document.getElementById("det-eodsrc").textContent = eod ? "EGYX EOD · "+String(eod.as_of||"—") : "—";
       document.getElementById("det-trg").textContent = present(p.trigger) ? fmt(p.trigger,2) : "—";
       document.getElementById("det-stop").textContent = present(p.dynamic_stop??p.initial_stop??t.stop) ? fmt(p.dynamic_stop??p.initial_stop??t.stop,2) : "—";
       document.getElementById("det-t1").textContent = present(p.target1??t.target1) ? fmt(p.target1??t.target1,2) : "—";
