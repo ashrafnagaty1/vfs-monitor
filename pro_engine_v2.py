@@ -181,6 +181,15 @@ def main():
         "quote_mode": "LIVE" if provider.has_live_quote else "DELAYED_EVALUATION",
         "quote_source": provider.quote_source_name,
         "history_source": provider.history_source_name,
+        "daily_history": {
+            "enabled": bool(provider.refo_bars.configured),
+            "provider": provider.refo_bars.source_name if provider.refo_bars.configured else provider.history_source_name,
+            "mode": "EOD",
+            "canonical_live_price": False,
+            "capabilities": ["OHLCV_DAILY"],
+            "unsupported": ["BID", "ASK", "DEPTH", "INTRADAY", "ENTRY_CONFIRMATION"],
+            "note": "Authenticated daily history when configured; never promoted to live execution data.",
+        },
         "eod_enrichment": {
             "enabled": provider.egyx_eod_enabled,
             "provider": "EGYX / OraTech" if provider.egyx_eod_enabled else None,
